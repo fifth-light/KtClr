@@ -1,0 +1,55 @@
+load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library", "kt_jvm_test")
+
+kt_jvm_library(
+    name = "util",
+    srcs = ["Util.kt"],
+    deps = [
+        "//asmnet",
+        "//asmnet/il/writer",
+        "@maven//:org_jetbrains_kotlin_kotlin_test",
+    ],
+)
+
+kt_jvm_test(
+    name = "assembly",
+    srcs = ["AssemblyTest.kt"],
+    test_class = "top.fifthlight.asmnet.il.writer.test.AssemblyTest",
+    deps = [
+        ":util",
+        "//asmnet",
+        "@maven//:junit_junit",
+    ],
+)
+
+kt_jvm_test(
+    name = "module",
+    srcs = ["ModuleTest.kt"],
+    test_class = "top.fifthlight.asmnet.il.writer.test.ModuleTest",
+    deps = [
+        ":util",
+        "//asmnet",
+        "@maven//:junit_junit",
+    ],
+)
+
+kt_jvm_test(
+    name = "class",
+    srcs = ["ClassTest.kt"],
+    test_class = "top.fifthlight.asmnet.il.writer.test.ClassTest",
+    deps = [
+        ":util",
+        "//asmnet",
+        "@maven//:junit_junit",
+    ],
+)
+
+kt_jvm_test(
+    name = "method",
+    srcs = ["MethodTest.kt"],
+    test_class = "top.fifthlight.asmnet.il.writer.test.MethodTest",
+    deps = [
+        ":util",
+        "//asmnet",
+        "@maven//:junit_junit",
+    ],
+)

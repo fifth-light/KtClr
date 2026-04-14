@@ -1,0 +1,15 @@
+load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
+
+copy_file(
+    name = "ildasm",
+    src = select({
+        "//config:linux_x86_64": "@ildasm_linux_x64//:ildasm",
+        "//config:linux_arm64": "@ildasm_linux_arm64//:ildasm",
+        "//config:macos_x86_64": "@ildasm_osx_x64//:ildasm",
+        "//config:macos_arm64": "@ildasm_osx_arm64//:ildasm",
+        "//config:windows_x86_64": "@ildasm_win_x64//:ildasm",
+    }),
+    out = "ildasm.exe",
+    is_executable = True,
+    visibility = ["//visibility:public"],
+)

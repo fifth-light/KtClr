@@ -1,0 +1,20 @@
+load("@rules_kotlin//kotlin:core.bzl", "define_kt_toolchain", "kt_kotlinc_options")
+
+kt_kotlinc_options(
+    name = "kotlinc_opts",
+    x_lambdas = "indy",
+)
+
+define_kt_toolchain(
+    name = "kotlin_toolchain",
+    api_version = "2.2",
+    experimental_report_unused_deps = "error",
+    experimental_strict_kotlin_deps = select({
+        "@platforms//os:windows": "off",
+        "//conditions:default": "error",
+    }),
+    experimental_use_abi_jars = True,
+    jvm_target = "21",
+    kotlinc_options = ":kotlinc_opts",
+    language_version = "2.2",
+)
