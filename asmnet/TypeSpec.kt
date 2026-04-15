@@ -7,11 +7,11 @@ sealed interface TypeSpec
 
 // ECMA-335 II.7.2
 sealed interface ResolutionScope {
-    data class Assembly(val name: KString) {
+    data class Assembly(val name: KString): ResolutionScope {
         override fun toString() = name
     }
 
-    data class Module(val name: KString) {
+    data class Module(val name: KString): ResolutionScope {
         override fun toString() = ".module $name"
     }
 }

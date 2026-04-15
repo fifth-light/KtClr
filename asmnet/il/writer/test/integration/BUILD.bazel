@@ -1,0 +1,27 @@
+load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary")
+load("//rule:il.bzl", "ilasm_exe")
+
+kt_jvm_binary(
+    name = "gen",
+    srcs = ["HelloWorldGenerator.kt"],
+    main_class = "top.fifthlight.asmnet.il.writer.test.integration.HelloWorldGeneratorKt",
+    deps = [
+        "//asmnet",
+        "//asmnet/il/writer",
+    ],
+)
+
+genrule(
+    name = "ir",
+    outs = ["hello_world.il"],
+    cmd = "$(location :gen) $@",
+    tools = [":gen"],
+    visibility = ["//visibility:private"],
+)
+
+ilasm_exe(
+    name = "hello_world",
+    input = ":ir",
+    runtimeconfig = "hello_world.runtimeconfig.json",
+    visibility = ["//visibility:public"],
+)
