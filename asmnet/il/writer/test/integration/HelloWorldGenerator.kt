@@ -56,7 +56,7 @@ private fun generateHelloWorld(): String = StringWriter().use {
             ),
         )
         visitModule("hello_world.dll", null)
-        visitClass("Hello")!!.apply {
+        visitClass("Hello").apply {
             visit(
                 TypeAttributes(TypeAttributes.Public or TypeAttributes.BeforeFieldInit),
                 "[System.Runtime]System.Object",
@@ -78,7 +78,7 @@ private fun generateHelloWorld(): String = StringWriter().use {
                     ),
                 ),
                 entryPoint = true,
-            )!!.apply {
+            ).apply {
                 visitMaxStack(8)
                 visitLabel(Label())
                 visitLdc("Hello, world!")
