@@ -80,9 +80,7 @@ private fun generateHelloWorld(): String = StringWriter().use {
                 entryPoint = true,
             ).apply {
                 visitMaxStack(8)
-                visitLabel(Label())
                 visitLdc("Hello, world!")
-                visitLabel(Label())
                 visitMethodInsn(
                     OpCode.CALL,
                     MethodReference(
@@ -96,7 +94,6 @@ private fun generateHelloWorld(): String = StringWriter().use {
                         parameterTypes = listOf(Type.String),
                     ),
                 )
-                visitLabel(Label())
                 visitInsn(OpCode.RET)
                 visitEnd()
             }
