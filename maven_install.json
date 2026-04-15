@@ -7,8 +7,6 @@
     "com.google.guava:guava": 1943808618,
     "com.google.j2objc:j2objc-annotations": 2003271689,
     "junit:junit": -744267592,
-    "org.antlr:antlr4": -626475756,
-    "org.antlr:antlr4-runtime": -1029114455,
     "org.jetbrains.kotlin:kotlin-compiler": -1140536117,
     "org.jetbrains.kotlin:kotlin-test-junit": 1929862879,
     "repositories": -1949687017
@@ -27,20 +25,8 @@
     "com.google.guava:listenablefuture": 1079558157,
     "com.google.j2objc:j2objc-annotations": 248818742,
     "com.google.j2objc:j2objc-annotations:jar:sources": -378364028,
-    "com.ibm.icu:icu4j": -1949900637,
-    "com.ibm.icu:icu4j:jar:sources": -2089376072,
     "junit:junit": -1256429642,
     "junit:junit:jar:sources": 940567721,
-    "org.abego.treelayout:org.abego.treelayout.core": 1772863105,
-    "org.abego.treelayout:org.abego.treelayout.core:jar:sources": 1973705229,
-    "org.antlr:ST4": 1481219143,
-    "org.antlr:ST4:jar:sources": 66773179,
-    "org.antlr:antlr-runtime": -1095022167,
-    "org.antlr:antlr-runtime:jar:sources": 673568178,
-    "org.antlr:antlr4": -1531721685,
-    "org.antlr:antlr4-runtime": 460090011,
-    "org.antlr:antlr4-runtime:jar:sources": 298890060,
-    "org.antlr:antlr4:jar:sources": 160843354,
     "org.checkerframework:checker-qual": -1533199059,
     "org.checkerframework:checker-qual:jar:sources": -1750922234,
     "org.hamcrest:hamcrest-core": 649657847,
@@ -118,52 +104,10 @@
       },
       "version": "2.8"
     },
-    "com.ibm.icu:icu4j": {
-      "shasums": {
-        "jar": "3df572b240a68d13b5cd778ad2393e885d26411434cd8f098ac5987ea2e64ce3",
-        "sources": "e90b4f8dd0e0ed1f8d5bf42c91c93d8aea13882eedd7aa3808123e7cb621f5d9"
-      },
-      "version": "72.1"
-    },
     "junit:junit": {
       "shasums": {
         "jar": "8e495b634469d64fb8acfa3495a065cbacc8a0fff55ce1e31007be4c16dc57d3",
         "sources": "34181df6482d40ea4c046b063cb53c7ffae94bdf1b1d62695bdf3adf9dea7e3a"
-      },
-      "version": "4.13.2"
-    },
-    "org.abego.treelayout:org.abego.treelayout.core": {
-      "shasums": {
-        "jar": "fa5e31395c39c2e7d46aca0f81f72060931607b2fa41bd36038eb2cb6fb93326",
-        "sources": "2b87037e8a650f41b2425bf69e4cc30cc842c0615eac1ba1ca2141dd544b1dd6"
-      },
-      "version": "1.0.3"
-    },
-    "org.antlr:ST4": {
-      "shasums": {
-        "jar": "f927ac384c46d749f8b5ec68972a53aed21e00313509299616edb73bfa15ff33",
-        "sources": "64904f5a5f451c0691abbd20aba8d703df11f9a04ab4e702b8d0ea10d3cf31fc"
-      },
-      "version": "4.3.4"
-    },
-    "org.antlr:antlr-runtime": {
-      "shasums": {
-        "jar": "68bf9f5a33dfcb34033495c587e6236bef4e37aa6612919f5b1e843b90669fb9",
-        "sources": "b4353aa5270d5ddedbc59de6fc7bb170c6d8fa6293d37533a304144a18e4b24d"
-      },
-      "version": "3.5.3"
-    },
-    "org.antlr:antlr4": {
-      "shasums": {
-        "jar": "e6f0b10d2ad206f338afe16867fc47148b6729d6e3a260ea28379b91f03a3657",
-        "sources": "99ae731cbd6d90aa4179fd7ac22754c23938ea5b6f54f4f986b67c155de5986e"
-      },
-      "version": "4.13.2"
-    },
-    "org.antlr:antlr4-runtime": {
-      "shasums": {
-        "jar": "dd3e8a13a2d669bf84fb8d834de35ce4875f27157698d206241ec8488aadcaf7",
-        "sources": "4100b1df2f38152d8502e89195b94654d9aa22f5b6c47aca7b6a7f3194b5fbb0"
       },
       "version": "4.13.2"
     },
@@ -264,16 +208,6 @@
     "junit:junit": [
       "org.hamcrest:hamcrest-core"
     ],
-    "org.antlr:ST4": [
-      "org.antlr:antlr-runtime"
-    ],
-    "org.antlr:antlr4": [
-      "com.ibm.icu:icu4j",
-      "org.abego.treelayout:org.abego.treelayout.core",
-      "org.antlr:ST4",
-      "org.antlr:antlr-runtime",
-      "org.antlr:antlr4-runtime"
-    ],
     "org.jetbrains.kotlin:kotlin-compiler": [
       "org.jetbrains.kotlin:kotlin-reflect",
       "org.jetbrains.kotlin:kotlin-script-runtime",
@@ -349,27 +283,6 @@
     "com.google.j2objc:j2objc-annotations": [
       "com.google.j2objc.annotations"
     ],
-    "com.ibm.icu:icu4j": [
-      "com.ibm.icu.impl",
-      "com.ibm.icu.impl.breakiter",
-      "com.ibm.icu.impl.coll",
-      "com.ibm.icu.impl.data",
-      "com.ibm.icu.impl.duration",
-      "com.ibm.icu.impl.duration.impl",
-      "com.ibm.icu.impl.locale",
-      "com.ibm.icu.impl.number",
-      "com.ibm.icu.impl.number.parse",
-      "com.ibm.icu.impl.number.range",
-      "com.ibm.icu.impl.personname",
-      "com.ibm.icu.impl.text",
-      "com.ibm.icu.impl.units",
-      "com.ibm.icu.lang",
-      "com.ibm.icu.math",
-      "com.ibm.icu.message2",
-      "com.ibm.icu.number",
-      "com.ibm.icu.text",
-      "com.ibm.icu.util"
-    ],
     "junit:junit": [
       "junit.extensions",
       "junit.framework",
@@ -403,53 +316,6 @@
       "org.junit.runners.model",
       "org.junit.runners.parameterized",
       "org.junit.validator"
-    ],
-    "org.abego.treelayout:org.abego.treelayout.core": [
-      "org.abego.treelayout",
-      "org.abego.treelayout.internal.util",
-      "org.abego.treelayout.internal.util.java.lang",
-      "org.abego.treelayout.internal.util.java.lang.string",
-      "org.abego.treelayout.internal.util.java.util",
-      "org.abego.treelayout.util"
-    ],
-    "org.antlr:ST4": [
-      "org.stringtemplate.v4",
-      "org.stringtemplate.v4.compiler",
-      "org.stringtemplate.v4.debug",
-      "org.stringtemplate.v4.gui",
-      "org.stringtemplate.v4.misc"
-    ],
-    "org.antlr:antlr-runtime": [
-      "org.antlr.runtime",
-      "org.antlr.runtime.debug",
-      "org.antlr.runtime.misc",
-      "org.antlr.runtime.tree"
-    ],
-    "org.antlr:antlr4": [
-      "org.antlr.v4",
-      "org.antlr.v4.analysis",
-      "org.antlr.v4.automata",
-      "org.antlr.v4.codegen",
-      "org.antlr.v4.codegen.model",
-      "org.antlr.v4.codegen.model.chunk",
-      "org.antlr.v4.codegen.model.decl",
-      "org.antlr.v4.codegen.target",
-      "org.antlr.v4.gui",
-      "org.antlr.v4.misc",
-      "org.antlr.v4.parse",
-      "org.antlr.v4.semantics",
-      "org.antlr.v4.tool",
-      "org.antlr.v4.tool.ast",
-      "org.antlr.v4.unicode"
-    ],
-    "org.antlr:antlr4-runtime": [
-      "org.antlr.v4.runtime",
-      "org.antlr.v4.runtime.atn",
-      "org.antlr.v4.runtime.dfa",
-      "org.antlr.v4.runtime.misc",
-      "org.antlr.v4.runtime.tree",
-      "org.antlr.v4.runtime.tree.pattern",
-      "org.antlr.v4.runtime.tree.xpath"
     ],
     "org.checkerframework:checker-qual": [
       "org.checkerframework.checker.builder.qual",
@@ -1573,20 +1439,8 @@
       "com.google.guava:listenablefuture",
       "com.google.j2objc:j2objc-annotations",
       "com.google.j2objc:j2objc-annotations:jar:sources",
-      "com.ibm.icu:icu4j",
-      "com.ibm.icu:icu4j:jar:sources",
       "junit:junit",
       "junit:junit:jar:sources",
-      "org.abego.treelayout:org.abego.treelayout.core",
-      "org.abego.treelayout:org.abego.treelayout.core:jar:sources",
-      "org.antlr:ST4",
-      "org.antlr:ST4:jar:sources",
-      "org.antlr:antlr-runtime",
-      "org.antlr:antlr-runtime:jar:sources",
-      "org.antlr:antlr4",
-      "org.antlr:antlr4-runtime",
-      "org.antlr:antlr4-runtime:jar:sources",
-      "org.antlr:antlr4:jar:sources",
       "org.checkerframework:checker-qual",
       "org.checkerframework:checker-qual:jar:sources",
       "org.hamcrest:hamcrest-core",
