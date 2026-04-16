@@ -18,12 +18,12 @@ class ILTextClassWriter internal constructor(
             line()
             extends?.let {
                 +"extends "
-                type(extends)
+                typeSpec(extends)
                 line()
             }
             implements.forEach { iface ->
                 +"implements "
-                type(iface)
+                typeSpec(iface)
                 line()
             }
             +"{"
@@ -62,6 +62,32 @@ class ILTextClassWriter internal constructor(
         initValue: FieldInitValue?,
     ) = writer.write {
         fieldDecl(name, type, attributes, offset, initValue)
+    }
+
+    // ECMA-335 II.17
+    @Suppress("RedundantNullableReturnType")
+    override fun visitProperty(
+        name: String,
+        type: TypeSpec,
+        callConv: CallConv,
+        attributes: PropertyAttributes,
+        parameters: List<MethodParameter>,
+    ): PropertyVisitor? {
+        writer.write {
+            +".property "
+            propertyAttr(attributes)
+            callConv(callConv)
+            +' '
+            type(type)
+            +' '
+            identifier(name)
+            params(parameters)
+            +' '
+            +"{"
+            indent()
+            line()
+        }
+        return ILTextPropertyWriter(writer, name)
     }
 
     override fun visitEnd() {

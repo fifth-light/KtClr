@@ -17,6 +17,7 @@ fun WriteScope.resolutionScope(resolutionScope: ResolutionScope) {
     }
 }
 
+// ECMA-335 II.7.1
 fun WriteScope.type(type: TypeSpec) {
     when (type) {
         is Type.BuiltInType -> +type.assemblyName
@@ -65,9 +66,23 @@ fun WriteScope.type(type: TypeSpec) {
 
         is Type.ValueType -> {
             +"valuetype "
-            type(type.type)
+            typeSpec(type.type)
         }
 
+        is TypeReference -> {
+            +"class "
+            type.resolutionScope?.let { resolutionScope(it) }
+            type.names.forEachIndexed { index, name ->
+                identifier(name)
+                if (index < type.names.size - 1) +'/'
+            }
+        }
+    }
+}
+
+// ECMA-335 II.7.3
+fun WriteScope.typeSpec(type: TypeSpec) {
+    when (type) {
         is TypeReference -> {
             type.resolutionScope?.let { resolutionScope(it) }
             type.names.forEachIndexed { index, name ->
@@ -75,6 +90,8 @@ fun WriteScope.type(type: TypeSpec) {
                 if (index < type.names.size - 1) +'/'
             }
         }
+
+        else -> type(type)
     }
 }
 
@@ -129,7 +146,7 @@ fun WriteScope.methodRef(ref: MethodReference) {
     +' '
     type(ref.returnType)
     +' '
-    type(ref.declaringType)
+    typeSpec(ref.declaringType)
     +"::"
     identifier(ref.name)
     +'('
@@ -144,7 +161,7 @@ fun WriteScope.methodRef(ref: MethodReference) {
 fun WriteScope.fieldRef(ref: FieldReference) {
     type(ref.fieldType)
     +' '
-    type(ref.declaringType)
+    typeSpec(ref.declaringType)
     +"::"
     identifier(ref.name)
 }
@@ -518,6 +535,12 @@ fun WriteScope.opcode(opcode: OpCode) {
         }
     }
     opcode(opcode.code)
+}
+
+// ECMA-335 II.17
+fun WriteScope.propertyAttr(attrs: PropertyAttributes) {
+    if (attrs.specialName) +"specialname "
+    if (attrs.rtSpecialName) +"rtspecialname "
 }
 
 // ECMA-335 II.16.1

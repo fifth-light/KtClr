@@ -140,7 +140,7 @@ class ILTextMethodWriter internal constructor(
         writer.write {
             opcode(opcode)
             +' '
-            type(type)
+            typeSpec(type)
             line()
         }
     }

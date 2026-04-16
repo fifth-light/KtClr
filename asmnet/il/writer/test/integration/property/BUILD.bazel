@@ -1,0 +1,28 @@
+load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary")
+load("//rule:il.bzl", "ilasm_exe")
+
+kt_jvm_binary(
+    name = "gen",
+    srcs = ["PropertyTestGenerator.kt"],
+    main_class = "top.fifthlight.asmnet.il.writer.test.integration.property.PropertyTestGeneratorKt",
+    deps = [
+        "//asmnet",
+        "//asmnet/dsl",
+        "//asmnet/il/writer",
+    ],
+)
+
+genrule(
+    name = "ir",
+    outs = ["property_test.il"],
+    cmd = "$(location :gen) $@",
+    tools = [":gen"],
+    visibility = ["//visibility:private"],
+)
+
+ilasm_exe(
+    name = "property_test",
+    input = ":ir",
+    runtimeconfig = "property_test.runtimeconfig.json",
+    visibility = ["//visibility:public"],
+)

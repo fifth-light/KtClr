@@ -40,5 +40,14 @@ interface ClassVisitor {
         // TODO: DataLabel
     )
 
+    // ECMA-335 II.17
+    fun visitProperty(
+        name: String,
+        type: TypeSpec,
+        callConv: CallConv = CallConv(),
+        attributes: PropertyAttributes = PropertyAttributes(),
+        parameters: List<MethodParameter> = emptyList(),
+    ): PropertyVisitor?
+
     fun visitEnd()
 }

@@ -34,4 +34,20 @@ class ClassDslScope(val visitor: ClassVisitor) {
         offset: Int? = null,
         initValue: FieldInitValue? = null,
     ) = visitor.visitField(name, type, attributes, offset, initValue)
+
+    fun property(
+        name: String,
+        type: TypeSpec,
+        callConv: CallConv = CallConv(),
+        attributes: PropertyAttributes = PropertyAttributes(),
+        parameters: List<MethodParameter> = emptyList(),
+        block: PropertyDslScope.() -> Unit,
+    ) {
+        visitor.visitProperty(
+            name, type, callConv, attributes, parameters,
+        )?.let { pv ->
+            PropertyDslScope(pv).block()
+            pv.visitEnd()
+        }
+    }
 }
