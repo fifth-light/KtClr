@@ -30,6 +30,8 @@ class MethodDslScope(val visitor: MethodVisitor) {
     fun insn(code: OpCode.Code, type: TypeSpec, vararg prefixes: Short) =
         visitor.visitTypeInsn(OpCode(code, *prefixes), type)
 
+    fun switch(labels: List<Label>) = visitor.visitSwitchInsn(labels)
+
     fun ldc(value: Any) = visitor.visitLdc(value)
 
     fun locals(init: Boolean = true, vararg locals: LocalVariable) =

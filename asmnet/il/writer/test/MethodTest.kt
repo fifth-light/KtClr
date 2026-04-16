@@ -643,4 +643,73 @@ class MethodTest {
             }
         )
     }
+
+    @Test
+    fun testSwitchInsn() {
+        val l0 = Label()
+        val l1 = Label()
+        val l2 = Label()
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .maxstack 8
+                  switch (LABEL_0, LABEL_1, LABEL_2)
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = MethodAttributes(
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    maxStack(8)
+                    switch(listOf(l0, l1, l2))
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testSwitchInsnFallThrough() {
+        val case0 = Label()
+        val case1 = Label()
+        val end = Label()
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .maxstack 8
+                  switch (LABEL_0, LABEL_1)
+                  br.s LABEL_2
+                  LABEL_0: ret
+                  LABEL_1: ret
+                  LABEL_2: ret
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = MethodAttributes(
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    maxStack(8)
+                    switch(listOf(case0, case1))
+                    insn(OpCode.Code.brS, end)
+                    label(case0)
+                    insn(OpCode.Code.ret)
+                    label(case1)
+                    insn(OpCode.Code.ret)
+                    label(end)
+                    insn(OpCode.Code.ret)
+                }
+            }
+        )
+    }
 }

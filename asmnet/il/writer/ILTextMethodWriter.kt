@@ -145,6 +145,20 @@ class ILTextMethodWriter internal constructor(
         }
     }
 
+    override fun visitSwitchInsn(labels: List<Label>) {
+        writer.write {
+            +"switch ("
+            labels.forEachIndexed { index, label ->
+                if (index > 0) {
+                    +", "
+                }
+                +"LABEL_${getOrCreateLabelIndex(label)}"
+            }
+            +")"
+            line()
+        }
+    }
+
     override fun visitLocalVariables(init: Boolean, locals: List<LocalVariable>) {
         writer.write {
             localsSignature(init, locals)

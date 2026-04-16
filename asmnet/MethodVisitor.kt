@@ -33,5 +33,8 @@ interface MethodVisitor {
     // ECMA-335 VI.C.4.10
     fun visitTypeInsn(opcode: OpCode, type: TypeSpec)
 
+    // ECMA-335 VI.C.4.14
+    fun visitSwitchInsn(labels: List<Label>)
+
     fun visitEnd()
 }
