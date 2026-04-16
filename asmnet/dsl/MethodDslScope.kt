@@ -24,6 +24,12 @@ class MethodDslScope(val visitor: MethodVisitor) {
     fun insn(code: OpCode.Code, varIndex: Int, vararg prefixes: Short) =
         visitor.visitVarInsn(OpCode(code, *prefixes), varIndex)
 
+    fun insn(code: OpCode.Code, label: Label, vararg prefixes: Short) =
+        visitor.visitJumpInsn(OpCode(code, *prefixes), label)
+
+    fun insn(code: OpCode.Code, type: TypeSpec, vararg prefixes: Short) =
+        visitor.visitTypeInsn(OpCode(code, *prefixes), type)
+
     fun ldc(value: Any) = visitor.visitLdc(value)
 
     fun locals(init: Boolean = true, vararg locals: LocalVariable) =

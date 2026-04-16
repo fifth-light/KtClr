@@ -435,4 +435,212 @@ class MethodTest {
             }
         )
     }
+
+    @Test
+    fun testJumpInsnBackwardReference() {
+        val target = Label()
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .maxstack 8
+                  LABEL_0: nop
+                  br LABEL_0
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = MethodAttributes(
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    maxStack(8)
+                    label(target)
+                    insn(OpCode.Code.nop)
+                    insn(OpCode.Code.br, target)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testJumpInsnForwardReference() {
+        val target = Label()
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .maxstack 8
+                  br LABEL_0
+                  LABEL_0: ret
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = MethodAttributes(
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    maxStack(8)
+                    insn(OpCode.Code.br, target)
+                    label(target)
+                    insn(OpCode.Code.ret)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testJumpInsnConditional() {
+        val end = Label()
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .maxstack 8
+                  brtrue.s LABEL_0
+                  nop
+                  LABEL_0: ret
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = MethodAttributes(
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    maxStack(8)
+                    insn(OpCode.Code.brtrueS, end)
+                    insn(OpCode.Code.nop)
+                    label(end)
+                    insn(OpCode.Code.ret)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testJumpInsnLeave() {
+        val end = Label()
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .maxstack 8
+                  leave LABEL_0
+                  LABEL_0: ret
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = MethodAttributes(
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    maxStack(8)
+                    insn(OpCode.Code.leave, end)
+                    label(end)
+                    insn(OpCode.Code.ret)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testTypeInsnNewArr() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .maxstack 8
+                  newarr int32
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = MethodAttributes(
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    maxStack(8)
+                    insn(OpCode.Code.newarr, Type.Int32)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testTypeInsnCastclass() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .maxstack 8
+                  castclass [SomeAssembly]SomeNamespace/SomeClass
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = MethodAttributes(
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    maxStack(8)
+                    insn(
+                        OpCode.Code.castclass,
+                        TypeReference(
+                            resolutionScope = ResolutionScope.Assembly("SomeAssembly"),
+                            names = listOf("SomeNamespace", "SomeClass"),
+                        ),
+                    )
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testTypeInsnBoxUnbox() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .maxstack 8
+                  box int32
+                  unbox.any int32
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = MethodAttributes(
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    maxStack(8)
+                    insn(OpCode.Code.box, Type.Int32)
+                    insn(OpCode.Code.unboxAny, Type.Int32)
+                }
+            }
+        )
+    }
 }

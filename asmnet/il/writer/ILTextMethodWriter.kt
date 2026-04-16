@@ -14,6 +14,10 @@ class ILTextMethodWriter internal constructor(
     private val parameters: List<MethodParameter>,
 ) : MethodVisitor {
     private val labels = mutableMapOf<Label, Int>()
+    private val emittedLabels = mutableSetOf<Label>()
+
+    private fun getOrCreateLabelIndex(label: Label): Int =
+        labels.getOrPut(label) { labels.size }
 
     init {
         writer.write {
@@ -50,9 +54,9 @@ class ILTextMethodWriter internal constructor(
     override fun visitCode() {}
 
     override fun visitLabel(label: Label) {
-        require(label !in labels.keys) { "Label $label already exists" }
-        val labelIndex = labels.size
-        labels[label] = labelIndex
+        require(label !in emittedLabels) { "Label $label already emitted" }
+        val labelIndex = getOrCreateLabelIndex(label)
+        emittedLabels.add(label)
         writer.write {
             +"LABEL_$labelIndex: "
         }
@@ -118,6 +122,25 @@ class ILTextMethodWriter internal constructor(
             opcode(opcode)
             +' '
             fieldRef(ref)
+            line()
+        }
+    }
+
+    override fun visitJumpInsn(opcode: OpCode, label: Label) {
+        val labelIndex = getOrCreateLabelIndex(label)
+        writer.write {
+            opcode(opcode)
+            +' '
+            +"LABEL_$labelIndex"
+            line()
+        }
+    }
+
+    override fun visitTypeInsn(opcode: OpCode, type: TypeSpec) {
+        writer.write {
+            opcode(opcode)
+            +' '
+            type(type)
             line()
         }
     }

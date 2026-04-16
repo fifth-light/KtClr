@@ -1,0 +1,22 @@
+load("@bazel_skylib//rules:select_file.bzl", "select_file")
+load("@rules_dotnet//dotnet:defs.bzl", "csharp_binary")
+load("//rule:il.bzl", "ildasm")
+
+csharp_binary(
+    name = "lib",
+    srcs = ["JumpTest.cs"],
+    out = "jump_test",
+    target_frameworks = ["net10.0"],
+)
+
+select_file(
+    name = "dll",
+    srcs = ":lib",
+    subpath = "jump_test.dll",
+)
+
+ildasm(
+    name = "ir",
+    input = ":dll",
+    visibility = ["//asmnet:__subpackages__"],
+)

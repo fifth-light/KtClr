@@ -1,0 +1,28 @@
+load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary")
+load("//rule:il.bzl", "ilasm_exe")
+
+kt_jvm_binary(
+    name = "gen",
+    srcs = ["TypeInsnGenerator.kt"],
+    main_class = "top.fifthlight.asmnet.il.writer.test.integration.type_insn.TypeInsnGeneratorKt",
+    deps = [
+        "//asmnet",
+        "//asmnet/dsl",
+        "//asmnet/il/writer",
+    ],
+)
+
+genrule(
+    name = "ir",
+    outs = ["type_insn.il"],
+    cmd = "$(location :gen) $@",
+    tools = [":gen"],
+    visibility = ["//visibility:private"],
+)
+
+ilasm_exe(
+    name = "type_insn",
+    input = ":ir",
+    runtimeconfig = "type_insn.runtimeconfig.json",
+    visibility = ["//visibility:public"],
+)
