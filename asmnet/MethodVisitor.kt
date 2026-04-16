@@ -2,6 +2,8 @@ package top.fifthlight.asmnet
 
 interface MethodVisitor {
     fun visitMaxStack(maxStack: Int)
+    fun visitLocalVariables(init: Boolean, locals: List<LocalVariable>) {}
+
     fun visitCode()
 
     fun visitLabel(label: Label)
@@ -11,6 +13,5 @@ interface MethodVisitor {
     fun visitVarInsn(opcode: OpCode, varIndex: Int)
     fun visitMethodInsn(opcode: OpCode, ref: MethodReference)
     fun visitFieldInsn(opcode: OpCode, ref: FieldReference)
-
     fun visitEnd()
 }

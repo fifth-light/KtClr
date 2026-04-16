@@ -122,6 +122,12 @@ class ILTextMethodWriter internal constructor(
         }
     }
 
+    override fun visitLocalVariables(init: Boolean, locals: List<LocalVariable>) {
+        writer.write {
+            localsSignature(init, locals)
+        }
+    }
+
     override fun visitEnd() {
         writer.write {
             unindent()

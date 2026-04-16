@@ -351,4 +351,88 @@ class MethodTest {
             }
         )
     }
+
+    @Test
+    fun testMethodWithLocalsInit() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .locals init (int32 x, int32 y)
+                  .maxstack 8
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = MethodAttributes(
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    locals(
+                        LocalVariable(Type.Int32, "x"),
+                        LocalVariable(Type.Int32, "y"),
+                    )
+                    maxStack(8)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testMethodWithLocalsNoInit() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .locals (int32 x)
+                  .maxstack 8
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = MethodAttributes(
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    locals(init = false, LocalVariable(Type.Int32, "x"))
+                    maxStack(8)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testMethodWithUnnamedLocals() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .locals init (int32, string)
+                  .maxstack 8
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = MethodAttributes(
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    locals(
+                        LocalVariable(Type.Int32),
+                        LocalVariable(Type.String),
+                    )
+                    maxStack(8)
+                }
+            }
+        )
+    }
 }

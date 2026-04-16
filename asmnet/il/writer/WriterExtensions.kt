@@ -78,6 +78,28 @@ fun WriteScope.type(type: TypeSpec) {
     }
 }
 
+// ECMA-335 II.15.4.1.3
+fun WriteScope.localsSignature(init: Boolean, locals: List<LocalVariable>) {
+    if (locals.isEmpty()) return
+    +".locals"
+    if (init) {
+        +" init"
+    }
+    +" ("
+    locals.forEachIndexed { index, local ->
+        type(local.type)
+        local.name?.let {
+            +' '
+            identifier(it)
+        }
+        if (index < locals.size - 1) {
+            +", "
+        }
+    }
+    +")"
+    line()
+}
+
 // ECMA-335 II.16
 fun WriteScope.fieldDecl(
     name: String,

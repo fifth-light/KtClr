@@ -25,4 +25,9 @@ class MethodDslScope(val visitor: MethodVisitor) {
         visitor.visitVarInsn(OpCode(code, *prefixes), varIndex)
 
     fun ldc(value: Any) = visitor.visitLdc(value)
+
+    fun locals(init: Boolean = true, vararg locals: LocalVariable) =
+        visitor.visitLocalVariables(init, locals.toList())
+
+    fun locals(vararg locals: LocalVariable) = locals(init = true, *locals)
 }

@@ -1,0 +1,28 @@
+load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary")
+load("//rule:il.bzl", "ilasm_exe")
+
+kt_jvm_binary(
+    name = "gen",
+    srcs = ["LocalVariableGenerator.kt"],
+    main_class = "top.fifthlight.asmnet.il.writer.test.integration.local_variable.LocalVariableGeneratorKt",
+    deps = [
+        "//asmnet",
+        "//asmnet/dsl",
+        "//asmnet/il/writer",
+    ],
+)
+
+genrule(
+    name = "ir",
+    outs = ["local_variable.il"],
+    cmd = "$(location :gen) $@",
+    tools = [":gen"],
+    visibility = ["//visibility:private"],
+)
+
+ilasm_exe(
+    name = "local_variable",
+    input = ":ir",
+    runtimeconfig = "local_variable.runtimeconfig.json",
+    visibility = ["//visibility:public"],
+)
