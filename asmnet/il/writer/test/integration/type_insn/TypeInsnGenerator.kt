@@ -77,6 +77,7 @@ private fun generateTypeInsnTest(): String = StringWriter().use {
                     LocalVariable(Type.String, "casted"),
                 )
                 maxStack(3)
+                code()
                 insn(OpCode.Code.ldcI43)
                 insn(OpCode.Code.newarr, systemRuntimeInt32)
                 insn(OpCode.Code.stloc, 0)

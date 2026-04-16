@@ -191,8 +191,8 @@ class MethodTest {
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
-                    code()
                     maxStack(8)
+                    code()
                 }
             }
         )
@@ -218,8 +218,8 @@ class MethodTest {
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                     entryPoint = true,
                 ) {
-                    code()
                     maxStack(8)
+                    code()
                 }
             }
         )
@@ -247,6 +247,7 @@ class MethodTest {
                         MethodAttributes.HideBySig,
                     )) {
                         maxStack(8)
+                        code()
                         label()
                         insn(OpCode.Code.nop)
                         label()
@@ -458,6 +459,7 @@ class MethodTest {
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
                     maxStack(8)
+                    code()
                     label(target)
                     insn(OpCode.Code.nop)
                     insn(OpCode.Code.br, target)
@@ -488,6 +490,7 @@ class MethodTest {
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
                     maxStack(8)
+                    code()
                     insn(OpCode.Code.br, target)
                     label(target)
                     insn(OpCode.Code.ret)
@@ -519,6 +522,7 @@ class MethodTest {
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
                     maxStack(8)
+                    code()
                     insn(OpCode.Code.brtrueS, end)
                     insn(OpCode.Code.nop)
                     label(end)
@@ -550,6 +554,7 @@ class MethodTest {
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
                     maxStack(8)
+                    code()
                     insn(OpCode.Code.leave, end)
                     label(end)
                     insn(OpCode.Code.ret)
@@ -578,6 +583,7 @@ class MethodTest {
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
                     maxStack(8)
+                    code()
                     insn(OpCode.Code.newarr, Type.Int32)
                 }
             }
@@ -604,6 +610,7 @@ class MethodTest {
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
                     maxStack(8)
+                    code()
                     insn(
                         OpCode.Code.castclass,
                         TypeReference(
@@ -637,6 +644,7 @@ class MethodTest {
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
                     maxStack(8)
+                    code()
                     insn(OpCode.Code.box, Type.Int32)
                     insn(OpCode.Code.unboxAny, Type.Int32)
                 }
@@ -667,6 +675,7 @@ class MethodTest {
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
                     maxStack(8)
+                    code()
                     switch(listOf(l0, l1, l2))
                 }
             }
@@ -700,6 +709,7 @@ class MethodTest {
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
                     maxStack(8)
+                    code()
                     switch(listOf(case0, case1))
                     insn(OpCode.Code.brS, end)
                     label(case0)

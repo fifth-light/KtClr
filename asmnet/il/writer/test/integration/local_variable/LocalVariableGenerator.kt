@@ -56,6 +56,7 @@ private fun generateLocalVariableTest(): String = StringWriter().use {
                     LocalVariable(Type.Int32, "y"),
                 )
                 maxStack(2)
+                code()
                 ldc(10)
                 insn(OpCode.Code.stloc, 0)
                 ldc(20)

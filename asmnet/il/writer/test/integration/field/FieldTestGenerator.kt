@@ -58,6 +58,7 @@ private fun generateFieldTest(): String = StringWriter().use {
                 ),
             ) {
                 maxStack(8)
+                code()
                 insn(OpCode.Code.ldarg0)
                 insn(OpCode.Code.call, MethodReference(
                     callConv = CallConv(instance = true),
@@ -84,6 +85,7 @@ private fun generateFieldTest(): String = StringWriter().use {
                 entryPoint = true,
             ) {
                 maxStack(8)
+                code()
                 insn(OpCode.Code.newobj, MethodReference(
                     callConv = CallConv(instance = true),
                     declaringType = fieldType,

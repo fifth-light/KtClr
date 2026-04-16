@@ -25,6 +25,7 @@ class InstructionTest {
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
                     maxStack(8)
+                    code()
                     label()
                     insn(OpCode.Code.nop)
                     label()
@@ -58,6 +59,7 @@ class InstructionTest {
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
                     maxStack(8)
+                    code()
                     label()
                     ldc(42)
                     label()
@@ -94,6 +96,7 @@ class InstructionTest {
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
                     maxStack(8)
+                    code()
                     label()
                     insn(OpCode.Code.call, MethodReference(
                         declaringType = Type.Object,
@@ -129,6 +132,7 @@ class InstructionTest {
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
                     maxStack(8)
+                    code()
                     label()
                     insn(OpCode.Code.ldarg0)
                     label()
@@ -166,6 +170,7 @@ class InstructionTest {
                     ),
                 ) {
                     maxStack(8)
+                    code()
                     label()
                     insn(OpCode.Code.ldargS, 4)
                     label()
@@ -197,6 +202,7 @@ class InstructionTest {
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
                     maxStack(8)
+                    code()
                     label()
                     insn(OpCode.Code.ldfld, FieldReference(
                         declaringType = TypeReference("MyClass"),

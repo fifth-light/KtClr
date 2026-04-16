@@ -64,6 +64,7 @@ private fun generateSwitchInsnTest(): String = StringWriter().use {
                     LocalVariable(Type.Int32, "switchVal"),
                 )
                 maxStack(1)
+                code()
                 insn(OpCode.Code.ldcI42)
                 insn(OpCode.Code.stloc, 0)
                 insn(OpCode.Code.ldloc, 0)

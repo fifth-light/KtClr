@@ -61,6 +61,7 @@ private fun generateJumpInsnTest(): String = StringWriter().use {
                     LocalVariable(Type.Bool, "ifCond"),
                 )
                 maxStack(2)
+                code()
                 insn(OpCode.Code.ldcI40)
                 insn(OpCode.Code.stloc, 0)
                 insn(OpCode.Code.ldcI41)

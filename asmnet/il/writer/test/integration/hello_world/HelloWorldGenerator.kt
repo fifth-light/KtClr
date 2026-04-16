@@ -52,6 +52,7 @@ private fun generateHelloWorld(): String = StringWriter().use {
                 entryPoint = true,
             ) {
                 maxStack(8)
+                code()
                 ldc("Hello, world!")
                 insn(OpCode.Code.call, MethodReference(
                     declaringType = TypeReference(
