@@ -55,6 +55,17 @@ kt_jvm_test(
 )
 
 kt_jvm_test(
+    name = "instruction",
+    srcs = ["InstructionTest.kt"],
+    test_class = "top.fifthlight.asmnet.il.writer.test.InstructionTest",
+    deps = [
+        ":util",
+        "//asmnet",
+        "@maven//:junit_junit",
+    ],
+)
+
+kt_jvm_test(
     name = "field",
     srcs = ["FieldTest.kt"],
     test_class = "top.fifthlight.asmnet.il.writer.test.FieldTest",
