@@ -1,10 +1,7 @@
 package top.fifthlight.asmnet.il.writer.test
 
 import org.junit.Test
-import top.fifthlight.asmnet.FieldAttributes
-import top.fifthlight.asmnet.FieldInitValue
-import top.fifthlight.asmnet.MethodAttributes
-import top.fifthlight.asmnet.Type
+import top.fifthlight.asmnet.*
 
 class FieldTest {
     @Test
@@ -17,14 +14,8 @@ class FieldTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit()
-                    visitField(
-                        name = "x",
-                        type = Type.Int32,
-                        attributes = FieldAttributes(FieldAttributes.Private),
-                    )
-                    visitEnd()
+                class_("MyClass") {
+                    field("x", Type.Int32, attributes = FieldAttributes(FieldAttributes.Private))
                 }
             }
         )
@@ -40,17 +31,11 @@ class FieldTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit()
-                    visitField(
-                        name = "count",
-                        type = Type.Int32,
-                        attributes = FieldAttributes(
-                            FieldAttributes.Public,
-                            FieldAttributes.Static,
-                        ),
-                    )
-                    visitEnd()
+                class_("MyClass") {
+                    field("count", Type.Int32, attributes = FieldAttributes(
+                        FieldAttributes.Public,
+                        FieldAttributes.Static,
+                    ))
                 }
             }
         )
@@ -66,18 +51,12 @@ class FieldTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit()
-                    visitField(
-                        name = "pointCount",
-                        type = Type.Int32,
-                        attributes = FieldAttributes(
-                            FieldAttributes.Public,
-                            FieldAttributes.Static,
-                            FieldAttributes.InitOnly,
-                        ),
-                    )
-                    visitEnd()
+                class_("MyClass") {
+                    field("pointCount", Type.Int32, attributes = FieldAttributes(
+                        FieldAttributes.Public,
+                        FieldAttributes.Static,
+                        FieldAttributes.InitOnly,
+                    ))
                 }
             }
         )
@@ -93,19 +72,12 @@ class FieldTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit()
-                    visitField(
-                        name = "no_error",
-                        type = Type.Int8,
-                        attributes = FieldAttributes(
-                            FieldAttributes.Public,
-                            FieldAttributes.Static,
-                            FieldAttributes.Literal,
-                        ),
-                        initValue = FieldInitValue.Int8(0.toByte()),
-                    )
-                    visitEnd()
+                class_("MyClass") {
+                    field("no_error", Type.Int8, attributes = FieldAttributes(
+                        FieldAttributes.Public,
+                        FieldAttributes.Static,
+                        FieldAttributes.Literal,
+                    ), initValue = FieldInitValue.Int8(0.toByte()))
                 }
             }
         )
@@ -121,18 +93,11 @@ class FieldTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit(attrs = top.fifthlight.asmnet.TypeAttributes(
-                        top.fifthlight.asmnet.TypeAttributes.Public,
-                        top.fifthlight.asmnet.TypeAttributes.ExplicitLayout,
-                    ))
-                    visitField(
-                        name = "x",
-                        type = Type.Int32,
-                        attributes = FieldAttributes(FieldAttributes.Public),
-                        offset = 0,
-                    )
-                    visitEnd()
+                class_("MyClass", attrs = TypeAttributes(
+                    TypeAttributes.Public,
+                    TypeAttributes.ExplicitLayout,
+                )) {
+                    field("x", Type.Int32, attributes = FieldAttributes(FieldAttributes.Public), offset = 0)
                 }
             }
         )
@@ -148,15 +113,8 @@ class FieldTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit()
-                    visitField(
-                        name = "ref",
-                        type = Type.Object,
-                        attributes = FieldAttributes(FieldAttributes.Private),
-                        initValue = FieldInitValue.NullRef,
-                    )
-                    visitEnd()
+                class_("MyClass") {
+                    field("ref", Type.Object, attributes = FieldAttributes(FieldAttributes.Private), initValue = FieldInitValue.NullRef)
                 }
             }
         )
@@ -172,18 +130,11 @@ class FieldTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit()
-                    visitField(
-                        name = "name",
-                        type = Type.String,
-                        attributes = FieldAttributes(
-                            FieldAttributes.Private,
-                            FieldAttributes.Static,
-                        ),
-                        initValue = FieldInitValue.String("hello"),
-                    )
-                    visitEnd()
+                class_("MyClass") {
+                    field("name", Type.String, attributes = FieldAttributes(
+                        FieldAttributes.Private,
+                        FieldAttributes.Static,
+                    ), initValue = FieldInitValue.String("hello"))
                 }
             }
         )
@@ -199,18 +150,11 @@ class FieldTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit()
-                    visitField(
-                        name = "pi",
-                        type = Type.Float32,
-                        attributes = FieldAttributes(
-                            FieldAttributes.Private,
-                            FieldAttributes.Static,
-                        ),
-                        initValue = FieldInitValue.Float32(3.14f),
-                    )
-                    visitEnd()
+                class_("MyClass") {
+                    field("pi", Type.Float32, attributes = FieldAttributes(
+                        FieldAttributes.Private,
+                        FieldAttributes.Static,
+                    ), initValue = FieldInitValue.Float32(3.14f))
                 }
             }
         )
@@ -226,18 +170,11 @@ class FieldTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit()
-                    visitField(
-                        name = "pi",
-                        type = Type.Float64,
-                        attributes = FieldAttributes(
-                            FieldAttributes.Private,
-                            FieldAttributes.Static,
-                        ),
-                        initValue = FieldInitValue.Float64(3.141592653589793),
-                    )
-                    visitEnd()
+                class_("MyClass") {
+                    field("pi", Type.Float64, attributes = FieldAttributes(
+                        FieldAttributes.Private,
+                        FieldAttributes.Static,
+                    ), initValue = FieldInitValue.Float64(3.141592653589793))
                 }
             }
         )
@@ -253,18 +190,11 @@ class FieldTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit()
-                    visitField(
-                        name = "big",
-                        type = Type.Int64,
-                        attributes = FieldAttributes(
-                            FieldAttributes.Private,
-                            FieldAttributes.Static,
-                        ),
-                        initValue = FieldInitValue.Int64(Long.MAX_VALUE),
-                    )
-                    visitEnd()
+                class_("MyClass") {
+                    field("big", Type.Int64, attributes = FieldAttributes(
+                        FieldAttributes.Private,
+                        FieldAttributes.Static,
+                    ), initValue = FieldInitValue.Int64(Long.MAX_VALUE))
                 }
             }
         )
@@ -280,18 +210,11 @@ class FieldTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit()
-                    visitField(
-                        name = "max",
-                        type = Type.UnsignedInt32,
-                        attributes = FieldAttributes(
-                            FieldAttributes.Private,
-                            FieldAttributes.Static,
-                        ),
-                        initValue = FieldInitValue.UnsignedInt32(0xFFFFFFFFu),
-                    )
-                    visitEnd()
+                class_("MyClass") {
+                    field("max", Type.UnsignedInt32, attributes = FieldAttributes(
+                        FieldAttributes.Private,
+                        FieldAttributes.Static,
+                    ), initValue = FieldInitValue.UnsignedInt32(0xFFFFFFFFu))
                 }
             }
         )
@@ -307,18 +230,11 @@ class FieldTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit()
-                    visitField(
-                        name = "flag",
-                        type = Type.Bool,
-                        attributes = FieldAttributes(
-                            FieldAttributes.Private,
-                            FieldAttributes.Static,
-                        ),
-                        initValue = FieldInitValue.Boolean(true),
-                    )
-                    visitEnd()
+                class_("MyClass") {
+                    field("flag", Type.Bool, attributes = FieldAttributes(
+                        FieldAttributes.Private,
+                        FieldAttributes.Static,
+                    ), initValue = FieldInitValue.Boolean(true))
                 }
             }
         )
@@ -334,18 +250,11 @@ class FieldTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit()
-                    visitField(
-                        name = "ch",
-                        type = Type.Char,
-                        attributes = FieldAttributes(
-                            FieldAttributes.Private,
-                            FieldAttributes.Static,
-                        ),
-                        initValue = FieldInitValue.Char('A'),
-                    )
-                    visitEnd()
+                class_("MyClass") {
+                    field("ch", Type.Char, attributes = FieldAttributes(
+                        FieldAttributes.Private,
+                        FieldAttributes.Static,
+                    ), initValue = FieldInitValue.Char('A'))
                 }
             }
         )
@@ -363,27 +272,13 @@ class FieldTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit()
-                    visitField(
-                        name = "x",
-                        type = Type.Int32,
-                        attributes = FieldAttributes(FieldAttributes.Private),
-                    )
-                    visitField(
-                        name = "y",
-                        type = Type.Int32,
-                        attributes = FieldAttributes(FieldAttributes.Private),
-                    )
-                    visitField(
-                        name = "count",
-                        type = Type.Int32,
-                        attributes = FieldAttributes(
-                            FieldAttributes.Public,
-                            FieldAttributes.Static,
-                        ),
-                    )
-                    visitEnd()
+                class_("MyClass") {
+                    field("x", Type.Int32, attributes = FieldAttributes(FieldAttributes.Private))
+                    field("y", Type.Int32, attributes = FieldAttributes(FieldAttributes.Private))
+                    field("count", Type.Int32, attributes = FieldAttributes(
+                        FieldAttributes.Public,
+                        FieldAttributes.Static,
+                    ))
                 }
             }
         )
@@ -402,24 +297,13 @@ class FieldTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit()
-                    visitField(
-                        name = "x",
-                        type = Type.Int32,
-                        attributes = FieldAttributes(FieldAttributes.Private),
-                    )
-                    visitMethod(
-                        name = "Main",
-                        attributes = MethodAttributes(
-                            MethodAttributes.Public,
-                            MethodAttributes.Static,
-                            MethodAttributes.HideBySig,
-                        ),
-                    )!!.apply {
-                        visitEnd()
-                    }
-                    visitEnd()
+                class_("MyClass") {
+                    field("x", Type.Int32, attributes = FieldAttributes(FieldAttributes.Private))
+                    method("Main", attributes = MethodAttributes(
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
+                    )) {}
                 }
             }
         )
@@ -432,14 +316,10 @@ class FieldTest {
                 .field public static int32 globalCount
             """.trimIndent(),
             actual = generateText {
-                visitField(
-                    name = "globalCount",
-                    type = Type.Int32,
-                    attributes = FieldAttributes(
-                        FieldAttributes.Public,
-                        FieldAttributes.Static,
-                    ),
-                )
+                field("globalCount", Type.Int32, attributes = FieldAttributes(
+                    FieldAttributes.Public,
+                    FieldAttributes.Static,
+                ))
             }
         )
     }
@@ -454,13 +334,8 @@ class FieldTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit()
-                    visitField(
-                        name = "x",
-                        type = Type.Int32,
-                    )
-                    visitEnd()
+                class_("MyClass") {
+                    field("x", Type.Int32)
                 }
             }
         )
@@ -476,14 +351,8 @@ class FieldTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit()
-                    visitField(
-                        name = "x",
-                        type = Type.Int32,
-                        attributes = FieldAttributes(FieldAttributes.Family),
-                    )
-                    visitEnd()
+                class_("MyClass") {
+                    field("x", Type.Int32, attributes = FieldAttributes(FieldAttributes.Family))
                 }
             }
         )
@@ -499,14 +368,8 @@ class FieldTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit()
-                    visitField(
-                        name = "x",
-                        type = Type.Int32,
-                        attributes = FieldAttributes(FieldAttributes.FamORAssem),
-                    )
-                    visitEnd()
+                class_("MyClass") {
+                    field("x", Type.Int32, attributes = FieldAttributes(FieldAttributes.FamORAssem))
                 }
             }
         )
@@ -522,14 +385,8 @@ class FieldTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit()
-                    visitField(
-                        name = "x",
-                        type = Type.Int32,
-                        attributes = FieldAttributes(FieldAttributes.Assembly),
-                    )
-                    visitEnd()
+                class_("MyClass") {
+                    field("x", Type.Int32, attributes = FieldAttributes(FieldAttributes.Assembly))
                 }
             }
         )
@@ -545,20 +402,14 @@ class FieldTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit(attrs = top.fifthlight.asmnet.TypeAttributes(
-                        top.fifthlight.asmnet.TypeAttributes.Public,
-                        top.fifthlight.asmnet.TypeAttributes.Serializable,
+                class_("MyClass", attrs = TypeAttributes(
+                    TypeAttributes.Public,
+                    TypeAttributes.Serializable,
+                )) {
+                    field("x", Type.Int32, attributes = FieldAttributes(
+                        FieldAttributes.Private,
+                        FieldAttributes.NotSerialized,
                     ))
-                    visitField(
-                        name = "x",
-                        type = Type.Int32,
-                        attributes = FieldAttributes(
-                            FieldAttributes.Private,
-                            FieldAttributes.NotSerialized,
-                        ),
-                    )
-                    visitEnd()
                 }
             }
         )
@@ -574,18 +425,12 @@ class FieldTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit()
-                    visitField(
-                        name = "value__",
-                        type = Type.Int32,
-                        attributes = FieldAttributes(
-                            FieldAttributes.Private,
-                            FieldAttributes.SpecialName,
-                            FieldAttributes.RTSpecialName,
-                        ),
-                    )
-                    visitEnd()
+                class_("MyClass") {
+                    field("value__", Type.Int32, attributes = FieldAttributes(
+                        FieldAttributes.Private,
+                        FieldAttributes.SpecialName,
+                        FieldAttributes.RTSpecialName,
+                    ))
                 }
             }
         )

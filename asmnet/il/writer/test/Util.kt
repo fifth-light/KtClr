@@ -1,14 +1,13 @@
 package top.fifthlight.asmnet.il.writer.test
 
-import top.fifthlight.asmnet.ModuleVisitor
+import top.fifthlight.asmnet.dsl.ModuleDslScope
+import top.fifthlight.asmnet.dsl.write
 import top.fifthlight.asmnet.il.writer.ILTextModuleWriter
 import java.io.StringWriter
 import kotlin.test.assertEquals
 
-infix fun Short.or(other: Short): Short = (toInt() or other.toInt()).toShort()
-
-fun generateText(block: ModuleVisitor.() -> Unit) = StringWriter().use {
-    block(ILTextModuleWriter(it))
+fun generateText(block: ModuleDslScope.() -> Unit) = StringWriter().use {
+    ILTextModuleWriter(it).write(block)
     it.toString()
 }
 

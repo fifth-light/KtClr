@@ -16,15 +16,12 @@ class AssemblyTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitAssembly(
-                    name = "name",
-                    declaration = AssemblyDeclaration(
-                        hash = null,
-                        culture = null,
-                        publicKey = null,
-                        version = null,
-                    ),
-                )
+                assembly("name", declaration = AssemblyDeclaration(
+                    hash = null,
+                    culture = null,
+                    publicKey = null,
+                    version = null,
+                ))
             }
         )
     }
@@ -39,15 +36,12 @@ class AssemblyTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitAssembly(
-                    name = "name",
-                    declaration = AssemblyDeclaration(
-                        hash = HashAlgorithm.SHA256,
-                        culture = null,
-                        publicKey = null,
-                        version = null,
-                    ),
-                )
+                assembly("name", declaration = AssemblyDeclaration(
+                    hash = HashAlgorithm.SHA256,
+                    culture = null,
+                    publicKey = null,
+                    version = null,
+                ))
             }
         )
     }
@@ -62,15 +56,12 @@ class AssemblyTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitAssembly(
-                    name = "name",
-                    declaration = AssemblyDeclaration(
-                        hash = null,
-                        culture = "en-US",
-                        publicKey = null,
-                        version = null,
-                    ),
-                )
+                assembly("name", declaration = AssemblyDeclaration(
+                    hash = null,
+                    culture = "en-US",
+                    publicKey = null,
+                    version = null,
+                ))
             }
         )
     }
@@ -85,15 +76,12 @@ class AssemblyTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitAssembly(
-                    name = "name",
-                    declaration = AssemblyDeclaration(
-                        hash = null,
-                        culture = null,
-                        publicKey = byteArrayOf(0x00, 0x01, 0x02, 0xAB.toByte(), 0xCD.toByte()),
-                        version = null,
-                    ),
-                )
+                assembly("name", declaration = AssemblyDeclaration(
+                    hash = null,
+                    culture = null,
+                    publicKey = byteArrayOf(0x00, 0x01, 0x02, 0xAB.toByte(), 0xCD.toByte()),
+                    version = null,
+                ))
             }
         )
     }
@@ -108,15 +96,12 @@ class AssemblyTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitAssembly(
-                    name = "name",
-                    declaration = AssemblyDeclaration(
-                        hash = null,
-                        culture = null,
-                        publicKey = null,
-                        version = Version(1, 2, 3, 4),
-                    ),
-                )
+                assembly("name", declaration = AssemblyDeclaration(
+                    hash = null,
+                    culture = null,
+                    publicKey = null,
+                    version = Version(1, 2, 3, 4),
+                ))
             }
         )
     }
@@ -134,15 +119,12 @@ class AssemblyTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitAssembly(
-                    name = "name",
-                    declaration = AssemblyDeclaration(
-                        hash = HashAlgorithm.SHA1,
-                        culture = "en-US",
-                        publicKey = byteArrayOf(0x00, 0x01, 0x02, 0xAB.toByte(), 0xCD.toByte()),
-                        version = Version(1, 2, 3, 4),
-                    ),
-                )
+                assembly("name", declaration = AssemblyDeclaration(
+                    hash = HashAlgorithm.SHA1,
+                    culture = "en-US",
+                    publicKey = byteArrayOf(0x00, 0x01, 0x02, 0xAB.toByte(), 0xCD.toByte()),
+                    version = Version(1, 2, 3, 4),
+                ))
             }
         )
     }
@@ -156,10 +138,7 @@ class AssemblyTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitAssembly(
-                    name = "my-assembly",
-                    declaration = AssemblyDeclaration(),
-                )
+                assembly("my-assembly")
             }
         )
     }
@@ -173,10 +152,7 @@ class AssemblyTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitExternAssembly(
-                    name = "name",
-                    declaration = ExternAssemblyDeclaration()
-                )
+                externAssembly("name")
             }
         )
     }
@@ -191,12 +167,9 @@ class AssemblyTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitExternAssembly(
-                    name = "name",
-                    declaration = ExternAssemblyDeclaration(
-                        culture = "en-US",
-                    )
-                )
+                externAssembly("name", declaration = ExternAssemblyDeclaration(
+                    culture = "en-US",
+                ))
             }
         )
     }
@@ -211,12 +184,9 @@ class AssemblyTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitExternAssembly(
-                    name = "name",
-                    declaration = ExternAssemblyDeclaration(
-                        publicKeyToken = byteArrayOf(0x00, 0x01, 0x02, 0xAB.toByte(), 0xCD.toByte()),
-                    )
-                )
+                externAssembly("name", declaration = ExternAssemblyDeclaration(
+                    publicKeyToken = byteArrayOf(0x00, 0x01, 0x02, 0xAB.toByte(), 0xCD.toByte()),
+                ))
             }
         )
     }
@@ -231,12 +201,9 @@ class AssemblyTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitExternAssembly(
-                    name = "name",
-                    declaration = ExternAssemblyDeclaration(
-                        publicKey = byteArrayOf(0x00, 0x01, 0x02, 0xAB.toByte(), 0xCD.toByte()),
-                    )
-                )
+                externAssembly("name", declaration = ExternAssemblyDeclaration(
+                    publicKey = byteArrayOf(0x00, 0x01, 0x02, 0xAB.toByte(), 0xCD.toByte()),
+                ))
             }
         )
     }
@@ -251,12 +218,9 @@ class AssemblyTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitExternAssembly(
-                    name = "name",
-                    declaration = ExternAssemblyDeclaration(
-                        version = Version(4, 0, 0, 0),
-                    )
-                )
+                externAssembly("name", declaration = ExternAssemblyDeclaration(
+                    version = Version(4, 0, 0, 0),
+                ))
             }
         )
     }
@@ -274,15 +238,12 @@ class AssemblyTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitExternAssembly(
-                    name = "name",
-                    declaration = ExternAssemblyDeclaration(
-                        culture = "en-US",
-                        publicKeyToken = byteArrayOf(0x31, 0x24, 0x6B.toByte(), 0xFD.toByte()),
-                        publicKey = byteArrayOf(0x00, 0x01, 0x02, 0xAB.toByte(), 0xCD.toByte()),
-                        version = Version(4, 0, 0, 0),
-                    )
-                )
+                externAssembly("name", declaration = ExternAssemblyDeclaration(
+                    culture = "en-US",
+                    publicKeyToken = byteArrayOf(0x31, 0x24, 0x6B.toByte(), 0xFD.toByte()),
+                    publicKey = byteArrayOf(0x00, 0x01, 0x02, 0xAB.toByte(), 0xCD.toByte()),
+                    version = Version(4, 0, 0, 0),
+                ))
             }
         )
     }
@@ -296,11 +257,7 @@ class AssemblyTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitExternAssembly(
-                    name = "my-assembly",
-                    declaration = ExternAssemblyDeclaration(
-                    )
-                )
+                externAssembly("my-assembly")
             }
         )
     }
@@ -312,12 +269,7 @@ class AssemblyTest {
                 .file myfile .hash = (AB CD EF 12 34)
             """.trimIndent(),
             actual = generateText {
-                visitFile(
-                    noMetadata = false,
-                    fileName = "myfile",
-                    hash = byteArrayOf(0xAB.toByte(), 0xCD.toByte(), 0xEF.toByte(), 0x12, 0x34),
-                    entryPoint = false,
-                )
+                file("myfile", byteArrayOf(0xAB.toByte(), 0xCD.toByte(), 0xEF.toByte(), 0x12, 0x34))
             }
         )
     }
@@ -329,12 +281,7 @@ class AssemblyTest {
                 .file nometadata myfile .hash = (AB CD EF 12 34)
             """.trimIndent(),
             actual = generateText {
-                visitFile(
-                    noMetadata = true,
-                    fileName = "myfile",
-                    hash = byteArrayOf(0xAB.toByte(), 0xCD.toByte(), 0xEF.toByte(), 0x12, 0x34),
-                    entryPoint = false,
-                )
+                file("myfile", byteArrayOf(0xAB.toByte(), 0xCD.toByte(), 0xEF.toByte(), 0x12, 0x34), noMetadata = true)
             }
         )
     }
@@ -346,12 +293,7 @@ class AssemblyTest {
                 .file myfile .hash = (AB CD EF 12 34) .entrypoint
             """.trimIndent(),
             actual = generateText {
-                visitFile(
-                    noMetadata = false,
-                    fileName = "myfile",
-                    hash = byteArrayOf(0xAB.toByte(), 0xCD.toByte(), 0xEF.toByte(), 0x12, 0x34),
-                    entryPoint = true,
-                )
+                file("myfile", byteArrayOf(0xAB.toByte(), 0xCD.toByte(), 0xEF.toByte(), 0x12, 0x34), entryPoint = true)
             }
         )
     }
@@ -363,12 +305,7 @@ class AssemblyTest {
                 .file nometadata myfile .hash = (AB CD EF 12 34) .entrypoint
             """.trimIndent(),
             actual = generateText {
-                visitFile(
-                    noMetadata = true,
-                    fileName = "myfile",
-                    hash = byteArrayOf(0xAB.toByte(), 0xCD.toByte(), 0xEF.toByte(), 0x12, 0x34),
-                    entryPoint = true,
-                )
+                file("myfile", byteArrayOf(0xAB.toByte(), 0xCD.toByte(), 0xEF.toByte(), 0x12, 0x34), noMetadata = true, entryPoint = true)
             }
         )
     }
@@ -380,12 +317,7 @@ class AssemblyTest {
                 .file 'my-file' .hash = (AB CD)
             """.trimIndent(),
             actual = generateText {
-                visitFile(
-                    noMetadata = false,
-                    fileName = "my-file",
-                    hash = byteArrayOf(0xAB.toByte(), 0xCD.toByte()),
-                    entryPoint = false,
-                )
+                file("my-file", byteArrayOf(0xAB.toByte(), 0xCD.toByte()))
             }
         )
     }

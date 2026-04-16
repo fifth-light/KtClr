@@ -16,10 +16,7 @@ class ClassTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit()
-                    visitEnd()
-                }
+                class_("MyClass") {}
             }
         )
     }
@@ -33,10 +30,7 @@ class ClassTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit(attrs = TypeAttributes(TypeAttributes.NotPublic))
-                    visitEnd()
-                }
+                class_("MyClass", attrs = TypeAttributes(TypeAttributes.NotPublic)) {}
             }
         )
     }
@@ -50,16 +44,11 @@ class ClassTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit(
-                        attrs = TypeAttributes(
-                            TypeAttributes.Public,
-                            TypeAttributes.Abstract,
-                            TypeAttributes.Sealed,
-                        ),
-                    )
-                    visitEnd()
-                }
+                class_("MyClass", attrs = TypeAttributes(
+                    TypeAttributes.Public,
+                    TypeAttributes.Abstract,
+                    TypeAttributes.Sealed,
+                )) {}
             }
         )
     }
@@ -73,15 +62,10 @@ class ClassTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit(
-                        attrs = TypeAttributes(
-                            TypeAttributes.Public,
-                            TypeAttributes.BeforeFieldInit,
-                        ),
-                    )
-                    visitEnd()
-                }
+                class_("MyClass", attrs = TypeAttributes(
+                    TypeAttributes.Public,
+                    TypeAttributes.BeforeFieldInit,
+                )) {}
             }
         )
     }
@@ -95,15 +79,10 @@ class ClassTest {
                 } // end of class IMyInterface
             """.trimIndent(),
             actual = generateText {
-                visitClass("IMyInterface")!!.apply {
-                    visit(
-                        attrs = TypeAttributes(
-                            TypeAttributes.Public,
-                            TypeAttributes.Interface,
-                        ),
-                    )
-                    visitEnd()
-                }
+                class_("IMyInterface", attrs = TypeAttributes(
+                    TypeAttributes.Public,
+                    TypeAttributes.Interface,
+                )) {}
             }
         )
     }
@@ -117,15 +96,10 @@ class ClassTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit(
-                        attrs = TypeAttributes(
-                            TypeAttributes.Public,
-                            TypeAttributes.Serializable,
-                        ),
-                    )
-                    visitEnd()
-                }
+                class_("MyClass", attrs = TypeAttributes(
+                    TypeAttributes.Public,
+                    TypeAttributes.Serializable,
+                )) {}
             }
         )
     }
@@ -139,15 +113,10 @@ class ClassTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit(
-                        attrs = TypeAttributes(
-                            TypeAttributes.Public,
-                            TypeAttributes.SequentialLayout,
-                        ),
-                    )
-                    visitEnd()
-                }
+                class_("MyClass", attrs = TypeAttributes(
+                    TypeAttributes.Public,
+                    TypeAttributes.SequentialLayout,
+                )) {}
             }
         )
     }
@@ -161,15 +130,10 @@ class ClassTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit(
-                        attrs = TypeAttributes(
-                            TypeAttributes.Public,
-                            TypeAttributes.UnicodeClass,
-                        ),
-                    )
-                    visitEnd()
-                }
+                class_("MyClass", attrs = TypeAttributes(
+                    TypeAttributes.Public,
+                    TypeAttributes.UnicodeClass,
+                )) {}
             }
         )
     }
@@ -184,15 +148,10 @@ class ClassTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit(
-                        extends = TypeReference(
-                            resolutionScope = ResolutionScope.Assembly("System.Runtime"),
-                            name = "System.Object",
-                        ),
-                    )
-                    visitEnd()
-                }
+                class_("MyClass", extends = TypeReference(
+                    resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                    name = "System.Object",
+                )) {}
             }
         )
     }
@@ -207,17 +166,12 @@ class ClassTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit(
-                        implements = setOf(
-                            TypeReference(
-                                resolutionScope = ResolutionScope.Assembly("System.Runtime"),
-                                name = "System.IDisposable",
-                            ),
-                        )
-                    )
-                    visitEnd()
-                }
+                class_("MyClass", implements = setOf(
+                    TypeReference(
+                        resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                        name = "System.IDisposable",
+                    ),
+                )) {}
             }
         )
     }
@@ -234,25 +188,22 @@ class ClassTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit(
-                        extends = TypeReference(
+                class_("MyClass",
+                    extends = TypeReference(
+                        resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                        name = "System.Object",
+                    ),
+                    implements = setOf(
+                        TypeReference(
                             resolutionScope = ResolutionScope.Assembly("System.Runtime"),
-                            name = "System.Object",
+                            name = "System.IDisposable",
                         ),
-                        implements = setOf(
-                            TypeReference(
-                                resolutionScope = ResolutionScope.Assembly("System.Runtime"),
-                                name = "System.IDisposable",
-                            ),
-                            TypeReference(
-                                resolutionScope = ResolutionScope.Assembly("System.Runtime"),
-                                name = "System.IComparable",
-                            ),
-                        )
-                    )
-                    visitEnd()
-                }
+                        TypeReference(
+                            resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                            name = "System.IComparable",
+                        ),
+                    ),
+                ) {}
             }
         )
     }
@@ -266,10 +217,7 @@ class ClassTest {
                 } // end of class InnerClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("InnerClass")!!.apply {
-                    visit(attrs = TypeAttributes(TypeAttributes.NestedPublic))
-                    visitEnd()
-                }
+                class_("InnerClass", attrs = TypeAttributes(TypeAttributes.NestedPublic)) {}
             }
         )
     }
@@ -285,26 +233,23 @@ class ClassTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit(
-                        attrs = TypeAttributes(
-                            TypeAttributes.Public,
-                            TypeAttributes.Abstract,
-                            TypeAttributes.BeforeFieldInit,
-                        ),
-                        extends = TypeReference(
+                class_("MyClass",
+                    attrs = TypeAttributes(
+                        TypeAttributes.Public,
+                        TypeAttributes.Abstract,
+                        TypeAttributes.BeforeFieldInit,
+                    ),
+                    extends = TypeReference(
+                        resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                        name = "System.Object",
+                    ),
+                    implements = setOf(
+                        TypeReference(
                             resolutionScope = ResolutionScope.Assembly("System.Runtime"),
-                            name = "System.Object",
+                            name = "System.IDisposable",
                         ),
-                        implements = setOf(
-                            TypeReference(
-                                resolutionScope = ResolutionScope.Assembly("System.Runtime"),
-                                name = "System.IDisposable",
-                            ),
-                        )
-                    )
-                    visitEnd()
-                }
+                    ),
+                ) {}
             }
         )
     }
@@ -321,19 +266,12 @@ class ClassTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit()
-                    visitMethod(
-                        name = "Main",
-                        attributes = MethodAttributes(
-                            MethodAttributes.Public,
-                            MethodAttributes.Static,
-                            MethodAttributes.HideBySig,
-                        ),
-                    )!!.apply {
-                        visitEnd()
-                    }
-                    visitEnd()
+                class_("MyClass") {
+                    method("Main", attributes = MethodAttributes(
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
+                    )) {}
                 }
             }
         )
@@ -348,16 +286,11 @@ class ClassTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit(
-                        attrs = TypeAttributes(
-                            TypeAttributes.Public,
-                            TypeAttributes.SpecialName,
-                            TypeAttributes.RTSpecialName,
-                        ),
-                    )
-                    visitEnd()
-                }
+                class_("MyClass", attrs = TypeAttributes(
+                    TypeAttributes.Public,
+                    TypeAttributes.SpecialName,
+                    TypeAttributes.RTSpecialName,
+                )) {}
             }
         )
     }

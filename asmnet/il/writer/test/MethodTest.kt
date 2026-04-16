@@ -13,20 +13,14 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitMethod(
-                    name = "Main",
-                    returnType = Type.Void,
-                    callConv = CallConv(),
+                method("Main",
                     attributes = MethodAttributes(
                         MethodAttributes.Public,
                         MethodAttributes.Static,
                         MethodAttributes.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
-                    parameters = emptyList(),
-                )!!.apply {
-                    visitEnd()
-                }
+                ) {}
             }
         )
     }
@@ -40,10 +34,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitMethod(
-                    name = "Add",
+                method("Add",
                     returnType = Type.Int32,
-                    callConv = CallConv(),
                     attributes = MethodAttributes(
                         MethodAttributes.Public,
                         MethodAttributes.Static,
@@ -54,9 +46,7 @@ class MethodTest {
                         MethodParameter(Type.Int32, "a"),
                         MethodParameter(Type.Int32, "b"),
                     ),
-                )!!.apply {
-                    visitEnd()
-                }
+                ) {}
             }
         )
     }
@@ -70,8 +60,7 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitMethod(
-                    name = "GetName",
+                method("GetName",
                     returnType = Type.String,
                     callConv = CallConv(instance = true),
                     attributes = MethodAttributes(
@@ -79,10 +68,7 @@ class MethodTest {
                         MethodAttributes.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
-                    parameters = emptyList(),
-                )!!.apply {
-                    visitEnd()
-                }
+                ) {}
             }
         )
     }
@@ -96,9 +82,7 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitMethod(
-                    name = ".ctor",
-                    returnType = Type.Void,
+                method(".ctor",
                     callConv = CallConv(instance = true),
                     attributes = MethodAttributes(
                         MethodAttributes.Public,
@@ -107,10 +91,7 @@ class MethodTest {
                         MethodAttributes.RTSpecialName,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
-                    parameters = emptyList(),
-                )!!.apply {
-                    visitEnd()
-                }
+                ) {}
             }
         )
     }
@@ -124,9 +105,7 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitMethod(
-                    name = "DoWork",
-                    returnType = Type.Void,
+                method("DoWork",
                     callConv = CallConv(instance = true),
                     attributes = MethodAttributes(
                         MethodAttributes.Public,
@@ -135,10 +114,7 @@ class MethodTest {
                         MethodAttributes.Virtual,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
-                    parameters = emptyList(),
-                )!!.apply {
-                    visitEnd()
-                }
+                ) {}
             }
         )
     }
@@ -152,9 +128,7 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitMethod(
-                    name = "DoWork",
-                    returnType = Type.Void,
+                method("DoWork",
                     callConv = CallConv(instance = true),
                     attributes = MethodAttributes(
                         MethodAttributes.Public,
@@ -164,10 +138,7 @@ class MethodTest {
                         MethodAttributes.Abstract,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
-                    parameters = emptyList(),
-                )!!.apply {
-                    visitEnd()
-                }
+                ) {}
             }
         )
     }
@@ -181,10 +152,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitMethod(
-                    name = "TryParse",
+                method("TryParse",
                     returnType = Type.Bool,
-                    callConv = CallConv(),
                     attributes = MethodAttributes(
                         MethodAttributes.Public,
                         MethodAttributes.Static,
@@ -199,9 +168,7 @@ class MethodTest {
                             ParamAttributes(ParamAttributes.Out),
                         ),
                     ),
-                )!!.apply {
-                    visitEnd()
-                }
+                ) {}
             }
         )
     }
@@ -216,21 +183,16 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitMethod(
-                    name = "Main",
-                    returnType = Type.Void,
-                    callConv = CallConv(),
+                method("Main",
                     attributes = MethodAttributes(
                         MethodAttributes.Public,
                         MethodAttributes.Static,
                         MethodAttributes.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
-                    parameters = emptyList(),
-                )!!.apply {
-                    visitCode()
-                    visitMaxStack(8)
-                    visitEnd()
+                ) {
+                    code()
+                    maxStack(8)
                 }
             }
         )
@@ -247,10 +209,7 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitMethod(
-                    name = "Main",
-                    returnType = Type.Void,
-                    callConv = CallConv(),
+                method("Main",
                     attributes = MethodAttributes(
                         MethodAttributes.Public,
                         MethodAttributes.Static,
@@ -258,11 +217,9 @@ class MethodTest {
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                     entryPoint = true,
-                    parameters = emptyList(),
-                )!!.apply {
-                    visitCode()
-                    visitMaxStack(8)
-                    visitEnd()
+                ) {
+                    code()
+                    maxStack(8)
                 }
             }
         )
@@ -283,24 +240,18 @@ class MethodTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                visitClass("MyClass")!!.apply {
-                    visit()
-                    visitMethod(
-                        name = "Main",
-                        attributes = MethodAttributes(
-                            MethodAttributes.Public,
-                            MethodAttributes.Static,
-                            MethodAttributes.HideBySig,
-                        ),
-                    )!!.apply {
-                        visitMaxStack(8)
-                        visitLabel(Label())
-                        visitInsn(OpCode(OpCode.Code.nop))
-                        visitLabel(Label())
-                        visitInsn(OpCode(OpCode.Code.ret))
-                        visitEnd()
+                class_("MyClass") {
+                    method("Main", attributes = MethodAttributes(
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
+                    )) {
+                        maxStack(8)
+                        label()
+                        insn(OpCode.Code.nop)
+                        label()
+                        insn(OpCode.Code.ret)
                     }
-                    visitEnd()
                 }
             }
         )
@@ -315,10 +266,7 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitMethod(
-                    name = "Main",
-                    returnType = Type.Void,
-                    callConv = CallConv(),
+                method("Main",
                     attributes = MethodAttributes(
                         MethodAttributes.Public,
                         MethodAttributes.Static,
@@ -328,10 +276,7 @@ class MethodTest {
                         ImplementationAttributes.IL,
                         ImplementationAttributes.Unmanaged,
                     ),
-                    parameters = emptyList(),
-                )!!.apply {
-                    visitEnd()
-                }
+                ) {}
             }
         )
     }
@@ -345,12 +290,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitMethod(
-                    name = "Printf",
-                    returnType = Type.Void,
-                    callConv = CallConv(
-                        callKind = CallKind.Managed(vararg = true),
-                    ),
+                method("Printf",
+                    callConv = CallConv(callKind = CallKind.Managed(vararg = true)),
                     attributes = MethodAttributes(
                         MethodAttributes.Public,
                         MethodAttributes.Static,
@@ -360,9 +301,7 @@ class MethodTest {
                     parameters = listOf(
                         MethodParameter(Type.String, "format"),
                     ),
-                )!!.apply {
-                    visitEnd()
-                }
+                ) {}
             }
         )
     }
@@ -376,10 +315,7 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitMethod(
-                    name = "Foo",
-                    returnType = Type.Void,
-                    callConv = CallConv(),
+                method("Foo",
                     attributes = MethodAttributes(
                         MethodAttributes.Public,
                         MethodAttributes.Static,
@@ -389,9 +325,7 @@ class MethodTest {
                     parameters = listOf(
                         MethodParameter(Type.Int32, "x", ParamAttributes(ParamAttributes.Optional)),
                     ),
-                )!!.apply {
-                    visitEnd()
-                }
+                ) {}
             }
         )
     }
@@ -405,10 +339,7 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitMethod(
-                    name = "DoWork",
-                    returnType = Type.Void,
-                    callConv = CallConv(),
+                method("DoWork",
                     attributes = MethodAttributes(
                         MethodAttributes.Public,
                         MethodAttributes.Static,
@@ -416,10 +347,7 @@ class MethodTest {
                         MethodAttributes.Final,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
-                    parameters = emptyList(),
-                )!!.apply {
-                    visitEnd()
-                }
+                ) {}
             }
         )
     }

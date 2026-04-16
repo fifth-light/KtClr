@@ -16,24 +16,19 @@ class InstructionTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitMethod(
-                    name = "Main",
-                    returnType = Type.Void,
-                    callConv = CallConv(),
+                method("Main",
                     attributes = MethodAttributes(
                         MethodAttributes.Public,
                         MethodAttributes.Static,
                         MethodAttributes.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
-                    parameters = emptyList(),
-                )!!.apply {
-                    visitMaxStack(8)
-                    visitLabel(Label())
-                    visitInsn(OpCode(OpCode.Code.nop))
-                    visitLabel(Label())
-                    visitInsn(OpCode(OpCode.Code.ret))
-                    visitEnd()
+                ) {
+                    maxStack(8)
+                    label()
+                    insn(OpCode.Code.nop)
+                    label()
+                    insn(OpCode.Code.ret)
                 }
             }
         )
@@ -54,30 +49,25 @@ class InstructionTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitMethod(
-                    name = "Main",
-                    returnType = Type.Void,
-                    callConv = CallConv(),
+                method("Main",
                     attributes = MethodAttributes(
                         MethodAttributes.Public,
                         MethodAttributes.Static,
                         MethodAttributes.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
-                    parameters = emptyList(),
-                )!!.apply {
-                    visitMaxStack(8)
-                    visitLabel(Label())
-                    visitLdc(42)
-                    visitLabel(Label())
-                    visitLdc(123456L)
-                    visitLabel(Label())
-                    visitLdc(3.14f)
-                    visitLabel(Label())
-                    visitLdc(2.718)
-                    visitLabel(Label())
-                    visitInsn(OpCode(OpCode.Code.ret))
-                    visitEnd()
+                ) {
+                    maxStack(8)
+                    label()
+                    ldc(42)
+                    label()
+                    ldc(123456L)
+                    label()
+                    ldc(3.14f)
+                    label()
+                    ldc(2.718)
+                    label()
+                    insn(OpCode.Code.ret)
                 }
             }
         )
@@ -95,32 +85,24 @@ class InstructionTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitMethod(
-                    name = "Main",
-                    returnType = Type.Void,
-                    callConv = CallConv(),
+                method("Main",
                     attributes = MethodAttributes(
                         MethodAttributes.Public,
                         MethodAttributes.Static,
                         MethodAttributes.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
-                    parameters = emptyList(),
-                )!!.apply {
-                    visitMaxStack(8)
-                    visitLabel(Label())
-                    visitMethodInsn(
-                        OpCode(OpCode.Code.call),
-                        MethodReference(
-                            declaringType = Type.Object,
-                            name = "WriteLine",
-                            returnType = Type.Void,
-                            parameterTypes = listOf(Type.String),
-                        ),
-                    )
-                    visitLabel(Label())
-                    visitInsn(OpCode(OpCode.Code.ret))
-                    visitEnd()
+                ) {
+                    maxStack(8)
+                    label()
+                    insn(OpCode.Code.call, MethodReference(
+                        declaringType = Type.Object,
+                        name = "WriteLine",
+                        returnType = Type.Void,
+                        parameterTypes = listOf(Type.String),
+                    ))
+                    label()
+                    insn(OpCode.Code.ret)
                 }
             }
         )
@@ -138,23 +120,19 @@ class InstructionTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitMethod(
-                    name = ".ctor",
-                    returnType = Type.Void,
+                method(".ctor",
                     callConv = CallConv(instance = true),
                     attributes = MethodAttributes(
                         MethodAttributes.Public,
                         MethodAttributes.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
-                    parameters = emptyList(),
-                )!!.apply {
-                    visitMaxStack(8)
-                    visitLabel(Label())
-                    visitInsn(OpCode(OpCode.Code.ldarg0))
-                    visitLabel(Label())
-                    visitInsn(OpCode(OpCode.Code.ret))
-                    visitEnd()
+                ) {
+                    maxStack(8)
+                    label()
+                    insn(OpCode.Code.ldarg0)
+                    label()
+                    insn(OpCode.Code.ret)
                 }
             }
         )
@@ -172,10 +150,7 @@ class InstructionTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitMethod(
-                    name = "Foo",
-                    returnType = Type.Void,
-                    callConv = CallConv(),
+                method("Foo",
                     attributes = MethodAttributes(
                         MethodAttributes.Public,
                         MethodAttributes.Static,
@@ -189,13 +164,12 @@ class InstructionTest {
                         MethodParameter(Type.String, "d"),
                         MethodParameter(Type.String, "e"),
                     ),
-                )!!.apply {
-                    visitMaxStack(8)
-                    visitLabel(Label())
-                    visitVarInsn(OpCode(OpCode.Code.ldargS), 4)
-                    visitLabel(Label())
-                    visitInsn(OpCode(OpCode.Code.ret))
-                    visitEnd()
+                ) {
+                    maxStack(8)
+                    label()
+                    insn(OpCode.Code.ldargS, 4)
+                    label()
+                    insn(OpCode.Code.ret)
                 }
             }
         )
@@ -214,40 +188,29 @@ class InstructionTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                visitMethod(
-                    name = "Main",
-                    returnType = Type.Void,
-                    callConv = CallConv(),
+                method("Main",
                     attributes = MethodAttributes(
                         MethodAttributes.Public,
                         MethodAttributes.Static,
                         MethodAttributes.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
-                    parameters = emptyList(),
-                )!!.apply {
-                    visitMaxStack(8)
-                    visitLabel(Label())
-                    visitFieldInsn(
-                        OpCode(OpCode.Code.ldfld),
-                        FieldReference(
-                            declaringType = TypeReference("MyClass"),
-                            name = "_count",
-                            fieldType = Type.Int32,
-                        ),
-                    )
-                    visitLabel(Label())
-                    visitFieldInsn(
-                        OpCode(OpCode.Code.stfld),
-                        FieldReference(
-                            declaringType = TypeReference("MyClass"),
-                            name = "_count",
-                            fieldType = Type.Int32,
-                        ),
-                    )
-                    visitLabel(Label())
-                    visitInsn(OpCode(OpCode.Code.ret))
-                    visitEnd()
+                ) {
+                    maxStack(8)
+                    label()
+                    insn(OpCode.Code.ldfld, FieldReference(
+                        declaringType = TypeReference("MyClass"),
+                        name = "_count",
+                        fieldType = Type.Int32,
+                    ))
+                    label()
+                    insn(OpCode.Code.stfld, FieldReference(
+                        declaringType = TypeReference("MyClass"),
+                        name = "_count",
+                        fieldType = Type.Int32,
+                    ))
+                    label()
+                    insn(OpCode.Code.ret)
                 }
             }
         )

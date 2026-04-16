@@ -13,7 +13,7 @@ class ModuleTest {
                 .module CountDown.exe
             """.trimIndent(),
             actual = generateText {
-                visitModule("CountDown.exe")
+                module("CountDown.exe")
             }
         )
     }
@@ -26,10 +26,7 @@ class ModuleTest {
                 // MVID: {4102e4b1-c2da-4c1d-945e-a41530b5efab}
             """.trimIndent(),
             actual = generateText {
-                visitModule(
-                    name = "CountDown.exe",
-                    mvid = UUID.fromString("4102e4b1-c2da-4c1d-945e-a41530b5efab"),
-                )
+                module("CountDown.exe", UUID.fromString("4102e4b1-c2da-4c1d-945e-a41530b5efab"))
             }
         )
     }
@@ -41,7 +38,7 @@ class ModuleTest {
                 .module 'my-module.exe'
             """.trimIndent(),
             actual = generateText {
-                visitModule("my-module.exe")
+                module("my-module.exe")
             }
         )
     }
@@ -53,7 +50,7 @@ class ModuleTest {
                 .module extern Counter.dll
             """.trimIndent(),
             actual = generateText {
-                visitExternModule(fileName = "Counter.dll")
+                externModule("Counter.dll")
             }
         )
     }
@@ -65,7 +62,7 @@ class ModuleTest {
                 .module extern 'my-module.dll'
             """.trimIndent(),
             actual = generateText {
-                visitExternModule(fileName = "my-module.dll")
+                externModule("my-module.dll")
             }
         )
     }
@@ -77,7 +74,7 @@ class ModuleTest {
                 .imagebase 0x10000000
             """.trimIndent(),
             actual = generateText {
-                visitImageBase(0x10000000)
+                imageBase(0x10000000)
             }
         )
     }
@@ -89,7 +86,7 @@ class ModuleTest {
                 .file alignment 0x00000200
             """.trimIndent(),
             actual = generateText {
-                visitFileAlignment(0x00000200)
+                fileAlignment(0x00000200)
             }
         )
     }
@@ -101,7 +98,7 @@ class ModuleTest {
                 .stackreserve 0x00100000
             """.trimIndent(),
             actual = generateText {
-                visitStackReserve(0x00100000)
+                stackReserve(0x00100000)
             }
         )
     }
@@ -113,7 +110,7 @@ class ModuleTest {
                 .subsystem 0x0003 // WINDOWS_CUI
             """.trimIndent(),
             actual = generateText {
-                visitSubsystem(Subsystem.WINDOWS_CUI)
+                subsystem(Subsystem.WINDOWS_CUI)
             }
         )
     }
@@ -125,7 +122,7 @@ class ModuleTest {
                 .corflags 0x00000001 // ILONLY
             """.trimIndent(),
             actual = generateText {
-                visitCorFlags(RuntimeFlags(RuntimeFlags.ILONLY))
+                corFlags(RuntimeFlags(RuntimeFlags.ILONLY))
             }
         )
     }
@@ -137,7 +134,7 @@ class ModuleTest {
                 .corflags 0x00010009 // ILONLY | STRONGNAMESIGNED | TRACKDEBUGDATA
             """.trimIndent(),
             actual = generateText {
-                visitCorFlags(RuntimeFlags(
+                corFlags(RuntimeFlags(
                     RuntimeFlags.ILONLY,
                     RuntimeFlags.STRONGNAMESIGNED,
                     RuntimeFlags.TRACKDEBUGDATA,

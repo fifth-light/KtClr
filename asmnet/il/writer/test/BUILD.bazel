@@ -5,6 +5,7 @@ kt_jvm_library(
     srcs = ["Util.kt"],
     deps = [
         "//asmnet",
+        "//asmnet/dsl",
         "//asmnet/il/writer",
         "@maven//:org_jetbrains_kotlin_kotlin_test",
     ],
