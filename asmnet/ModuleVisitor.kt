@@ -1,6 +1,6 @@
 package top.fifthlight.asmnet
 
-import java.util.UUID
+import java.util.*
 
 // ECMA-335 II.5.10
 interface ModuleVisitor {

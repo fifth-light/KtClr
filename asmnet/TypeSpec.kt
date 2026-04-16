@@ -120,14 +120,14 @@ sealed interface Type : TypeSpec {
             append(type)
             append('[')
             append(bounds.joinToString(", ") {
-                if (it == null || (it.start == 0 && it.endInclusive == Int.MAX_VALUE)) {
+                if (it == null || (it.first == 0 && it.last == Int.MAX_VALUE)) {
                     "..."
-                } else if (it.start == 0) {
-                    "${it.endInclusive}"
-                } else if (it.start != 0 && it.endInclusive == Int.MAX_VALUE) {
-                    "${it.start}..."
+                } else if (it.first == 0) {
+                    "${it.last}"
+                } else if (it.last == Int.MAX_VALUE) {
+                    "${it.first}..."
                 } else {
-                    "${it.start}...${it.endInclusive}"
+                    "${it.first}...${it.last}"
                 }
             })
             append(']')

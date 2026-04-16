@@ -1,20 +1,6 @@
 package top.fifthlight.asmnet.il.writer.test.integration.field
 
-import top.fifthlight.asmnet.CallConv
-import top.fifthlight.asmnet.AssemblyDeclaration
-import top.fifthlight.asmnet.ExternAssemblyDeclaration
-import top.fifthlight.asmnet.FieldAttributes
-import top.fifthlight.asmnet.FieldReference
-import top.fifthlight.asmnet.HashAlgorithm
-import top.fifthlight.asmnet.MethodAttributes
-import top.fifthlight.asmnet.MethodParameter
-import top.fifthlight.asmnet.MethodReference
-import top.fifthlight.asmnet.OpCode
-import top.fifthlight.asmnet.ResolutionScope
-import top.fifthlight.asmnet.Type
-import top.fifthlight.asmnet.TypeAttributes
-import top.fifthlight.asmnet.TypeReference
-import top.fifthlight.asmnet.Version
+import top.fifthlight.asmnet.*
 import top.fifthlight.asmnet.il.writer.ILTextModuleWriter
 import java.io.File
 import java.io.StringWriter

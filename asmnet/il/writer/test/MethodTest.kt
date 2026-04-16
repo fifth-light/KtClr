@@ -1,15 +1,7 @@
 package top.fifthlight.asmnet.il.writer.test
 
 import org.junit.Test
-import top.fifthlight.asmnet.CallConv
-import top.fifthlight.asmnet.CallKind
-import top.fifthlight.asmnet.ImplementationAttributes
-import top.fifthlight.asmnet.Label
-import top.fifthlight.asmnet.MethodAttributes
-import top.fifthlight.asmnet.MethodParameter
-import top.fifthlight.asmnet.OpCode
-import top.fifthlight.asmnet.ParamAttributes
-import top.fifthlight.asmnet.Type
+import top.fifthlight.asmnet.*
 
 class MethodTest {
     @Test

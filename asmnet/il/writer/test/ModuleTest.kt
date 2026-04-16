@@ -3,7 +3,7 @@ package top.fifthlight.asmnet.il.writer.test
 import org.junit.Test
 import top.fifthlight.asmnet.RuntimeFlags
 import top.fifthlight.asmnet.Subsystem
-import java.util.UUID
+import java.util.*
 
 class ModuleTest {
     @Test

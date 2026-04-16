@@ -3,7 +3,6 @@ package top.fifthlight.asmnet.il.writer.test
 import org.junit.Test
 import top.fifthlight.asmnet.MethodAttributes
 import top.fifthlight.asmnet.ResolutionScope
-import top.fifthlight.asmnet.Type
 import top.fifthlight.asmnet.TypeAttributes
 import top.fifthlight.asmnet.TypeReference
 

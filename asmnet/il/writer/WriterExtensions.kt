@@ -1,21 +1,6 @@
 package top.fifthlight.asmnet.il.writer
 
-import top.fifthlight.asmnet.CallConv
-import top.fifthlight.asmnet.CallKind
-import top.fifthlight.asmnet.FieldAttributes
-import top.fifthlight.asmnet.FieldInitValue
-import top.fifthlight.asmnet.FieldReference
-import top.fifthlight.asmnet.ImplementationAttributes
-import top.fifthlight.asmnet.MethodAttributes
-import top.fifthlight.asmnet.MethodParameter
-import top.fifthlight.asmnet.MethodReference
-import top.fifthlight.asmnet.OpCode
-import top.fifthlight.asmnet.ParamAttributes
-import top.fifthlight.asmnet.ResolutionScope
-import top.fifthlight.asmnet.Type
-import top.fifthlight.asmnet.TypeAttributes
-import top.fifthlight.asmnet.TypeReference
-import top.fifthlight.asmnet.TypeSpec
+import top.fifthlight.asmnet.*
 import top.fifthlight.asmnet.il.writer.TextWriter.WriteScope
 
 fun WriteScope.resolutionScope(resolutionScope: ResolutionScope) {
@@ -62,17 +47,17 @@ fun WriteScope.type(type: TypeSpec) {
             type(type.type)
             +'['
             type.bounds.forEachIndexed { index, bound ->
-                if (bound == null || (bound.start == 0 && bound.endInclusive == Int.MAX_VALUE)) {
+                if (bound == null || (bound.first == 0 && bound.last == Int.MAX_VALUE)) {
                     +"..."
-                } else if (bound.start == 0) {
-                    +"${bound.endInclusive}"
-                } else if (bound.start != 0 && bound.endInclusive == Int.MAX_VALUE) {
-                    +"${bound.start}"
+                } else if (bound.first == 0) {
+                    +"${bound.last}"
+                } else if (bound.last == Int.MAX_VALUE) {
+                    +"${bound.first}"
                     +"..."
                 } else {
-                    +"${bound.start}"
+                    +"${bound.first}"
                     +"..."
-                    +"${bound.endInclusive}"
+                    +"${bound.last}"
                 }
                 if (index < type.bounds.size - 1) +", "
             }

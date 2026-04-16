@@ -2,7 +2,7 @@ package top.fifthlight.asmnet.il.writer
 
 import top.fifthlight.asmnet.il.writer.TextWriter.WriteScope
 import java.io.Writer
-import java.util.UUID
+import java.util.*
 
 @DslMarker
 @Target(AnnotationTarget.CLASS)
