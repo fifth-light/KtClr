@@ -3,6 +3,8 @@ package top.fifthlight.asmnet
 // ECMA-335 II.23.1.11
 @JvmInline
 value class ImplementationAttributes(val value: Short) {
+    constructor(vararg flags: Short): this(flags.or())
+
     val codeType: Short
         get() = value and CodeTypeMask
 

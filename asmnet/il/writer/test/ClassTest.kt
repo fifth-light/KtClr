@@ -1,11 +1,11 @@
 package top.fifthlight.asmnet.il.writer.test
 
 import org.junit.Test
-import top.fifthlight.asmnet.CallConv
-import top.fifthlight.asmnet.ImplementationAttributes
 import top.fifthlight.asmnet.MethodAttributes
+import top.fifthlight.asmnet.ResolutionScope
 import top.fifthlight.asmnet.Type
 import top.fifthlight.asmnet.TypeAttributes
+import top.fifthlight.asmnet.TypeReference
 
 class ClassTest {
     @Test
@@ -18,7 +18,7 @@ class ClassTest {
             """.trimIndent(),
             actual = generateText {
                 visitClass("MyClass")!!.apply {
-                    visit(TypeAttributes(TypeAttributes.Public), null, emptySet())
+                    visit()
                     visitEnd()
                 }
             }
@@ -35,7 +35,7 @@ class ClassTest {
             """.trimIndent(),
             actual = generateText {
                 visitClass("MyClass")!!.apply {
-                    visit(TypeAttributes(TypeAttributes.NotPublic), null, emptySet())
+                    visit(attrs = TypeAttributes(TypeAttributes.NotPublic))
                     visitEnd()
                 }
             }
@@ -53,9 +53,11 @@ class ClassTest {
             actual = generateText {
                 visitClass("MyClass")!!.apply {
                     visit(
-                        TypeAttributes(
-                            TypeAttributes.Public or TypeAttributes.Abstract or TypeAttributes.Sealed
-                        ), null, emptySet()
+                        attrs = TypeAttributes(
+                            TypeAttributes.Public,
+                            TypeAttributes.Abstract,
+                            TypeAttributes.Sealed,
+                        ),
                     )
                     visitEnd()
                 }
@@ -74,9 +76,10 @@ class ClassTest {
             actual = generateText {
                 visitClass("MyClass")!!.apply {
                     visit(
-                        TypeAttributes(
-                            TypeAttributes.Public or TypeAttributes.BeforeFieldInit
-                        ), null, emptySet()
+                        attrs = TypeAttributes(
+                            TypeAttributes.Public,
+                            TypeAttributes.BeforeFieldInit,
+                        ),
                     )
                     visitEnd()
                 }
@@ -95,9 +98,10 @@ class ClassTest {
             actual = generateText {
                 visitClass("IMyInterface")!!.apply {
                     visit(
-                        TypeAttributes(TypeAttributes.Public or TypeAttributes.Interface),
-                        null,
-                        emptySet()
+                        attrs = TypeAttributes(
+                            TypeAttributes.Public,
+                            TypeAttributes.Interface,
+                        ),
                     )
                     visitEnd()
                 }
@@ -116,9 +120,10 @@ class ClassTest {
             actual = generateText {
                 visitClass("MyClass")!!.apply {
                     visit(
-                        TypeAttributes(TypeAttributes.Public or TypeAttributes.Serializable),
-                        null,
-                        emptySet()
+                        attrs = TypeAttributes(
+                            TypeAttributes.Public,
+                            TypeAttributes.Serializable,
+                        ),
                     )
                     visitEnd()
                 }
@@ -137,9 +142,10 @@ class ClassTest {
             actual = generateText {
                 visitClass("MyClass")!!.apply {
                     visit(
-                        TypeAttributes(TypeAttributes.Public or TypeAttributes.SequentialLayout),
-                        null,
-                        emptySet()
+                        attrs = TypeAttributes(
+                            TypeAttributes.Public,
+                            TypeAttributes.SequentialLayout,
+                        ),
                     )
                     visitEnd()
                 }
@@ -158,9 +164,10 @@ class ClassTest {
             actual = generateText {
                 visitClass("MyClass")!!.apply {
                     visit(
-                        TypeAttributes(TypeAttributes.Public or TypeAttributes.UnicodeClass),
-                        null,
-                        emptySet()
+                        attrs = TypeAttributes(
+                            TypeAttributes.Public,
+                            TypeAttributes.UnicodeClass,
+                        ),
                     )
                     visitEnd()
                 }
@@ -180,9 +187,10 @@ class ClassTest {
             actual = generateText {
                 visitClass("MyClass")!!.apply {
                     visit(
-                        TypeAttributes(TypeAttributes.Public),
-                        "[System.Runtime]System.Object",
-                        emptySet()
+                        extends = TypeReference(
+                            resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                            name = "System.Object",
+                        ),
                     )
                     visitEnd()
                 }
@@ -195,16 +203,19 @@ class ClassTest {
         assertContentEquals(
             expected = """
                 .class public auto ansi MyClass
-                implements IDisposable
+                implements [System.Runtime]System.IDisposable
                 {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
                 visitClass("MyClass")!!.apply {
                     visit(
-                        TypeAttributes(TypeAttributes.Public),
-                        null,
-                        setOf("IDisposable")
+                        implements = setOf(
+                            TypeReference(
+                                resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                                name = "System.IDisposable",
+                            ),
+                        )
                     )
                     visitEnd()
                 }
@@ -218,17 +229,28 @@ class ClassTest {
             expected = """
                 .class public auto ansi MyClass
                 extends [System.Runtime]System.Object
-                implements IDisposable
-                implements IComparable
+                implements [System.Runtime]System.IDisposable
+                implements [System.Runtime]System.IComparable
                 {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
                 visitClass("MyClass")!!.apply {
                     visit(
-                        TypeAttributes(TypeAttributes.Public),
-                        "[System.Runtime]System.Object",
-                        setOf("IDisposable", "IComparable")
+                        extends = TypeReference(
+                            resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                            name = "System.Object",
+                        ),
+                        implements = setOf(
+                            TypeReference(
+                                resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                                name = "System.IDisposable",
+                            ),
+                            TypeReference(
+                                resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                                name = "System.IComparable",
+                            ),
+                        )
                     )
                     visitEnd()
                 }
@@ -246,7 +268,7 @@ class ClassTest {
             """.trimIndent(),
             actual = generateText {
                 visitClass("InnerClass")!!.apply {
-                    visit(TypeAttributes(TypeAttributes.NestedPublic), null, emptySet())
+                    visit(attrs = TypeAttributes(TypeAttributes.NestedPublic))
                     visitEnd()
                 }
             }
@@ -259,20 +281,28 @@ class ClassTest {
             expected = """
                 .class public auto ansi abstract beforefieldinit MyClass
                 extends [System.Runtime]System.Object
-                implements IDisposable
+                implements [System.Runtime]System.IDisposable
                 {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
                 visitClass("MyClass")!!.apply {
                     visit(
-                        TypeAttributes(
-                            TypeAttributes.Public
-                                    or TypeAttributes.Abstract
-                                    or TypeAttributes.BeforeFieldInit
+                        attrs = TypeAttributes(
+                            TypeAttributes.Public,
+                            TypeAttributes.Abstract,
+                            TypeAttributes.BeforeFieldInit,
                         ),
-                        "[System.Runtime]System.Object",
-                        setOf("IDisposable")
+                        extends = TypeReference(
+                            resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                            name = "System.Object",
+                        ),
+                        implements = setOf(
+                            TypeReference(
+                                resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                                name = "System.IDisposable",
+                            ),
+                        )
                     )
                     visitEnd()
                 }
@@ -293,16 +323,14 @@ class ClassTest {
             """.trimIndent(),
             actual = generateText {
                 visitClass("MyClass")!!.apply {
-                    visit(TypeAttributes(TypeAttributes.Public), null, emptySet())
+                    visit()
                     visitMethod(
                         name = "Main",
-                        returnType = Type.Void,
-                        callConv = CallConv(),
                         attributes = MethodAttributes(
-                            MethodAttributes.Public or MethodAttributes.Static or MethodAttributes.HideBySig
+                            MethodAttributes.Public,
+                            MethodAttributes.Static,
+                            MethodAttributes.HideBySig,
                         ),
-                        implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
-                        parameters = emptyList(),
                     )!!.apply {
                         visitEnd()
                     }
@@ -323,13 +351,11 @@ class ClassTest {
             actual = generateText {
                 visitClass("MyClass")!!.apply {
                     visit(
-                        TypeAttributes(
-                            TypeAttributes.Public
-                                    or TypeAttributes.SpecialName
-                                    or TypeAttributes.RTSpecialName
+                        attrs = TypeAttributes(
+                            TypeAttributes.Public,
+                            TypeAttributes.SpecialName,
+                            TypeAttributes.RTSpecialName,
                         ),
-                        null,
-                        emptySet()
                     )
                     visitEnd()
                 }

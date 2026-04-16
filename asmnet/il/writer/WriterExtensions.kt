@@ -7,12 +7,86 @@ import top.fifthlight.asmnet.MethodAttributes
 import top.fifthlight.asmnet.MethodParameter
 import top.fifthlight.asmnet.MethodReference
 import top.fifthlight.asmnet.ParamAttributes
+import top.fifthlight.asmnet.ResolutionScope
+import top.fifthlight.asmnet.Type
 import top.fifthlight.asmnet.TypeAttributes
+import top.fifthlight.asmnet.TypeReference
 import top.fifthlight.asmnet.TypeSpec
 import top.fifthlight.asmnet.il.writer.TextWriter.WriteScope
 
+fun WriteScope.resolutionScope(resolutionScope: ResolutionScope) {
+    when (resolutionScope) {
+        is ResolutionScope.Assembly -> {
+            +'['
+            identifier(resolutionScope.name)
+            +']'
+        }
+        is ResolutionScope.Module -> {
+            +".module "
+            identifier(resolutionScope.name)
+        }
+    }
+}
+
 fun WriteScope.type(type: TypeSpec) {
-    +type.toString()
+    when (type) {
+        is Type.BuiltInType -> +type.assemblyName
+
+        Type.Void -> +"void"
+
+        is Type.MethodPointer -> {
+            callConv(type.callConv)
+            +' '
+            type(type.returnType)
+            +"*("
+            params(type.parameterTypes)
+            +')'
+        }
+
+        is Type.UnmanagedTypePointer -> {
+            type(type.type)
+            +"*"
+        }
+
+        is Type.ManagedTypePointer -> {
+            type(type.type)
+            +"&"
+        }
+
+        is Type.Array -> {
+            type(type.type)
+            +'['
+            type.bounds.forEachIndexed { index, bound ->
+                if (bound == null || (bound.start == 0 && bound.endInclusive == Int.MAX_VALUE)) {
+                    +"..."
+                } else if (bound.start == 0) {
+                    +"${bound.endInclusive}"
+                } else if (bound.start != 0 && bound.endInclusive == Int.MAX_VALUE) {
+                    +"${bound.start}"
+                    +"..."
+                } else {
+                    +"${bound.start}"
+                    +"..."
+                    +"${bound.endInclusive}"
+                }
+                if (index < type.bounds.size - 1) +", "
+            }
+            +']'
+        }
+
+        is Type.ValueType -> {
+            +"valuetype "
+            type(type.type)
+        }
+
+        is TypeReference -> {
+            type.resolutionScope?.let { resolutionScope(it) }
+            type.names.forEachIndexed { index, name ->
+                identifier(name)
+                if (index < type.names.size - 1) +'/'
+            }
+        }
+    }
 }
 
 // ECMA-335 VI.C.4.8

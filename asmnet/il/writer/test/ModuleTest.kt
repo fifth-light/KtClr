@@ -13,7 +13,7 @@ class ModuleTest {
                 .module CountDown.exe
             """.trimIndent(),
             actual = generateText {
-                visitModule(name = "CountDown.exe", mvid = null)
+                visitModule("CountDown.exe")
             }
         )
     }
@@ -41,7 +41,7 @@ class ModuleTest {
                 .module 'my-module.exe'
             """.trimIndent(),
             actual = generateText {
-                visitModule(name = "my-module.exe", mvid = null)
+                visitModule("my-module.exe")
             }
         )
     }
@@ -137,7 +137,11 @@ class ModuleTest {
                 .corflags 0x00010009 // ILONLY | STRONGNAMESIGNED | TRACKDEBUGDATA
             """.trimIndent(),
             actual = generateText {
-                visitCorFlags(RuntimeFlags(RuntimeFlags.ILONLY or RuntimeFlags.STRONGNAMESIGNED or RuntimeFlags.TRACKDEBUGDATA))
+                visitCorFlags(RuntimeFlags(
+                    RuntimeFlags.ILONLY,
+                    RuntimeFlags.STRONGNAMESIGNED,
+                    RuntimeFlags.TRACKDEBUGDATA,
+                ))
             }
         )
     }

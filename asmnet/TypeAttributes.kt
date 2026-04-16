@@ -3,6 +3,8 @@ package top.fifthlight.asmnet
 // ECMA-335 II.23.1.15
 @JvmInline
 value class TypeAttributes(val value: Int) {
+    constructor(vararg flags: Int): this(flags.or())
+
     val visibility: Int
         get() = value and VisibilityMask
 

@@ -3,6 +3,8 @@ package top.fifthlight.asmnet
 // ECMA-335 II.25.3.3.1
 @JvmInline
 value class RuntimeFlags(val value: Int) {
+    constructor(vararg flags: Int): this(flags.or())
+
     val ilOnly: Boolean
         get() = (value and ILONLY) != 0
 

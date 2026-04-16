@@ -1,16 +1,12 @@
 package top.fifthlight.asmnet.il.writer.test.integration
 
-import top.fifthlight.asmnet.CallConv
 import top.fifthlight.asmnet.ExternAssemblyDeclaration
 import top.fifthlight.asmnet.HashAlgorithm
 import top.fifthlight.asmnet.il.writer.ILTextModuleWriter
-import top.fifthlight.asmnet.ImplementationAttributes
-import top.fifthlight.asmnet.Label
 import top.fifthlight.asmnet.MethodAttributes
 import top.fifthlight.asmnet.MethodParameter
 import top.fifthlight.asmnet.MethodReference
 import top.fifthlight.asmnet.OpCode
-import top.fifthlight.asmnet.ParamAttributes
 import top.fifthlight.asmnet.ResolutionScope
 import top.fifthlight.asmnet.Type
 import top.fifthlight.asmnet.TypeAttributes
@@ -56,38 +52,40 @@ private fun generateHelloWorld(): String = StringWriter().use {
             ),
         )
         visitModule("hello_world.dll", null)
-        visitClass("Hello").apply {
+        visitClass("Hello")!!.apply {
             visit(
-                TypeAttributes(TypeAttributes.Public or TypeAttributes.BeforeFieldInit),
-                "[System.Runtime]System.Object",
-                emptySet(),
+                attrs = TypeAttributes(
+                    TypeAttributes.Public,
+                    TypeAttributes.BeforeFieldInit,
+                ),
+                extends = TypeReference(
+                    resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                    name = "System.Object",
+                ),
             )
             visitMethod(
                 name = "Main",
-                returnType = Type.Void,
-                callConv = CallConv(),
                 attributes = MethodAttributes(
-                    (MethodAttributes.Public.toInt() or MethodAttributes.Static.toInt() or MethodAttributes.HideBySig.toInt()).toShort()
+                    MethodAttributes.Public,
+                    MethodAttributes.Static,
+                    MethodAttributes.HideBySig,
                 ),
-                implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 parameters = listOf(
                     MethodParameter(
-                        Type.Array(Type.String, emptyList()),
-                        "args",
-                        ParamAttributes(0),
+                        type = Type.Array(Type.String),
+                        name = "args",
                     ),
                 ),
                 entryPoint = true,
-            ).apply {
+            )!!.apply {
                 visitMaxStack(8)
                 visitLdc("Hello, world!")
                 visitMethodInsn(
-                    OpCode.CALL,
+                    opcode = OpCode.CALL,
                     MethodReference(
-                        callConv = CallConv(),
                         declaringType = TypeReference(
                             resolutionScope = ResolutionScope.Assembly("System.Console"),
-                            names = listOf("System.Console"),
+                            name = "System.Console",
                         ),
                         name = "WriteLine",
                         returnType = Type.Void,

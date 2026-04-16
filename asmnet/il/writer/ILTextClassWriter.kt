@@ -6,7 +6,11 @@ class ILTextClassWriter internal constructor(
     private val writer: TextWriter,
     private val className: String,
 ) : ClassVisitor {
-    override fun visit(attrs: TypeAttributes, extends: String?, implements: Set<String>) {
+    override fun visit(
+        attrs: TypeAttributes,
+        extends: TypeSpec?,
+        implements: Set<TypeSpec>,
+    ) {
         writer.write {
             +".class "
             typeAttr(attrs)
@@ -14,12 +18,12 @@ class ILTextClassWriter internal constructor(
             line()
             extends?.let {
                 +"extends "
-                +it
+                type(extends)
                 line()
             }
             implements.forEach { iface ->
                 +"implements "
-                +iface
+                type(iface)
                 line()
             }
             +"{"
@@ -28,14 +32,16 @@ class ILTextClassWriter internal constructor(
         }
     }
 
+    @Suppress("RedundantNullableReturnType")
     override fun visitMethod(
         name: String,
         returnType: TypeSpec,
         callConv: CallConv,
         attributes: MethodAttributes,
         implAttributes: ImplementationAttributes,
+        entryPoint: Boolean,
         parameters: List<MethodParameter>,
-    ): MethodVisitor = ILTextMethodWriter(
+    ): MethodVisitor? = ILTextMethodWriter(
         writer = writer,
         className = className,
         name = name,
@@ -43,7 +49,7 @@ class ILTextClassWriter internal constructor(
         callConv = callConv,
         attributes = attributes,
         implAttributes = implAttributes,
-        entryPoint = false,
+        entryPoint = entryPoint,
         parameters = parameters,
     )
 

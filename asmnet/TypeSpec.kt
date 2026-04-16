@@ -21,6 +21,16 @@ data class TypeReference(
     val resolutionScope: ResolutionScope? = null,
     val names: List<KString>,
 ) : TypeSpec {
+    constructor(
+        resolutionScope: ResolutionScope,
+        name: KString
+    ): this(
+        resolutionScope = resolutionScope,
+        names = listOf(name),
+    )
+
+    constructor(name: KString): this(names = listOf(name))
+
     init {
         require(names.isNotEmpty()) { "Type name cannot be empty" }
     }
@@ -73,12 +83,12 @@ sealed interface Type : TypeSpec {
 
     // ECMA-335 II.14.5
     data class MethodPointer(
-        val callConvention: CallConv,
+        val callConv: CallConv,
         val returnType: Type,
         val parameterTypes: List<MethodParameter>,
     ) : Type {
         override fun toString() = buildString {
-            append(callConvention)
+            append(callConv)
             append(' ')
             append(returnType)
             append("*(")
@@ -104,7 +114,7 @@ sealed interface Type : TypeSpec {
     // ECMA-335 II.14.2
     data class Array(
         val type: Type,
-        val bounds: List<IntRange?>,
+        val bounds: List<IntRange?> = emptyList(),
     ) : Type {
         override fun toString() = buildString {
             append(type)

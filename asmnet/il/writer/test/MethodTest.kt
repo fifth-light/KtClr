@@ -27,12 +27,12 @@ class MethodTest {
                     name = "Main",
                     returnType = Type.Void,
                     callConv = CallConv(),
-                    vararg = false,
                     attributes = MethodAttributes(
-                        MethodAttributes.Public or MethodAttributes.Static or MethodAttributes.HideBySig
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
-                    entryPoint = false,
                     parameters = emptyList(),
                 )!!.apply {
                     visitEnd()
@@ -54,15 +54,15 @@ class MethodTest {
                     name = "Add",
                     returnType = Type.Int32,
                     callConv = CallConv(),
-                    vararg = false,
                     attributes = MethodAttributes(
-                        MethodAttributes.Public or MethodAttributes.Static or MethodAttributes.HideBySig
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
-                    entryPoint = false,
                     parameters = listOf(
-                        MethodParameter(Type.Int32, "a", ParamAttributes(0)),
-                        MethodParameter(Type.Int32, "b", ParamAttributes(0)),
+                        MethodParameter(Type.Int32, "a"),
+                        MethodParameter(Type.Int32, "b"),
                     ),
                 )!!.apply {
                     visitEnd()
@@ -83,15 +83,12 @@ class MethodTest {
                 visitMethod(
                     name = "GetName",
                     returnType = Type.String,
-                    callConv = CallConv(
-                        instance = true,
-                    ),
-                    vararg = false,
+                    callConv = CallConv(instance = true),
                     attributes = MethodAttributes(
-                        MethodAttributes.Public or MethodAttributes.HideBySig
+                        MethodAttributes.Public,
+                        MethodAttributes.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
-                    entryPoint = false,
                     parameters = emptyList(),
                 )!!.apply {
                     visitEnd()
@@ -112,18 +109,14 @@ class MethodTest {
                 visitMethod(
                     name = ".ctor",
                     returnType = Type.Void,
-                    callConv = CallConv(
-                        instance = true,
-                    ),
-                    vararg = false,
+                    callConv = CallConv(instance = true),
                     attributes = MethodAttributes(
-                        MethodAttributes.Public
-                                or MethodAttributes.HideBySig
-                                or MethodAttributes.SpecialName
-                                or MethodAttributes.RTSpecialName
+                        MethodAttributes.Public,
+                        MethodAttributes.HideBySig,
+                        MethodAttributes.SpecialName,
+                        MethodAttributes.RTSpecialName,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
-                    entryPoint = false,
                     parameters = emptyList(),
                 )!!.apply {
                     visitEnd()
@@ -144,18 +137,14 @@ class MethodTest {
                 visitMethod(
                     name = "DoWork",
                     returnType = Type.Void,
-                    callConv = CallConv(
-                        instance = true,
-                    ),
-                    vararg = false,
+                    callConv = CallConv(instance = true),
                     attributes = MethodAttributes(
-                        MethodAttributes.Public
-                                or MethodAttributes.HideBySig
-                                or MethodAttributes.NewSlot
-                                or MethodAttributes.Virtual
+                        MethodAttributes.Public,
+                        MethodAttributes.HideBySig,
+                        MethodAttributes.NewSlot,
+                        MethodAttributes.Virtual,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
-                    entryPoint = false,
                     parameters = emptyList(),
                 )!!.apply {
                     visitEnd()
@@ -176,19 +165,15 @@ class MethodTest {
                 visitMethod(
                     name = "DoWork",
                     returnType = Type.Void,
-                    callConv = CallConv(
-                        instance = true,
-                    ),
-                    vararg = false,
+                    callConv = CallConv(instance = true),
                     attributes = MethodAttributes(
-                        MethodAttributes.Public
-                                or MethodAttributes.HideBySig
-                                or MethodAttributes.NewSlot
-                                or MethodAttributes.Virtual
-                                or MethodAttributes.Abstract
+                        MethodAttributes.Public,
+                        MethodAttributes.HideBySig,
+                        MethodAttributes.NewSlot,
+                        MethodAttributes.Virtual,
+                        MethodAttributes.Abstract,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
-                    entryPoint = false,
                     parameters = emptyList(),
                 )!!.apply {
                     visitEnd()
@@ -210,18 +195,18 @@ class MethodTest {
                     name = "TryParse",
                     returnType = Type.Bool,
                     callConv = CallConv(),
-                    vararg = false,
                     attributes = MethodAttributes(
-                        MethodAttributes.Public or MethodAttributes.Static or MethodAttributes.HideBySig
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
-                    entryPoint = false,
                     parameters = listOf(
-                        MethodParameter(Type.String, "input", ParamAttributes(0)),
+                        MethodParameter(Type.String, "input"),
                         MethodParameter(
                             Type.ManagedTypePointer(Type.Int32),
                             "result",
-                            ParamAttributes(ParamAttributes.Out)
+                            ParamAttributes(ParamAttributes.Out),
                         ),
                     ),
                 )!!.apply {
@@ -245,12 +230,12 @@ class MethodTest {
                     name = "Main",
                     returnType = Type.Void,
                     callConv = CallConv(),
-                    vararg = false,
                     attributes = MethodAttributes(
-                        MethodAttributes.Public or MethodAttributes.Static or MethodAttributes.HideBySig
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
-                    entryPoint = false,
                     parameters = emptyList(),
                 )!!.apply {
                     visitCode()
@@ -276,9 +261,10 @@ class MethodTest {
                     name = "Main",
                     returnType = Type.Void,
                     callConv = CallConv(),
-                    vararg = false,
                     attributes = MethodAttributes(
-                        MethodAttributes.Public or MethodAttributes.Static or MethodAttributes.HideBySig
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                     entryPoint = true,
@@ -308,12 +294,12 @@ class MethodTest {
                     name = "Main",
                     returnType = Type.Void,
                     callConv = CallConv(),
-                    vararg = false,
                     attributes = MethodAttributes(
-                        MethodAttributes.Public or MethodAttributes.Static or MethodAttributes.HideBySig
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
-                    entryPoint = false,
                     parameters = emptyList(),
                 )!!.apply {
                     visitMaxStack(8)
@@ -346,12 +332,12 @@ class MethodTest {
                     name = "Main",
                     returnType = Type.Void,
                     callConv = CallConv(),
-                    vararg = false,
                     attributes = MethodAttributes(
-                        MethodAttributes.Public or MethodAttributes.Static or MethodAttributes.HideBySig
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
-                    entryPoint = false,
                     parameters = emptyList(),
                 )!!.apply {
                     visitMaxStack(8)
@@ -387,12 +373,12 @@ class MethodTest {
                     name = "Main",
                     returnType = Type.Void,
                     callConv = CallConv(),
-                    vararg = false,
                     attributes = MethodAttributes(
-                        MethodAttributes.Public or MethodAttributes.Static or MethodAttributes.HideBySig
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
-                    entryPoint = false,
                     parameters = emptyList(),
                 )!!.apply {
                     visitMaxStack(8)
@@ -400,7 +386,6 @@ class MethodTest {
                     visitMethodInsn(
                         OpCode.CALL,
                         MethodReference(
-                            callConv = CallConv(),
                             declaringType = Type.Object,
                             name = "WriteLine",
                             returnType = Type.Void,
@@ -430,15 +415,12 @@ class MethodTest {
                 visitMethod(
                     name = ".ctor",
                     returnType = Type.Void,
-                    callConv = CallConv(
-                        instance = true,
-                    ),
-                    vararg = false,
+                    callConv = CallConv(instance = true),
                     attributes = MethodAttributes(
-                        MethodAttributes.Public or MethodAttributes.HideBySig
+                        MethodAttributes.Public,
+                        MethodAttributes.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
-                    entryPoint = false,
                     parameters = emptyList(),
                 )!!.apply {
                     visitMaxStack(8)
@@ -468,16 +450,14 @@ class MethodTest {
             """.trimIndent(),
             actual = generateText {
                 visitClass("MyClass")!!.apply {
-                    visit(TypeAttributes(TypeAttributes.Public), null, emptySet())
+                    visit()
                     visitMethod(
                         name = "Main",
-                        returnType = Type.Void,
-                        callConv = CallConv(),
                         attributes = MethodAttributes(
-                            MethodAttributes.Public or MethodAttributes.Static or MethodAttributes.HideBySig
+                            MethodAttributes.Public,
+                            MethodAttributes.Static,
+                            MethodAttributes.HideBySig,
                         ),
-                        implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
-                        parameters = emptyList(),
                     )!!.apply {
                         visitMaxStack(8)
                         visitLabel(Label())
@@ -505,14 +485,15 @@ class MethodTest {
                     name = "Main",
                     returnType = Type.Void,
                     callConv = CallConv(),
-                    vararg = false,
                     attributes = MethodAttributes(
-                        MethodAttributes.Public or MethodAttributes.Static or MethodAttributes.HideBySig
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(
-                        ImplementationAttributes.IL or ImplementationAttributes.Unmanaged
+                        ImplementationAttributes.IL,
+                        ImplementationAttributes.Unmanaged,
                     ),
-                    entryPoint = false,
                     parameters = emptyList(),
                 )!!.apply {
                     visitEnd()
@@ -534,18 +515,16 @@ class MethodTest {
                     name = "Printf",
                     returnType = Type.Void,
                     callConv = CallConv(
-                        callKind = CallKind.Managed(
-                            vararg = true,
-                        ),
+                        callKind = CallKind.Managed(vararg = true),
                     ),
-                    vararg = true,
                     attributes = MethodAttributes(
-                        MethodAttributes.Public or MethodAttributes.Static or MethodAttributes.HideBySig
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
-                    entryPoint = false,
                     parameters = listOf(
-                        MethodParameter(Type.String, "format", ParamAttributes(0)),
+                        MethodParameter(Type.String, "format"),
                     ),
                 )!!.apply {
                     visitEnd()
@@ -567,12 +546,12 @@ class MethodTest {
                     name = "Foo",
                     returnType = Type.Void,
                     callConv = CallConv(),
-                    vararg = false,
                     attributes = MethodAttributes(
-                        MethodAttributes.Public or MethodAttributes.Static or MethodAttributes.HideBySig
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
-                    entryPoint = false,
                     parameters = listOf(
                         MethodParameter(Type.Int32, "x", ParamAttributes(ParamAttributes.Optional)),
                     ),
@@ -596,15 +575,13 @@ class MethodTest {
                     name = "DoWork",
                     returnType = Type.Void,
                     callConv = CallConv(),
-                    vararg = false,
                     attributes = MethodAttributes(
-                        MethodAttributes.Public
-                                or MethodAttributes.Static
-                                or MethodAttributes.HideBySig
-                                or MethodAttributes.Final
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
+                        MethodAttributes.Final,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
-                    entryPoint = false,
                     parameters = emptyList(),
                 )!!.apply {
                     visitEnd()

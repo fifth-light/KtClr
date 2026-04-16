@@ -3,6 +3,8 @@ package top.fifthlight.asmnet
 // ECMA-335 II.23.1.13, but only contains II.15.4's ParamAttr
 @JvmInline
 value class ParamAttributes(val value: Short) {
+    constructor(vararg flags: Short): this(flags.or())
+
     val `in`: Boolean
         get() = (value and In) != 0.toShort()
 

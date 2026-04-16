@@ -6,9 +6,15 @@ import java.util.UUID
 interface ModuleVisitor {
     /* Only in assembly */
     // ECMA-335 II.6.2
-    fun visitAssembly(name: String, declaration: AssemblyDeclaration)
+    fun visitAssembly(
+        name: String,
+        declaration: AssemblyDeclaration = AssemblyDeclaration(),
+    )
     // ECMA-335 II.6.3
-    fun visitExternAssembly(name: String, declaration: ExternAssemblyDeclaration)
+    fun visitExternAssembly(
+        name: String,
+        declaration: ExternAssemblyDeclaration = ExternAssemblyDeclaration(),
+    )
     // ECMA-335 II.6.3
     fun visitFile(
         noMetadata: Boolean = false,
@@ -19,7 +25,7 @@ interface ModuleVisitor {
     /* End of only in assembly */
 
     // ECMA-335 II.6.4, mvid can be null when reading ILASM
-    fun visitModule(name: String, mvid: UUID?)
+    fun visitModule(name: String, mvid: UUID? = null)
     // ECMA-335 II.6.5
     fun visitExternModule(fileName: String)
 
@@ -37,13 +43,17 @@ interface ModuleVisitor {
     // ECMA-335 II.15
     fun visitMethod(
         name: String,
-        returnType: TypeSpec,
-        callConv: CallConv,
-        vararg: Boolean = false,
-        attributes: MethodAttributes,
-        implAttributes: ImplementationAttributes,
+        returnType: TypeSpec = Type.Void,
+        callConv: CallConv = CallConv(),
+        attributes: MethodAttributes = MethodAttributes(
+            MethodAttributes.Public,
+        ),
+        implAttributes: ImplementationAttributes = ImplementationAttributes(
+            ImplementationAttributes.IL,
+            ImplementationAttributes.Managed,
+        ),
         entryPoint: Boolean = false,
-        parameters: List<MethodParameter>,
+        parameters: List<MethodParameter> = emptyList(),
     ): MethodVisitor?
 
     fun visitEnd()

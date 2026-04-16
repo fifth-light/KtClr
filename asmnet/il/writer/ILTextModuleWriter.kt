@@ -159,18 +159,19 @@ class ILTextModuleWriter internal constructor(
         line()
     }
 
-    override fun visitClass(name: String): ClassVisitor = ILTextClassWriter(writer, name)
+    @Suppress("RedundantNullableReturnType")
+    override fun visitClass(name: String): ClassVisitor? = ILTextClassWriter(writer, name)
 
+    @Suppress("RedundantNullableReturnType")
     override fun visitMethod(
         name: String,
         returnType: TypeSpec,
         callConv: CallConv,
-        vararg: Boolean,
         attributes: MethodAttributes,
         implAttributes: ImplementationAttributes,
         entryPoint: Boolean,
         parameters: List<MethodParameter>
-    ): MethodVisitor = ILTextMethodWriter(
+    ): MethodVisitor? = ILTextMethodWriter(
         writer = writer,
         className = null,
         name = name,

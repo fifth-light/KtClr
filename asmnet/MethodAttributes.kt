@@ -3,6 +3,8 @@ package top.fifthlight.asmnet
 // ECMA-335 II.23.1.10
 @JvmInline
 value class MethodAttributes(val value: Short) {
+    constructor(vararg flags: Short): this(flags.or())
+
     val memberAccess: Short
         get() = value and MemberAccessMask
 
