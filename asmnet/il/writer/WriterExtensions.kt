@@ -1,7 +1,6 @@
 package top.fifthlight.asmnet.il.writer
 
 import top.fifthlight.asmnet.*
-import top.fifthlight.asmnet.il.writer.TextWriter.WriteScope
 
 fun WriteScope.resolutionScope(resolutionScope: ResolutionScope) {
     when (resolutionScope) {

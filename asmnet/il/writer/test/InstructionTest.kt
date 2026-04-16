@@ -183,11 +183,11 @@ class InstructionTest {
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                     parameters = listOf(
-                        top.fifthlight.asmnet.MethodParameter(Type.String, "a"),
-                        top.fifthlight.asmnet.MethodParameter(Type.String, "b"),
-                        top.fifthlight.asmnet.MethodParameter(Type.String, "c"),
-                        top.fifthlight.asmnet.MethodParameter(Type.String, "d"),
-                        top.fifthlight.asmnet.MethodParameter(Type.String, "e"),
+                        MethodParameter(Type.String, "a"),
+                        MethodParameter(Type.String, "b"),
+                        MethodParameter(Type.String, "c"),
+                        MethodParameter(Type.String, "d"),
+                        MethodParameter(Type.String, "e"),
                     ),
                 )!!.apply {
                     visitMaxStack(8)
