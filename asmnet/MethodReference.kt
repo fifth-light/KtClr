@@ -1,6 +1,6 @@
 package top.fifthlight.asmnet
 
-class MethodReference(
+data class MethodReference(
     val callConv: CallConv = CallConv(),
     val declaringType: TypeSpec,
     val name: String,

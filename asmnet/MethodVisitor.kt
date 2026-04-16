@@ -10,6 +10,7 @@ interface MethodVisitor {
     fun visitLdc(value: Any)
     fun visitVarInsn(opcode: OpCode, varIndex: Int)
     fun visitMethodInsn(opcode: OpCode, ref: MethodReference)
+    fun visitFieldInsn(opcode: OpCode, ref: FieldReference)
 
     fun visitEnd()
 }

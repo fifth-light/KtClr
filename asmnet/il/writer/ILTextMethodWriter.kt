@@ -113,6 +113,15 @@ class ILTextMethodWriter internal constructor(
         }
     }
 
+    override fun visitFieldInsn(opcode: OpCode, ref: FieldReference) {
+        writer.write {
+            opcode(opcode)
+            +' '
+            fieldRef(ref)
+            line()
+        }
+    }
+
     override fun visitEnd() {
         writer.write {
             unindent()

@@ -2,6 +2,9 @@ package top.fifthlight.asmnet.il.writer
 
 import top.fifthlight.asmnet.CallConv
 import top.fifthlight.asmnet.CallKind
+import top.fifthlight.asmnet.FieldAttributes
+import top.fifthlight.asmnet.FieldInitValue
+import top.fifthlight.asmnet.FieldReference
 import top.fifthlight.asmnet.ImplementationAttributes
 import top.fifthlight.asmnet.MethodAttributes
 import top.fifthlight.asmnet.MethodParameter
@@ -22,6 +25,7 @@ fun WriteScope.resolutionScope(resolutionScope: ResolutionScope) {
             identifier(resolutionScope.name)
             +']'
         }
+
         is ResolutionScope.Module -> {
             +".module "
             identifier(resolutionScope.name)
@@ -90,6 +94,29 @@ fun WriteScope.type(type: TypeSpec) {
     }
 }
 
+// ECMA-335 II.16
+fun WriteScope.fieldDecl(
+    name: String,
+    type: TypeSpec,
+    attributes: FieldAttributes,
+    offset: Int?,
+    initValue: FieldInitValue?,
+) {
+    +".field "
+    offset?.let {
+        +"[${it}] "
+    }
+    fieldAttr(attributes)
+    type(type)
+    +' '
+    identifier(name)
+    initValue?.let {
+        +" = "
+        fieldInitValue(it)
+    }
+    line()
+}
+
 // ECMA-335 VI.C.4.8
 fun WriteScope.methodRef(ref: MethodReference) {
     callConv(ref.callConv)
@@ -105,6 +132,15 @@ fun WriteScope.methodRef(ref: MethodReference) {
         type(type)
     }
     +')'
+}
+
+// ECMA-335 VI.C.4.9
+fun WriteScope.fieldRef(ref: FieldReference) {
+    type(ref.fieldType)
+    +' '
+    type(ref.declaringType)
+    +"::"
+    identifier(ref.name)
 }
 
 // ECMA-335 II.10.1
@@ -476,4 +512,80 @@ fun WriteScope.opcode(opcode: OpCode) {
         }
     }
     opcode(opcode.code)
+}
+
+// ECMA-335 II.16.1
+fun WriteScope.fieldAttr(attrs: FieldAttributes) {
+    when (val access = attrs.fieldAccess) {
+        FieldAttributes.CompilerControlled -> +"compilercontrolled "
+        FieldAttributes.Private -> +"private "
+        FieldAttributes.FamANDAssem -> +"famandassem "
+        FieldAttributes.Assembly -> +"assembly "
+        FieldAttributes.Family -> +"family "
+        FieldAttributes.FamORAssem -> +"famorassem "
+        FieldAttributes.Public -> +"public "
+        else -> throw IllegalArgumentException("Unknown field access: $access")
+    }
+
+    if (attrs.static) +"static "
+    if (attrs.initOnly) +"initonly "
+    if (attrs.literal) +"literal "
+    if (attrs.notSerialized) +"notserialized "
+    if (attrs.specialName) +"specialname "
+
+    if (attrs.pInvokeImpl) TODO("pinvokeimpl attribute is not yet supported")
+
+    if (attrs.rtSpecialName) +"rtspecialname "
+    if (attrs.hasFieldMarshal) TODO("marshal attribute is not yet supported")
+}
+
+// ECMA-335 II.16.2
+fun WriteScope.fieldInitValue(value: FieldInitValue) {
+    when (value) {
+        is FieldInitValue.Boolean -> +"bool(${value.value})"
+        is FieldInitValue.Char -> +"char(${value.value.code})"
+
+        is FieldInitValue.Int8 -> {
+            +"int8("; hex(value.value); +')'
+        }
+
+        is FieldInitValue.Int16 -> {
+            +"int16("; hex(value.value); +')'
+        }
+
+        is FieldInitValue.Int32 -> {
+            +"int32("; hex(value.value); +')'
+        }
+
+        is FieldInitValue.Int64 -> {
+            +"int64("; hex(value.value); +')'
+        }
+
+        is FieldInitValue.UnsignedInt8 -> {
+            +"unsigned int8("; hex(value.value); +')'
+        }
+
+        is FieldInitValue.UnsignedInt16 -> {
+            +"unsigned int16("; hex(value.value); +')'
+        }
+
+        is FieldInitValue.UnsignedInt32 -> {
+            +"unsigned int32("; hex(value.value); +')'
+        }
+
+        is FieldInitValue.UnsignedInt64 -> {
+            +"unsigned int64("; hex(value.value); +')'
+        }
+
+        is FieldInitValue.Float32 -> +"float32(${value.value})"
+        is FieldInitValue.Float64 -> +"float64(${value.value})"
+        is FieldInitValue.String -> quoted(value.value)
+        is FieldInitValue.NullRef -> +"nullref"
+
+        is FieldInitValue.ByteArray -> {
+            +"bytearray("
+            hex(value.value)
+            +')'
+        }
+    }
 }

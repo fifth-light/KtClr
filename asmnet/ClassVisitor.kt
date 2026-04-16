@@ -30,5 +30,15 @@ interface ClassVisitor {
         parameters: List<MethodParameter> = emptyList(),
     ): MethodVisitor?
 
+    // ECMA-335 II.16
+    fun visitField(
+        name: String,
+        type: TypeSpec,
+        attributes: FieldAttributes = FieldAttributes(),
+        offset: Int? = null,
+        initValue: FieldInitValue? = null,
+        // TODO: DataLabel
+    )
+
     fun visitEnd()
 }

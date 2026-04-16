@@ -1,4 +1,4 @@
-package top.fifthlight.asmnet.il.writer.test.integration
+package top.fifthlight.asmnet.il.writer.test.integration.hello_world
 
 import top.fifthlight.asmnet.ExternAssemblyDeclaration
 import top.fifthlight.asmnet.HashAlgorithm
@@ -51,7 +51,7 @@ private fun generateHelloWorld(): String = StringWriter().use {
                 version = Version(0, 0, 0, 0),
             ),
         )
-        visitModule("hello_world.dll", null)
+        visitModule("hello_world.dll")
         visitClass("Hello")!!.apply {
             visit(
                 attrs = TypeAttributes(

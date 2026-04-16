@@ -53,6 +53,17 @@ class ILTextClassWriter internal constructor(
         parameters = parameters,
     )
 
+    // ECMA-335 II.16
+    override fun visitField(
+        name: String,
+        type: TypeSpec,
+        attributes: FieldAttributes,
+        offset: Int?,
+        initValue: FieldInitValue?,
+    ) = writer.write {
+        fieldDecl(name, type, attributes, offset, initValue)
+    }
+
     override fun visitEnd() {
         writer.write {
             unindent()

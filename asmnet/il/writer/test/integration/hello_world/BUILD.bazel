@@ -4,7 +4,7 @@ load("//rule:il.bzl", "ilasm_exe")
 kt_jvm_binary(
     name = "gen",
     srcs = ["HelloWorldGenerator.kt"],
-    main_class = "top.fifthlight.asmnet.il.writer.test.integration.HelloWorldGeneratorKt",
+    main_class = "top.fifthlight.asmnet.il.writer.test.integration.hello_world.HelloWorldGeneratorKt",
     deps = [
         "//asmnet",
         "//asmnet/il/writer",

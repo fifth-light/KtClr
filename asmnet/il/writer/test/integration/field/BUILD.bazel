@@ -1,0 +1,27 @@
+load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary")
+load("//rule:il.bzl", "ilasm_exe")
+
+kt_jvm_binary(
+    name = "gen",
+    srcs = ["FieldTestGenerator.kt"],
+    main_class = "top.fifthlight.asmnet.il.writer.test.integration.field.FieldTestGeneratorKt",
+    deps = [
+        "//asmnet",
+        "//asmnet/il/writer",
+    ],
+)
+
+genrule(
+    name = "ir",
+    outs = ["field_test.il"],
+    cmd = "$(location :gen) $@",
+    tools = [":gen"],
+    visibility = ["//visibility:private"],
+)
+
+ilasm_exe(
+    name = "field_test",
+    input = ":ir",
+    runtimeconfig = "field_test.runtimeconfig.json",
+    visibility = ["//visibility:public"],
+)

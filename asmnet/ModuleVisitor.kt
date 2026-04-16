@@ -10,11 +10,13 @@ interface ModuleVisitor {
         name: String,
         declaration: AssemblyDeclaration = AssemblyDeclaration(),
     )
+
     // ECMA-335 II.6.3
     fun visitExternAssembly(
         name: String,
         declaration: ExternAssemblyDeclaration = ExternAssemblyDeclaration(),
     )
+
     // ECMA-335 II.6.3
     fun visitFile(
         noMetadata: Boolean = false,
@@ -26,6 +28,7 @@ interface ModuleVisitor {
 
     // ECMA-335 II.6.4, mvid can be null when reading ILASM
     fun visitModule(name: String, mvid: UUID? = null)
+
     // ECMA-335 II.6.5
     fun visitExternModule(fileName: String)
 
@@ -35,11 +38,13 @@ interface ModuleVisitor {
 
     // ECMA-335 II.6.2
     fun visitSubsystem(subsystem: Subsystem)
+
     // ECMA-335 II.6.2
     fun visitCorFlags(flag: RuntimeFlags)
 
     // ECMA-335 II.10
     fun visitClass(name: String): ClassVisitor?
+
     // ECMA-335 II.15
     fun visitMethod(
         name: String,
@@ -55,6 +60,16 @@ interface ModuleVisitor {
         entryPoint: Boolean = false,
         parameters: List<MethodParameter> = emptyList(),
     ): MethodVisitor?
+
+    // ECMA-335 II.16
+    fun visitField(
+        name: String,
+        type: TypeSpec,
+        attributes: FieldAttributes = FieldAttributes(),
+        offset: Int? = null,
+        initValue: FieldInitValue? = null,
+        // TODO: DataLabel
+    )
 
     fun visitEnd()
 }

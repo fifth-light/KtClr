@@ -22,7 +22,7 @@ data class TypeReference(
     val names: List<KString>,
 ) : TypeSpec {
     constructor(
-        resolutionScope: ResolutionScope,
+        resolutionScope: ResolutionScope? = null,
         name: KString
     ): this(
         resolutionScope = resolutionScope,
