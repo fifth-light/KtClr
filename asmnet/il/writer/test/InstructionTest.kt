@@ -115,7 +115,7 @@ class InstructionTest {
     fun testMethodWithLdarg() {
         assertContentEquals(
             expected = """
-                .method public hidebysig instance void .ctor() cil managed
+                .method public hidebysig instance void '.ctor'() cil managed
                 {
                   .maxstack 8
                   LABEL_0: ldarg.0

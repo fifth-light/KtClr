@@ -77,7 +77,7 @@ class MethodTest {
     fun testConstructor() {
         assertContentEquals(
             expected = """
-                .method public hidebysig specialname rtspecialname instance void .ctor() cil managed
+                .method public hidebysig specialname rtspecialname instance void '.ctor'() cil managed
                 {
                 }
             """.trimIndent(),
