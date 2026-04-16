@@ -81,7 +81,7 @@ private fun generateHelloWorld(): String = StringWriter().use {
                 visitMaxStack(8)
                 visitLdc("Hello, world!")
                 visitMethodInsn(
-                    opcode = OpCode.CALL,
+                    opcode = OpCode(OpCode.Code.call),
                     MethodReference(
                         declaringType = TypeReference(
                             resolutionScope = ResolutionScope.Assembly("System.Console"),
@@ -92,7 +92,7 @@ private fun generateHelloWorld(): String = StringWriter().use {
                         parameterTypes = listOf(Type.String),
                     ),
                 )
-                visitInsn(OpCode.RET)
+                visitInsn(OpCode(OpCode.Code.ret))
                 visitEnd()
             }
             visitEnd()

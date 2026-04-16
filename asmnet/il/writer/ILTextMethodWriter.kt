@@ -60,7 +60,7 @@ class ILTextMethodWriter internal constructor(
 
     override fun visitInsn(opCode: OpCode) {
         writer.write {
-            +opCodeName(opCode)
+            opcode(opCode)
             line()
         }
     }
@@ -68,11 +68,28 @@ class ILTextMethodWriter internal constructor(
     override fun visitLdc(value: Any) {
         writer.write {
             when (value) {
-                is Int -> +"ldc.i4 $value"
-                is Long -> +"ldc.i8 $value"
-                is Float -> +"ldc.r4 $value"
-                is Double -> +"ldc.r8 $value"
-                is String -> {+"ldstr "; quoted(value)}
+                is Int -> {
+                    opcode(OpCode.Code.ldcI4)
+                    +" "
+                    hex(value)
+                }
+                is Long -> {
+                    opcode(OpCode.Code.ldcI8)
+                    +" "
+                    hex(value)
+                }
+                is Float -> {
+                    opcode(OpCode.Code.ldcR4)
+                    +" $value"
+                }
+                is Double -> {
+                    opcode(OpCode.Code.ldcR8)
+                    +" $value"
+                }
+                is String -> {
+                    opcode(OpCode.Code.ldstr)
+                    quoted(value)
+                }
                 else -> throw IllegalArgumentException("Unsupported LDC value: $value")
             }
             line()
@@ -81,7 +98,7 @@ class ILTextMethodWriter internal constructor(
 
     override fun visitVarInsn(opcode: OpCode, varIndex: Int) {
         writer.write {
-            +opCodeName(opcode)
+            opcode(opcode)
             +" $varIndex"
             line()
         }
@@ -89,7 +106,7 @@ class ILTextMethodWriter internal constructor(
 
     override fun visitMethodInsn(opcode: OpCode, ref: MethodReference) {
         writer.write {
-            +opCodeName(opcode)
+            opcode(opcode)
             +' '
             methodRef(ref)
             line()
@@ -106,14 +123,5 @@ class ILTextMethodWriter internal constructor(
             }
             line()
         }
-    }
-
-    private fun opCodeName(opCode: OpCode): String = when (opCode.value) {
-        0x00 -> "nop"
-        0x02 -> "ldarg.0"
-        0x28 -> "call"
-        0x2A -> "ret"
-        0x72 -> "ldstr"
-        else -> throw IllegalArgumentException("Unsupported opcode: $opCode")
     }
 }

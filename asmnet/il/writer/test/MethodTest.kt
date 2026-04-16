@@ -304,9 +304,9 @@ class MethodTest {
                 )!!.apply {
                     visitMaxStack(8)
                     visitLabel(Label())
-                    visitInsn(OpCode.NOP)
+                    visitInsn(OpCode(OpCode.Code.nop))
                     visitLabel(Label())
-                    visitInsn(OpCode.RET)
+                    visitInsn(OpCode(OpCode.Code.ret))
                     visitEnd()
                 }
             }
@@ -320,8 +320,8 @@ class MethodTest {
                 .method public static hidebysig void Main() cil managed
                 {
                   .maxstack 8
-                  LABEL_0: ldc.i4 42
-                  LABEL_1: ldc.i8 123456
+                  LABEL_0: ldc.i4 0x0000002A
+                  LABEL_1: ldc.i8 0x000000000001E240
                   LABEL_2: ldc.r4 3.14
                   LABEL_3: ldc.r8 2.718
                   LABEL_4: ret
@@ -350,7 +350,7 @@ class MethodTest {
                     visitLabel(Label())
                     visitLdc(2.718)
                     visitLabel(Label())
-                    visitInsn(OpCode.RET)
+                    visitInsn(OpCode(OpCode.Code.ret))
                     visitEnd()
                 }
             }
@@ -384,7 +384,7 @@ class MethodTest {
                     visitMaxStack(8)
                     visitLabel(Label())
                     visitMethodInsn(
-                        OpCode.CALL,
+                        OpCode(OpCode.Code.call),
                         MethodReference(
                             declaringType = Type.Object,
                             name = "WriteLine",
@@ -393,7 +393,7 @@ class MethodTest {
                         ),
                     )
                     visitLabel(Label())
-                    visitInsn(OpCode.RET)
+                    visitInsn(OpCode(OpCode.Code.ret))
                     visitEnd()
                 }
             }
@@ -425,9 +425,9 @@ class MethodTest {
                 )!!.apply {
                     visitMaxStack(8)
                     visitLabel(Label())
-                    visitInsn(OpCode.LDARG_0)
+                    visitInsn(OpCode(OpCode.Code.ldarg0))
                     visitLabel(Label())
-                    visitInsn(OpCode.RET)
+                    visitInsn(OpCode(OpCode.Code.ret))
                     visitEnd()
                 }
             }
@@ -461,9 +461,9 @@ class MethodTest {
                     )!!.apply {
                         visitMaxStack(8)
                         visitLabel(Label())
-                        visitInsn(OpCode.NOP)
+                        visitInsn(OpCode(OpCode.Code.nop))
                         visitLabel(Label())
-                        visitInsn(OpCode.RET)
+                        visitInsn(OpCode(OpCode.Code.ret))
                         visitEnd()
                     }
                     visitEnd()

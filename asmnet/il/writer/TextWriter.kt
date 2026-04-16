@@ -42,8 +42,10 @@ class TextWriter(
         }
     }
 
+    fun writeHex(int8: Byte) = write(String.format("0x%02X", int8))
     fun writeHex(int16: Short) = write(String.format("0x%04X", int16))
     fun writeHex(int32: Int) = write(String.format("0x%08X", int32))
+    fun writeHex(int64: Long) = write(String.format("0x%016X", int64))
     fun writeHex(bytes: ByteArray) = bytes.forEachIndexed { index, byte ->
         write(String.format("%02X", byte))
         if (index < bytes.size - 1) {
@@ -103,8 +105,10 @@ class TextWriter(
         fun write(text: String)
         fun write(text: Char)
 
+        fun hex(int8: Byte)
         fun hex(int16: Short)
         fun hex(int32: Int)
+        fun hex(int64: Long)
         fun hex(bytes: ByteArray)
 
         fun guid(guid: UUID)
@@ -130,8 +134,10 @@ class TextWriter(
         override fun write(text: String) = writer.write(text)
         override fun write(text: Char) = writer.write(text)
 
+        override fun hex(int8: Byte) = writer.writeHex(int8)
         override fun hex(int16: Short) = writer.writeHex(int16)
         override fun hex(int32: Int) = writer.writeHex(int32)
+        override fun hex(int64: Long) = writer.writeHex(int64)
         override fun hex(bytes: ByteArray) = writer.writeHex(bytes)
 
         override fun guid(guid: UUID) = writer.writeGuid(guid)
