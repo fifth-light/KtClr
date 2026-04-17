@@ -221,6 +221,17 @@ data class OpCode(
             val rethrow = Code(0xFE1A.toShort())
             val sizeof = Code(0xFE1C.toShort())
             val refanytype = Code(0xFE1D.toShort())
+
+            val brnull = brfalse
+            val brnullS = brfalseS
+            val brzero = brfalse
+            val brzeroS = brfalseS
+            val brinst = brtrue
+            val brinstS = brtrueS
+            val ldindU8 = ldindI8
+            val ldelemU8 = ldelemI8
+            val ldcI4M1x = ldcI4M1
+            val endfault = endfinally
         }
     }
 

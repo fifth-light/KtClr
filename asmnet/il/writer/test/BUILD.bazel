@@ -106,3 +106,15 @@ kt_jvm_test(
         "@maven//:junit_junit",
     ],
 )
+
+kt_jvm_test(
+    name = "exception_handler",
+    srcs = ["ExceptionHandlerTest.kt"],
+    test_class = "top.fifthlight.asmnet.il.writer.test.ExceptionHandlerTest",
+    deps = [
+        ":util",
+        "//asmnet",
+        "//asmnet/dsl",
+        "@maven//:junit_junit",
+    ],
+)

@@ -41,4 +41,113 @@ class MethodDslScope(val visitor: MethodVisitor) {
         visitor.visitLocalVariables(init, locals.toList())
 
     fun locals(vararg locals: LocalVariable) = locals(init = true, *locals)
+
+    fun tryCatch(
+        exceptionType: TypeSpec,
+        tryBlock: MethodDslScope.() -> Unit,
+        catchBlock: MethodDslScope.() -> Unit,
+    ) {
+        val tryStart = Label()
+        val handlerStart = Label()
+        val handlerEnd = Label()
+        label(tryStart)
+        tryBlock()
+        label(handlerStart)
+        catchBlock()
+        label(handlerEnd)
+        visitor.visitExceptionHandler(
+            flags = ExceptionFlag.Exception,
+            tryStart = tryStart,
+            tryEnd = handlerStart,
+            exceptionType = exceptionType,
+            handlerStart = handlerStart,
+            handlerEnd = handlerEnd,
+        )
+    }
+
+    fun tryFinally(
+        tryBlock: MethodDslScope.() -> Unit,
+        finallyBlock: MethodDslScope.() -> Unit,
+    ) {
+        val tryStart = Label()
+        val handlerStart = Label()
+        val handlerEnd = Label()
+        label(tryStart)
+        tryBlock()
+        label(handlerStart)
+        finallyBlock()
+        label(handlerEnd)
+        visitor.visitExceptionHandler(
+            flags = ExceptionFlag.Finally,
+            tryStart = tryStart,
+            tryEnd = handlerStart,
+            handlerStart = handlerStart,
+            handlerEnd = handlerEnd,
+        )
+    }
+
+    fun tryFault(
+        tryBlock: MethodDslScope.() -> Unit,
+        faultBlock: MethodDslScope.() -> Unit,
+    ) {
+        val tryStart = Label()
+        val handlerStart = Label()
+        val handlerEnd = Label()
+        label(tryStart)
+        tryBlock()
+        label(handlerStart)
+        faultBlock()
+        label(handlerEnd)
+        visitor.visitExceptionHandler(
+            flags = ExceptionFlag.Fault,
+            tryStart = tryStart,
+            tryEnd = handlerStart,
+            handlerStart = handlerStart,
+            handlerEnd = handlerEnd,
+        )
+    }
+
+    fun tryFilter(
+        tryBlock: MethodDslScope.() -> Unit,
+        filterBlock: MethodDslScope.() -> Unit,
+        handlerBlock: MethodDslScope.() -> Unit,
+    ) {
+        val tryStart = Label()
+        val filterStart = Label()
+        val handlerStart = Label()
+        val handlerEnd = Label()
+        label(tryStart)
+        tryBlock()
+        label(filterStart)
+        filterBlock()
+        label(handlerStart)
+        handlerBlock()
+        label(handlerEnd)
+        visitor.visitExceptionHandler(
+            flags = ExceptionFlag.Filter,
+            tryStart = tryStart,
+            tryEnd = filterStart,
+            filterStart = filterStart,
+            handlerStart = handlerStart,
+            handlerEnd = handlerEnd,
+        )
+    }
+
+    fun exceptionHandler(
+        flags: ExceptionFlag,
+        tryStart: Label,
+        tryEnd: Label,
+        handlerStart: Label,
+        handlerEnd: Label,
+        exceptionType: TypeSpec? = null,
+        filterStart: Label? = null,
+    ) = visitor.visitExceptionHandler(
+        flags = flags,
+        tryStart = tryStart,
+        tryEnd = tryEnd,
+        handlerStart = handlerStart,
+        handlerEnd = handlerEnd,
+        exceptionType = exceptionType,
+        filterStart = filterStart,
+    )
 }

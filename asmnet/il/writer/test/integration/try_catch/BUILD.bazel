@@ -1,0 +1,17 @@
+load("//asmnet/il/writer/test/integration:integration.bzl", "integration_test")
+
+integration_test(
+    name = "try_catch",
+    srcs = ["TryCatchGenerator.kt"],
+    expected = [
+        "Caught!",
+        "Done",
+    ],
+    main_class = "top.fifthlight.asmnet.il.writer.test.integration.try_catch.TryCatchGeneratorKt",
+    runtimeconfig = "try_catch_test.runtimeconfig.json",
+    deps = [
+        "//asmnet",
+        "//asmnet/dsl",
+        "//asmnet/il/writer",
+    ],
+)

@@ -39,5 +39,16 @@ interface MethodVisitor {
     // ECMA-335 II.10.3.2
     fun visitOverride(baseType: TypeSpec, baseName: String)
 
+    // ECMA-335 II.19
+    fun visitExceptionHandler(
+        flags: ExceptionFlag,
+        tryStart: Label,
+        tryEnd: Label,
+        handlerStart: Label,
+        handlerEnd: Label,
+        exceptionType: TypeSpec? = null,
+        filterStart: Label? = null,
+    )
+
     fun visitEnd()
 }

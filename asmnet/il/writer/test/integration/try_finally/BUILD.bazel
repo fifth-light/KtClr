@@ -1,0 +1,18 @@
+load("//asmnet/il/writer/test/integration:integration.bzl", "integration_test")
+
+integration_test(
+    name = "try_finally",
+    srcs = ["TryFinallyGenerator.kt"],
+    expected = [
+        "Try",
+        "Finally ran",
+        "Done",
+    ],
+    main_class = "top.fifthlight.asmnet.il.writer.test.integration.try_finally.TryFinallyGeneratorKt",
+    runtimeconfig = "try_finally_test.runtimeconfig.json",
+    deps = [
+        "//asmnet",
+        "//asmnet/dsl",
+        "//asmnet/il/writer",
+    ],
+)

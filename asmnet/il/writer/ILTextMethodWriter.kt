@@ -175,6 +175,40 @@ class ILTextMethodWriter internal constructor(
         line()
     }
 
+    override fun visitExceptionHandler(
+        flags: ExceptionFlag,
+        tryStart: Label,
+        tryEnd: Label,
+        handlerStart: Label,
+        handlerEnd: Label,
+        exceptionType: TypeSpec?,
+        filterStart: Label?
+    ) {
+        writer.write {
+            +".try "
+            +"LABEL_${getOrCreateLabelIndex(tryStart)} to LABEL_${getOrCreateLabelIndex(tryEnd)} "
+            when (flags) {
+                ExceptionFlag.Exception -> {
+                    +"catch "
+                    typeSpec(exceptionType!!)
+                    +' '
+                }
+                ExceptionFlag.Filter -> {
+                    +"filter LABEL_${getOrCreateLabelIndex(filterStart!!)} "
+                }
+                ExceptionFlag.Finally -> {
+                    +"finally "
+                }
+                ExceptionFlag.Fault -> {
+                    +"fault "
+                }
+                else -> error("Unknown exception flag: $flags")
+            }
+            +"handler LABEL_${getOrCreateLabelIndex(handlerStart)} to LABEL_${getOrCreateLabelIndex(handlerEnd)}"
+            line()
+        }
+    }
+
     override fun visitEnd() {
         writer.write {
             unindent()
