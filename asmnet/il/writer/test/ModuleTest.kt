@@ -110,7 +110,19 @@ class ModuleTest {
                 .subsystem 0x0003 // WINDOWS_CUI
             """.trimIndent(),
             actual = generateText {
-                subsystem(Subsystem.WINDOWS_CUI)
+                subsystem(Subsystem(Subsystem.WINDOWS_CUI))
+            }
+        )
+    }
+
+    @Test
+    fun testSubsystemUnknown() {
+        assertContentEquals(
+            expected = """
+                .subsystem 0x00FF
+            """.trimIndent(),
+            actual = generateText {
+                subsystem(Subsystem(0x00FF))
             }
         )
     }
