@@ -82,7 +82,7 @@ class ILTextClassWriter internal constructor(
             +' '
             identifier(name)
             params(parameters)
-            +' '
+            line()
             +"{"
             indent()
             line()

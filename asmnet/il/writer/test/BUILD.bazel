@@ -78,6 +78,17 @@ kt_jvm_test(
 )
 
 kt_jvm_test(
+    name = "property",
+    srcs = ["PropertyTest.kt"],
+    test_class = "top.fifthlight.asmnet.il.writer.test.PropertyTest",
+    deps = [
+        ":util",
+        "//asmnet",
+        "@maven//:junit_junit",
+    ],
+)
+
+kt_jvm_test(
     name = "event",
     srcs = ["EventTest.kt"],
     test_class = "top.fifthlight.asmnet.il.writer.test.EventTest",
