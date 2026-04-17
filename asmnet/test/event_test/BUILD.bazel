@@ -1,6 +1,6 @@
 load("@bazel_skylib//rules:select_file.bzl", "select_file")
 load("@rules_dotnet//dotnet:defs.bzl", "csharp_binary")
-load("//rule:il.bzl", "ildasm")
+load("//rule/dotnet:il.bzl", "ildasm")
 
 csharp_binary(
     name = "lib",

@@ -1,0 +1,1 @@
+exports_files(["launcher.bat.tpl", "launcher.sh.tpl"])

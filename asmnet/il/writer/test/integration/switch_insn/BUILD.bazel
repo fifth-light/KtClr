@@ -1,28 +1,17 @@
-load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary")
-load("//rule:il.bzl", "ilasm_exe")
+load("//asmnet/il/writer/test/integration:integration.bzl", "integration_test")
 
-kt_jvm_binary(
-    name = "gen",
+integration_test(
+    name = "switch_insn",
     srcs = ["SwitchInsnGenerator.kt"],
+    expected = [
+        "two",
+        "",
+    ],
     main_class = "top.fifthlight.asmnet.il.writer.test.integration.switch_insn.SwitchInsnGeneratorKt",
+    runtimeconfig = "switch_insn.runtimeconfig.json",
     deps = [
         "//asmnet",
         "//asmnet/dsl",
         "//asmnet/il/writer",
     ],
-)
-
-genrule(
-    name = "ir",
-    outs = ["switch_insn.il"],
-    cmd = "$(location :gen) $@",
-    tools = [":gen"],
-    visibility = ["//visibility:private"],
-)
-
-ilasm_exe(
-    name = "switch_insn",
-    input = ":ir",
-    runtimeconfig = "switch_insn.runtimeconfig.json",
-    visibility = ["//visibility:public"],
 )

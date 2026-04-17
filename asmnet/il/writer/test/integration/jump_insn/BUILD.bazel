@@ -1,28 +1,18 @@
-load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary")
-load("//rule:il.bzl", "ilasm_exe")
+load("//asmnet/il/writer/test/integration:integration.bzl", "integration_test")
 
-kt_jvm_binary(
-    name = "gen",
+integration_test(
+    name = "jump_insn",
     srcs = ["JumpInsnGenerator.kt"],
+    expected = [
+        "15",
+        "big",
+        "",
+    ],
     main_class = "top.fifthlight.asmnet.il.writer.test.integration.jump_insn.JumpInsnGeneratorKt",
+    runtimeconfig = "jump_insn.runtimeconfig.json",
     deps = [
         "//asmnet",
         "//asmnet/dsl",
         "//asmnet/il/writer",
     ],
-)
-
-genrule(
-    name = "ir",
-    outs = ["jump_insn.il"],
-    cmd = "$(location :gen) $@",
-    tools = [":gen"],
-    visibility = ["//visibility:private"],
-)
-
-ilasm_exe(
-    name = "jump_insn",
-    input = ":ir",
-    runtimeconfig = "jump_insn.runtimeconfig.json",
-    visibility = ["//visibility:public"],
 )

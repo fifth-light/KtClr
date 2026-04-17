@@ -1,28 +1,17 @@
-load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary")
-load("//rule:il.bzl", "ilasm_exe")
+load("//asmnet/il/writer/test/integration:integration.bzl", "integration_test")
 
-kt_jvm_binary(
-    name = "gen",
+integration_test(
+    name = "hello_world",
     srcs = ["HelloWorldGenerator.kt"],
+    expected = [
+        "Hello, world!",
+        "",
+    ],
     main_class = "top.fifthlight.asmnet.il.writer.test.integration.hello_world.HelloWorldGeneratorKt",
+    runtimeconfig = "hello_world.runtimeconfig.json",
     deps = [
         "//asmnet",
         "//asmnet/dsl",
         "//asmnet/il/writer",
     ],
-)
-
-genrule(
-    name = "ir",
-    outs = ["hello_world.il"],
-    cmd = "$(location :gen) $@",
-    tools = [":gen"],
-    visibility = ["//visibility:private"],
-)
-
-ilasm_exe(
-    name = "hello_world",
-    input = ":ir",
-    runtimeconfig = "hello_world.runtimeconfig.json",
-    visibility = ["//visibility:public"],
 )

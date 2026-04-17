@@ -1,28 +1,23 @@
-load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary")
-load("//rule:il.bzl", "ilasm_exe")
+load("//asmnet/il/writer/test/integration:integration.bzl", "integration_test")
 
-kt_jvm_binary(
-    name = "gen",
+integration_test(
+    name = "event",
     srcs = ["EventTestGenerator.kt"],
     main_class = "top.fifthlight.asmnet.il.writer.test.integration.event.EventTestGeneratorKt",
+    runtimeconfig = "event_test.runtimeconfig.json",
     deps = [
         "//asmnet",
         "//asmnet/dsl",
         "//asmnet/il/writer",
     ],
-)
-
-genrule(
-    name = "ir",
-    outs = ["event_test.il"],
-    cmd = "$(location :gen) $@",
-    tools = [":gen"],
-    visibility = ["//visibility:private"],
-)
-
-ilasm_exe(
-    name = "event_test",
-    input = ":ir",
-    runtimeconfig = "event_test.runtimeconfig.json",
-    visibility = ["//visibility:public"],
+    expected = [
+        "Event fired!",
+        "Another handler!",
+        "Event fired!",
+        "Another handler!",
+        "Event fired!",
+        "Another handler!",
+        "6",
+        "",
+    ]
 )

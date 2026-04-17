@@ -1,4 +1,5 @@
 load("@bazel_lib//lib:copy_file.bzl", "COPY_FILE_TOOLCHAINS", "copy_file_action")
+load("@bazel_lib//lib:paths.bzl", "to_rlocation_path")
 
 def ildasm_action(actions, input, output, ildasm_tool, is_windows):
     args = actions.args()
@@ -42,17 +43,19 @@ ildasm = rule(
 
 def ilasm_action(actions, input, output, is_dll, ilasm_tool, is_windows):
     args = actions.args()
+    args.add(input)
     if is_windows:
         args.add("/NOLOGO")
         args.add("/QUIET")
         if is_dll:
             args.add("/DLL")
+        args.add(output, format = "/OUTPUT=%s")
     else:
         args.add("-NOLOGO")
         args.add("-QUIET")
         if is_dll:
             args.add("-DLL")
-    args.add(input)
+        args.add(output, format = "-OUTPUT=%s")
     actions.run(
         inputs = depset([input]),
         outputs = [output],
@@ -83,30 +86,68 @@ def _ilasm_exe_impl(ctx):
     is_windows = ctx.target_platform_has_constraint(ctx.attr._windows_constraint[platform_common.ConstraintValueInfo])
     ilasm_action(ctx.actions, ctx.file.input, output_file, False, ctx.executable._ilasm, is_windows)
 
-    runfile_outputs = []
     if ctx.file.runtimeconfig:
         rc_output = ctx.actions.declare_file(ctx.label.name + ".runtimeconfig.json")
         copy_file_action(ctx, ctx.file.runtimeconfig, rc_output)
         outputs.append(rc_output)
-        runfile_outputs.append(rc_output)
 
-    runfiles = ctx.runfiles(files = runfile_outputs)
+    toolchain = ctx.toolchains["@rules_dotnet//dotnet:toolchain_type"]
+    runtime = toolchain.runtime
+    dotnet_info = toolchain.dotnetinfo
+
+    launcher = ctx.actions.declare_file("{}.{}".format(ctx.label.name, "bat" if is_windows else "sh"))
+    if is_windows:
+        ctx.actions.expand_template(
+            template = ctx.file._launcher_bat,
+            output = launcher,
+            substitutions = {
+                "TEMPLATED_dotnet": to_rlocation_path(ctx, runtime.files_to_run.executable),
+                "TEMPLATED_executable": to_rlocation_path(ctx, output_file),
+            },
+            is_executable = True,
+        )
+    else:
+        ctx.actions.expand_template(
+            template = ctx.file._launcher_sh,
+            output = launcher,
+            substitutions = {
+                "TEMPLATED_dotnet": to_rlocation_path(ctx, runtime.files_to_run.executable),
+                "TEMPLATED_executable": to_rlocation_path(ctx, output_file),
+            },
+            is_executable = True,
+        )
+
+    runfiles = ctx.runfiles(files = outputs + dotnet_info.runtime_files)
+    runfiles = runfiles.merge(ctx.attr._bash_runfiles[DefaultInfo].default_runfiles)
 
     return DefaultInfo(
         files = depset(outputs),
-        executable = output_file,
+        executable = launcher,
         runfiles = runfiles,
     )
 
 ilasm_exe = rule(
     implementation = _ilasm_exe_impl,
+    executable = True,
     attrs = _COMMON_ILASM_ATTRS | {
         "runtimeconfig": attr.label(
+            mandatory = False,
             allow_single_file = [".json"],
             doc = "Optional runtimeconfig.json to copy alongside output",
         ),
+        "_launcher_sh": attr.label(
+            doc = "A template file for the launcher on Linux/MacOS",
+            default = "//rule/dotnet:launcher.sh.tpl",
+            allow_single_file = True,
+        ),
+        "_launcher_bat": attr.label(
+            doc = "A template file for the launcher on Windows",
+            default = "//rule/dotnet:launcher.bat.tpl",
+            allow_single_file = True,
+        ),
+        "_bash_runfiles": attr.label(default = "@rules_shell//shell/runfiles"),
     },
-    toolchains = COPY_FILE_TOOLCHAINS,
+    toolchains = COPY_FILE_TOOLCHAINS + ["@rules_dotnet//dotnet:toolchain_type"],
     doc = "Assemble .il file into .net binary",
 )
 
