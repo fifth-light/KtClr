@@ -90,6 +90,27 @@ class ILTextClassWriter internal constructor(
         return ILTextPropertyWriter(writer, name)
     }
 
+    // ECMA-335 II.18
+    @Suppress("RedundantNullableReturnType")
+    override fun visitEvent(
+        name: String,
+        type: TypeSpec,
+        attributes: EventAttributes,
+    ): EventVisitor? {
+        writer.write {
+            +".event "
+            eventAttr(attributes)
+            type(type)
+            +' '
+            identifier(name)
+            line()
+            +"{"
+            indent()
+            line()
+        }
+        return ILTextEventWriter(writer, name)
+    }
+
     override fun visitEnd() {
         writer.write {
             unindent()

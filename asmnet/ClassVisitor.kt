@@ -49,5 +49,12 @@ interface ClassVisitor {
         parameters: List<Parameter> = emptyList(),
     ): PropertyVisitor?
 
+    // ECMA-335 II.18
+    fun visitEvent(
+        name: String,
+        type: TypeSpec,
+        attributes: EventAttributes = EventAttributes(),
+    ): EventVisitor?
+
     fun visitEnd()
 }

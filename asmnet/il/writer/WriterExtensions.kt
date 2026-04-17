@@ -543,6 +543,12 @@ fun WriteScope.propertyAttr(attrs: PropertyAttributes) {
     if (attrs.rtSpecialName) +"rtspecialname "
 }
 
+// ECMA-335 II.18
+fun WriteScope.eventAttr(attrs: EventAttributes) {
+    if (attrs.specialName) +"specialname "
+    if (attrs.rtSpecialName) +"rtspecialname "
+}
+
 // ECMA-335 II.16.1
 fun WriteScope.fieldAttr(attrs: FieldAttributes) {
     when (val access = attrs.fieldAccess) {

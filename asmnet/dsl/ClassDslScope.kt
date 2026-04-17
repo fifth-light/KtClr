@@ -50,4 +50,18 @@ class ClassDslScope(val visitor: ClassVisitor) {
             pv.visitEnd()
         }
     }
+
+    fun event(
+        name: String,
+        type: TypeSpec,
+        attributes: EventAttributes = EventAttributes(),
+        block: EventDslScope.() -> Unit,
+    ) {
+        visitor.visitEvent(
+            name, type, attributes,
+        )?.let { ev ->
+            EventDslScope(ev).block()
+            ev.visitEnd()
+        }
+    }
 }

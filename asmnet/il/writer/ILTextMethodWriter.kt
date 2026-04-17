@@ -92,6 +92,7 @@ class ILTextMethodWriter internal constructor(
                 }
                 is String -> {
                     opcode(OpCode.Code.ldstr)
+                    +' '
                     quoted(value)
                 }
                 else -> throw IllegalArgumentException("Unsupported LDC value: $value")

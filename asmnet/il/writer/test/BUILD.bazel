@@ -76,3 +76,14 @@ kt_jvm_test(
         "@maven//:junit_junit",
     ],
 )
+
+kt_jvm_test(
+    name = "event",
+    srcs = ["EventTest.kt"],
+    test_class = "top.fifthlight.asmnet.il.writer.test.EventTest",
+    deps = [
+        ":util",
+        "//asmnet",
+        "@maven//:junit_junit",
+    ],
+)
