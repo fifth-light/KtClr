@@ -58,7 +58,7 @@ interface ModuleVisitor {
             ImplementationAttributes.Managed,
         ),
         entryPoint: Boolean = false,
-        parameters: List<MethodParameter> = emptyList(),
+        parameters: List<Parameter> = emptyList(),
     ): MethodVisitor?
 
     // ECMA-335 II.16

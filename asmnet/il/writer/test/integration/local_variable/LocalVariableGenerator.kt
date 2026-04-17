@@ -48,7 +48,7 @@ private fun generateLocalVariableTest(): String = StringWriter().use {
                     MethodAttributes.Static,
                     MethodAttributes.HideBySig,
                 ),
-                parameters = listOf(MethodParameter(Type.Array(Type.String), "args")),
+                parameters = listOf(Parameter(Type.Array(Type.String), "args")),
                 entryPoint = true,
             ) {
                 locals(

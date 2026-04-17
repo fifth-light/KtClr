@@ -162,11 +162,11 @@ class InstructionTest {
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                     parameters = listOf(
-                        MethodParameter(Type.String, "a"),
-                        MethodParameter(Type.String, "b"),
-                        MethodParameter(Type.String, "c"),
-                        MethodParameter(Type.String, "d"),
-                        MethodParameter(Type.String, "e"),
+                        Parameter(Type.String, "a"),
+                        Parameter(Type.String, "b"),
+                        Parameter(Type.String, "c"),
+                        Parameter(Type.String, "d"),
+                        Parameter(Type.String, "e"),
                     ),
                 ) {
                     maxStack(8)

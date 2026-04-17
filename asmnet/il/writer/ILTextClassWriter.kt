@@ -40,7 +40,7 @@ class ILTextClassWriter internal constructor(
         attributes: MethodAttributes,
         implAttributes: ImplementationAttributes,
         entryPoint: Boolean,
-        parameters: List<MethodParameter>,
+        parameters: List<Parameter>,
     ): MethodVisitor? = ILTextMethodWriter(
         writer = writer,
         className = className,
@@ -71,7 +71,7 @@ class ILTextClassWriter internal constructor(
         type: TypeSpec,
         callConv: CallConv,
         attributes: PropertyAttributes,
-        parameters: List<MethodParameter>,
+        parameters: List<Parameter>,
     ): PropertyVisitor? {
         writer.write {
             +".property "

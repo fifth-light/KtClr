@@ -11,7 +11,7 @@ class ILTextMethodWriter internal constructor(
     private val attributes: MethodAttributes,
     private val implAttributes: ImplementationAttributes,
     private val entryPoint: Boolean,
-    private val parameters: List<MethodParameter>,
+    private val parameters: List<Parameter>,
 ) : MethodVisitor {
     private val labels = mutableMapOf<Label, Int>()
     private val emittedLabels = mutableSetOf<Label>()

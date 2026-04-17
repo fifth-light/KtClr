@@ -16,7 +16,7 @@ class ClassDslScope(val visitor: ClassVisitor) {
             ImplementationAttributes.Managed,
         ),
         entryPoint: Boolean = false,
-        parameters: List<MethodParameter> = emptyList(),
+        parameters: List<Parameter> = emptyList(),
         block: MethodDslScope.() -> Unit,
     ) {
         visitor.visitMethod(
@@ -40,7 +40,7 @@ class ClassDslScope(val visitor: ClassVisitor) {
         type: TypeSpec,
         callConv: CallConv = CallConv(),
         attributes: PropertyAttributes = PropertyAttributes(),
-        parameters: List<MethodParameter> = emptyList(),
+        parameters: List<Parameter> = emptyList(),
         block: PropertyDslScope.() -> Unit,
     ) {
         visitor.visitProperty(

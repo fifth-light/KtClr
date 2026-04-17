@@ -170,7 +170,7 @@ class ILTextModuleWriter internal constructor(
         attributes: MethodAttributes,
         implAttributes: ImplementationAttributes,
         entryPoint: Boolean,
-        parameters: List<MethodParameter>
+        parameters: List<Parameter>
     ): MethodVisitor? = ILTextMethodWriter(
         writer = writer,
         className = null,

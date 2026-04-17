@@ -43,8 +43,8 @@ class MethodTest {
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                     parameters = listOf(
-                        MethodParameter(Type.Int32, "a"),
-                        MethodParameter(Type.Int32, "b"),
+                        Parameter(Type.Int32, "a"),
+                        Parameter(Type.Int32, "b"),
                     ),
                 ) {}
             }
@@ -161,8 +161,8 @@ class MethodTest {
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                     parameters = listOf(
-                        MethodParameter(Type.String, "input"),
-                        MethodParameter(
+                        Parameter(Type.String, "input"),
+                        Parameter(
                             Type.ManagedTypePointer(Type.Int32),
                             "result",
                             ParamAttributes(ParamAttributes.Out),
@@ -300,7 +300,7 @@ class MethodTest {
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                     parameters = listOf(
-                        MethodParameter(Type.String, "format"),
+                        Parameter(Type.String, "format"),
                     ),
                 ) {}
             }
@@ -324,7 +324,7 @@ class MethodTest {
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                     parameters = listOf(
-                        MethodParameter(Type.Int32, "x", ParamAttributes(ParamAttributes.Optional)),
+                        Parameter(Type.Int32, "x", ParamAttributes(ParamAttributes.Optional)),
                     ),
                 ) {}
             }

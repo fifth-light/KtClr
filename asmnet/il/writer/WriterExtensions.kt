@@ -287,14 +287,14 @@ fun WriteScope.paramAttr(paramAttr: ParamAttributes) {
 }
 
 // ECMA-335 II.15.4
-fun WriteScope.param(param: MethodParameter) {
+fun WriteScope.param(param: Parameter) {
     paramAttr(param.flags)
     type(param.type)
     param.name?.let { +' '; identifier(it) }
 }
 
 // ECMA-335 II.15.4
-fun WriteScope.params(parameters: List<MethodParameter>) {
+fun WriteScope.params(parameters: List<Parameter>) {
     +'('
     parameters.forEachIndexed { index, param ->
         if (index > 0) +", "

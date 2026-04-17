@@ -85,7 +85,7 @@ sealed interface Type : TypeSpec {
     data class MethodPointer(
         val callConv: CallConv,
         val returnType: Type,
-        val parameterTypes: List<MethodParameter>,
+        val parameterTypes: List<Parameter>,
     ) : Type {
         override fun toString() = buildString {
             append(callConv)

@@ -95,7 +95,7 @@ private fun generatePropertyTest(): String = StringWriter().use {
                     MethodAttributes.HideBySig,
                     MethodAttributes.SpecialName,
                 ),
-                parameters = listOf(MethodParameter(Type.Int32, "value")),
+                parameters = listOf(Parameter(Type.Int32, "value")),
             ) {
                 maxStack(8)
                 insn(OpCode.Code.ldarg0)
@@ -126,7 +126,7 @@ private fun generatePropertyTest(): String = StringWriter().use {
                     MethodAttributes.Static,
                     MethodAttributes.HideBySig,
                 ),
-                parameters = listOf(MethodParameter(Type.Array(Type.String), "args")),
+                parameters = listOf(Parameter(Type.Array(Type.String), "args")),
                 entryPoint = true,
             ) {
                 maxStack(2)

@@ -27,7 +27,7 @@ interface ClassVisitor {
             ImplementationAttributes.Managed,
         ),
         entryPoint: Boolean = false,
-        parameters: List<MethodParameter> = emptyList(),
+        parameters: List<Parameter> = emptyList(),
     ): MethodVisitor?
 
     // ECMA-335 II.16
@@ -46,7 +46,7 @@ interface ClassVisitor {
         type: TypeSpec,
         callConv: CallConv = CallConv(),
         attributes: PropertyAttributes = PropertyAttributes(),
-        parameters: List<MethodParameter> = emptyList(),
+        parameters: List<Parameter> = emptyList(),
     ): PropertyVisitor?
 
     fun visitEnd()

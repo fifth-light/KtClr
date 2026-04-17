@@ -67,7 +67,7 @@ class ModuleDslScope(val visitor: ModuleVisitor) {
             ImplementationAttributes.Managed,
         ),
         entryPoint: Boolean = false,
-        parameters: List<MethodParameter> = emptyList(),
+        parameters: List<Parameter> = emptyList(),
         block: MethodDslScope.() -> Unit,
     ) {
         visitor.visitMethod(
