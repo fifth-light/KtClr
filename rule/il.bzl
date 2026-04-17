@@ -1,9 +1,12 @@
 load("@bazel_lib//lib:copy_file.bzl", "COPY_FILE_TOOLCHAINS", "copy_file_action")
 
-def ildasm_action(actions, input, output, ildasm_tool):
+def ildasm_action(actions, input, output, ildasm_tool, is_windows):
     args = actions.args()
     args.add(input)
-    args.add(output, format = "/OUT=%s")
+    if is_windows:
+        args.add(output, format = "/OUT=%s")
+    else:
+        args.add(output, format = "-OUT=%s")
     actions.run(
         inputs = depset([input]),
         outputs = [output],
@@ -13,7 +16,8 @@ def ildasm_action(actions, input, output, ildasm_tool):
 
 def _ildasm_impl(ctx):
     output_file = ctx.actions.declare_file(ctx.label.name + ".il")
-    ildasm_action(ctx.actions, ctx.file.input, output_file, ctx.executable._ildasm)
+    is_windows = ctx.target_platform_has_constraint(ctx.attr._windows_constraint[platform_common.ConstraintValueInfo])
+    ildasm_action(ctx.actions, ctx.file.input, output_file, ctx.executable._ildasm, is_windows)
     return [DefaultInfo(files = depset([output_file]))]
 
 ildasm = rule(
@@ -29,16 +33,25 @@ ildasm = rule(
             executable = True,
             cfg = "exec",
         ),
+        "_windows_constraint": attr.label(
+            default = "@platforms//os:windows",
+        ),
     },
     doc = "Disassembly .net binary",
 )
 
-def ilasm_action(actions, input, output, is_dll, ilasm_tool):
+def ilasm_action(actions, input, output, is_dll, ilasm_tool, is_windows):
     args = actions.args()
-    args.add("/NOLOGO")
-    args.add("/QUIET")
-    if is_dll:
-        args.add("/DLL")
+    if is_windows:
+        args.add("/NOLOGO")
+        args.add("/QUIET")
+        if is_dll:
+            args.add("/DLL")
+    else:
+        args.add("-NOLOGO")
+        args.add("-QUIET")
+        if is_dll:
+            args.add("-DLL")
     args.add(input)
     actions.run(
         inputs = depset([input]),
@@ -58,13 +71,17 @@ _COMMON_ILASM_ATTRS = {
         executable = True,
         cfg = "exec",
     ),
+    "_windows_constraint": attr.label(
+        default = "@platforms//os:windows",
+    ),
 }
 
 def _ilasm_exe_impl(ctx):
     output_file = ctx.actions.declare_file(ctx.label.name + ".exe")
     outputs = [output_file]
 
-    ilasm_action(ctx.actions, ctx.file.input, output_file, False, ctx.executable._ilasm)
+    is_windows = ctx.target_platform_has_constraint(ctx.attr._windows_constraint[platform_common.ConstraintValueInfo])
+    ilasm_action(ctx.actions, ctx.file.input, output_file, False, ctx.executable._ilasm, is_windows)
 
     runfile_outputs = []
     if ctx.file.runtimeconfig:
@@ -95,7 +112,8 @@ ilasm_exe = rule(
 
 def _ilasm_dll_impl(ctx):
     output_file = ctx.actions.declare_file(ctx.label.name + ".dll")
-    ilasm_action(ctx.actions, ctx.file.input, output_file, True, ctx.executable._ilasm)
+    is_windows = ctx.target_platform_has_constraint(ctx.attr._windows_constraint[platform_common.ConstraintValueInfo])
+    ilasm_action(ctx.actions, ctx.file.input, output_file, True, ctx.executable._ilasm, is_windows)
     return DefaultInfo(files = depset([output_file]))
 
 ilasm_dll = rule(

@@ -18,6 +18,7 @@ kt_jvm_test(
     deps = [
         ":util",
         "//asmnet",
+        "//asmnet/dsl",
         "@maven//:junit_junit",
     ],
 )
@@ -29,6 +30,7 @@ kt_jvm_test(
     deps = [
         ":util",
         "//asmnet",
+        "//asmnet/dsl",
         "@maven//:junit_junit",
     ],
 )
@@ -40,6 +42,7 @@ kt_jvm_test(
     deps = [
         ":util",
         "//asmnet",
+        "//asmnet/dsl",
         "@maven//:junit_junit",
     ],
 )
@@ -51,6 +54,7 @@ kt_jvm_test(
     deps = [
         ":util",
         "//asmnet",
+        "//asmnet/dsl",
         "@maven//:junit_junit",
     ],
 )
@@ -62,6 +66,7 @@ kt_jvm_test(
     deps = [
         ":util",
         "//asmnet",
+        "//asmnet/dsl",
         "@maven//:junit_junit",
     ],
 )
@@ -73,6 +78,7 @@ kt_jvm_test(
     deps = [
         ":util",
         "//asmnet",
+        "//asmnet/dsl",
         "@maven//:junit_junit",
     ],
 )
@@ -84,6 +90,7 @@ kt_jvm_test(
     deps = [
         ":util",
         "//asmnet",
+        "//asmnet/dsl",
         "@maven//:junit_junit",
     ],
 )
@@ -95,6 +102,7 @@ kt_jvm_test(
     deps = [
         ":util",
         "//asmnet",
+        "//asmnet/dsl",
         "@maven//:junit_junit",
     ],
 )
