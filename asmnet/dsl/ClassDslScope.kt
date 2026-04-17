@@ -54,6 +54,10 @@ class ClassDslScope(val visitor: ClassVisitor) {
     fun override(baseType: TypeSpec, baseName: String, implementation: MethodReference) =
         visitor.visitOverride(baseType, baseName, implementation)
 
+    fun pack(packSize: Int) = visitor.visitPack(packSize)
+
+    fun size(classSize: Int) = visitor.visitSize(classSize)
+
     fun event(
         name: String,
         type: TypeSpec,

@@ -335,4 +335,66 @@ class ClassTest {
             }
         )
     }
+
+    @Test
+    fun testPack() {
+        assertContentEquals(
+            expected = """
+                .class public sequential ansi MyClass
+                {
+                  .pack 2
+                } // end of class MyClass
+            """.trimIndent(),
+            actual = generateText {
+                class_("MyClass", attrs = TypeAttributes(
+                    TypeAttributes.Public,
+                    TypeAttributes.SequentialLayout,
+                )) {
+                    pack(2)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testSize() {
+        assertContentEquals(
+            expected = """
+                .class public sequential ansi MyClass
+                {
+                  .size 16
+                } // end of class MyClass
+            """.trimIndent(),
+            actual = generateText {
+                class_("MyClass", attrs = TypeAttributes(
+                    TypeAttributes.Public,
+                    TypeAttributes.SequentialLayout,
+                )) {
+                    size(16)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testPackAndSize() {
+        assertContentEquals(
+            expected = """
+                .class public sequential ansi MyClass
+                {
+                  .pack 2
+                  .size 16
+                } // end of class MyClass
+            """.trimIndent(),
+            actual = generateText {
+                class_("MyClass", attrs = TypeAttributes(
+                    TypeAttributes.Public,
+                    TypeAttributes.SequentialLayout,
+                )) {
+                    pack(2)
+                    size(16)
+                }
+            }
+        )
+    }
 }

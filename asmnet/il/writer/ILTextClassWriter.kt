@@ -111,6 +111,20 @@ class ILTextClassWriter internal constructor(
         return ILTextEventWriter(writer, name)
     }
 
+    // ECMA-335 II.10.7
+    override fun visitPack(packSize: Int) = writer.write {
+        +".pack "
+        +"$packSize"
+        line()
+    }
+
+    // ECMA-335 II.10.7
+    override fun visitSize(classSize: Int) = writer.write {
+        +".size "
+        +"$classSize"
+        line()
+    }
+
     // ECMA-335 II.10.3.2
     override fun visitOverride(baseType: TypeSpec, baseName: String, implementation: MethodReference) = writer.write {
         +".override "
