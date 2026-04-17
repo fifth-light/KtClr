@@ -166,6 +166,15 @@ class ILTextMethodWriter internal constructor(
         }
     }
 
+    // ECMA-335 II.10.3.2
+    override fun visitOverride(baseType: TypeSpec, baseName: String) = writer.write {
+        +".override "
+        typeSpec(baseType)
+        +"::"
+        identifier(baseName)
+        line()
+    }
+
     override fun visitEnd() {
         writer.write {
             unindent()

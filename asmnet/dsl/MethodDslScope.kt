@@ -34,6 +34,9 @@ class MethodDslScope(val visitor: MethodVisitor) {
 
     fun ldc(value: Any) = visitor.visitLdc(value)
 
+    fun override(baseType: TypeSpec, baseName: String) =
+        visitor.visitOverride(baseType, baseName)
+
     fun locals(init: Boolean = true, vararg locals: LocalVariable) =
         visitor.visitLocalVariables(init, locals.toList())
 

@@ -36,5 +36,8 @@ interface MethodVisitor {
     // ECMA-335 VI.C.4.14
     fun visitSwitchInsn(labels: List<Label>)
 
+    // ECMA-335 II.10.3.2
+    fun visitOverride(baseType: TypeSpec, baseName: String)
+
     fun visitEnd()
 }

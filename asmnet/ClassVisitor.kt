@@ -56,5 +56,8 @@ interface ClassVisitor {
         attributes: EventAttributes = EventAttributes(),
     ): EventVisitor?
 
+    // ECMA-335 II.10.3.2
+    fun visitOverride(baseType: TypeSpec, baseName: String, implementation: MethodReference)
+
     fun visitEnd()
 }

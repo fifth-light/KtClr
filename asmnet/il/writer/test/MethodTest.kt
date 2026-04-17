@@ -653,6 +653,36 @@ class MethodTest {
     }
 
     @Test
+    fun testOverride() {
+        assertContentEquals(
+            expected = """
+                .method public hidebysig instance void M2() cil managed
+                {
+                  .override .module testIMyInterface::M
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("M2",
+                    callConv = CallConv(instance = true),
+                    attributes = MethodAttributes(
+                        MethodAttributes.Public,
+                        MethodAttributes.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    override(
+                        baseType = TypeReference(
+                            resolutionScope = ResolutionScope.Module("test"),
+                            name = "IMyInterface",
+                        ),
+                        baseName = "M",
+                    )
+                }
+            }
+        )
+    }
+
+    @Test
     fun testSwitchInsn() {
         val l0 = Label()
         val l1 = Label()

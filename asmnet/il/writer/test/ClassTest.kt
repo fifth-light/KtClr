@@ -1,7 +1,9 @@
 package top.fifthlight.asmnet.il.writer.test
 
 import org.junit.Test
+import top.fifthlight.asmnet.CallConv
 import top.fifthlight.asmnet.MethodAttributes
+import top.fifthlight.asmnet.MethodReference
 import top.fifthlight.asmnet.ResolutionScope
 import top.fifthlight.asmnet.TypeAttributes
 import top.fifthlight.asmnet.TypeReference
@@ -16,7 +18,9 @@ class ClassTest {
                 } // end of class MyClass
             """.trimIndent(),
             actual = generateText {
-                class_("MyClass") {}
+                class_("MyClass") {
+
+                }
             }
         )
     }
@@ -272,6 +276,43 @@ class ClassTest {
                         MethodAttributes.Static,
                         MethodAttributes.HideBySig,
                     )) {}
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testOverride() {
+        assertContentEquals(
+            expected = """
+                .class public auto ansi MyClass
+                implements .module testIMyInterface
+                {
+                  .override .module testIMyInterface::M with instance void .module testMyClass::M2()
+                } // end of class MyClass
+            """.trimIndent(),
+            actual = generateText {
+                class_("MyClass", implements = setOf(
+                    TypeReference(
+                        resolutionScope = ResolutionScope.Module("test"),
+                        name = "IMyInterface",
+                    ),
+                )) {
+                    override(
+                        baseType = TypeReference(
+                            resolutionScope = ResolutionScope.Module("test"),
+                            name = "IMyInterface",
+                        ),
+                        baseName = "M",
+                        implementation = MethodReference(
+                            callConv = CallConv(instance = true),
+                            declaringType = TypeReference(
+                                resolutionScope = ResolutionScope.Module("test"),
+                                name = "MyClass",
+                            ),
+                            name = "M2",
+                        ),
+                    )
                 }
             }
         )
