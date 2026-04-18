@@ -43,6 +43,13 @@ class ILTextMethodWriter internal constructor(
         }
     }
 
+    // ECMA-335 II.21
+    override fun visitCustomAttribute(reference: CustomAttributeReference, blob: ByteArray?) {
+        writer.write {
+            customAttributeRef(reference, blob)
+        }
+    }
+
     override fun visitMaxStack(maxStack: Int) {
         writer.write {
             +".maxstack "

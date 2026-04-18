@@ -752,4 +752,68 @@ class MethodTest {
             }
         )
     }
+
+    @Test
+    fun testMethodCustomAttributeWithoutBlob() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .custom instance void [System.Runtime]System.ObsoleteAttribute::.ctor()
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = MethodAttributes(
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    custom(
+                        CustomAttributeReference(
+                            attributeType = TypeReference(
+                                resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                                name = "System.ObsoleteAttribute",
+                            ),
+                        ),
+                        blob = null,
+                    )
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testMethodCustomAttributeWithBlob() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .custom instance void [System.Runtime]System.STAThreadAttribute::.ctor() = ( 01 00 00 00 )
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = MethodAttributes(
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    custom(
+                        CustomAttributeReference(
+                            attributeType = TypeReference(
+                                resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                                name = "System.STAThreadAttribute",
+                            ),
+                        ),
+                        blob = byteArrayOf(0x01, 0x00, 0x00, 0x00),
+                    )
+                }
+            }
+        )
+    }
 }

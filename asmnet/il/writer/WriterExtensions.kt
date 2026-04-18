@@ -537,6 +537,28 @@ fun WriteScope.opcode(opcode: OpCode) {
     opcode(opcode.code)
 }
 
+// ECMA-335 II.21
+fun WriteScope.customAttributeRef(ref: CustomAttributeReference, blob: ByteArray?) {
+    +".custom "
+    callConv(ref.callConv)
+    +' '
+    type(ref.returnType)
+    +' '
+    typeSpec(ref.attributeType)
+    +"::.ctor("
+    ref.parameterTypes.forEachIndexed { index, type ->
+        if (index > 0) +", "
+        type(type)
+    }
+    +')'
+    blob?.let {
+        +" = ( "
+        hex(it)
+        +" )"
+    }
+    line()
+}
+
 // ECMA-335 II.17
 fun WriteScope.propertyAttr(attrs: PropertyAttributes) {
     if (attrs.specialName) +"specialname "

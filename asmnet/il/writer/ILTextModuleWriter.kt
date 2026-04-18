@@ -191,6 +191,11 @@ class ILTextModuleWriter internal constructor(
         parameters = parameters,
     )
 
+    // ECMA-335 II.21
+    override fun visitCustomAttribute(reference: CustomAttributeReference, blob: ByteArray?) = writer.write {
+        customAttributeRef(reference, blob)
+    }
+
     // ECMA-335 II.16
     override fun visitField(
         name: String,

@@ -2,9 +2,11 @@ package top.fifthlight.asmnet.il.writer.test
 
 import org.junit.Test
 import top.fifthlight.asmnet.CallConv
+import top.fifthlight.asmnet.CustomAttributeReference
 import top.fifthlight.asmnet.MethodAttributes
 import top.fifthlight.asmnet.MethodReference
 import top.fifthlight.asmnet.ResolutionScope
+import top.fifthlight.asmnet.Type
 import top.fifthlight.asmnet.TypeAttributes
 import top.fifthlight.asmnet.TypeReference
 
@@ -393,6 +395,57 @@ class ClassTest {
                 )) {
                     pack(2)
                     size(16)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testClassCustomAttributeWithoutBlob() {
+        assertContentEquals(
+            expected = """
+                .class public auto ansi MyClass
+                {
+                  .custom instance void [System.Runtime]System.FlagsAttribute::.ctor()
+                } // end of class MyClass
+            """.trimIndent(),
+            actual = generateText {
+                class_("MyClass") {
+                    custom(
+                        CustomAttributeReference(
+                            attributeType = TypeReference(
+                                resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                                name = "System.FlagsAttribute",
+                            ),
+                        ),
+                        blob = null,
+                    )
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testClassCustomAttributeWithBlob() {
+        assertContentEquals(
+            expected = """
+                .class public auto ansi MyClass
+                {
+                  .custom instance void [System.Runtime]System.CLSCompliantAttribute::.ctor(bool) = ( 01 00 01 00 00 )
+                } // end of class MyClass
+            """.trimIndent(),
+            actual = generateText {
+                class_("MyClass") {
+                    custom(
+                        CustomAttributeReference(
+                            attributeType = TypeReference(
+                                resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                                name = "System.CLSCompliantAttribute",
+                            ),
+                            parameterTypes = listOf(Type.Bool),
+                        ),
+                        blob = byteArrayOf(0x01, 0x00, 0x01, 0x00, 0x00),
+                    )
                 }
             }
         )

@@ -2,6 +2,7 @@ package top.fifthlight.asmnet.il.writer.test
 
 import org.junit.Test
 import top.fifthlight.asmnet.CallConv
+import top.fifthlight.asmnet.CustomAttributeReference
 import top.fifthlight.asmnet.MethodReference
 import top.fifthlight.asmnet.Parameter
 import top.fifthlight.asmnet.PropertyAttributes
@@ -312,6 +313,85 @@ class PropertyTest {
                             name = "set_Item",
                             returnType = Type.Void,
                             parameterTypes = listOf(Type.Int32, Type.Int32),
+                        ))
+                    }
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testPropertyCustomAttributeWithoutBlob() {
+        assertContentEquals(
+            expected = """
+                .class public auto ansi MyClass
+                {
+                  .property instance int32 MyProp()
+                  {
+                    .custom instance void [System.Runtime]System.CLSCompliantAttribute::.ctor()
+                    .get instance int32 MyClass::get_MyProp()
+                  } // end of property MyProp
+                } // end of class MyClass
+            """.trimIndent(),
+            actual = generateText {
+                class_("MyClass") {
+                    property("MyProp", Type.Int32,
+                        callConv = CallConv(instance = true),
+                    ) {
+                        custom(
+                            CustomAttributeReference(
+                                attributeType = TypeReference(
+                                    resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                                    name = "System.CLSCompliantAttribute",
+                                ),
+                            ),
+                            blob = null,
+                        )
+                        get(MethodReference(
+                            callConv = CallConv(instance = true),
+                            declaringType = propertyType,
+                            name = "get_MyProp",
+                            returnType = Type.Int32,
+                        ))
+                    }
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testPropertyCustomAttributeWithBlob() {
+        assertContentEquals(
+            expected = """
+                .class public auto ansi MyClass
+                {
+                  .property instance int32 MyProp()
+                  {
+                    .custom instance void [System.Runtime]System.ObsoleteAttribute::.ctor(string) = ( 01 00 05 68 65 6C 6C 6F 00 00 )
+                    .get instance int32 MyClass::get_MyProp()
+                  } // end of property MyProp
+                } // end of class MyClass
+            """.trimIndent(),
+            actual = generateText {
+                class_("MyClass") {
+                    property("MyProp", Type.Int32,
+                        callConv = CallConv(instance = true),
+                    ) {
+                        custom(
+                            CustomAttributeReference(
+                                attributeType = TypeReference(
+                                    resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                                    name = "System.ObsoleteAttribute",
+                                ),
+                                parameterTypes = listOf(Type.String),
+                            ),
+                            blob = byteArrayOf(0x01, 0x00, 0x05, 0x68, 0x65, 0x6C, 0x6C, 0x6F, 0x00, 0x00),
+                        )
+                        get(MethodReference(
+                            callConv = CallConv(instance = true),
+                            declaringType = propertyType,
+                            name = "get_MyProp",
+                            returnType = Type.Int32,
                         ))
                     }
                 }

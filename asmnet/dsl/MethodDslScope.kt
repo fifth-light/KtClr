@@ -4,6 +4,8 @@ import top.fifthlight.asmnet.*
 
 @AsmDsl
 class MethodDslScope(val visitor: MethodVisitor) {
+    fun custom(reference: CustomAttributeReference, blob: ByteArray?) = visitor.visitCustomAttribute(reference, blob)
+
     fun maxStack(maxStack: Int) = visitor.visitMaxStack(maxStack)
 
     fun code() = visitor.visitCode()

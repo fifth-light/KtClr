@@ -1,5 +1,6 @@
 package top.fifthlight.asmnet.il.writer
 
+import top.fifthlight.asmnet.CustomAttributeReference
 import top.fifthlight.asmnet.MethodReference
 import top.fifthlight.asmnet.PropertyVisitor
 
@@ -23,6 +24,10 @@ class ILTextPropertyWriter internal constructor(
         +".other "
         methodRef(ref)
         line()
+    }
+
+    override fun visitCustomAttribute(reference: CustomAttributeReference, blob: ByteArray?) = writer.write {
+        customAttributeRef(reference, blob)
     }
 
     override fun visitEnd() {

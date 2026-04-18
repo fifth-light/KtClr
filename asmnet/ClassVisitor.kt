@@ -14,6 +14,9 @@ interface ClassVisitor {
         implements: Set<TypeSpec> = emptySet(),
     )
 
+    // ECMA-335 II.21
+    fun visitCustomAttribute(reference: CustomAttributeReference, blob: ByteArray?)
+
     // ECMA-335 II.15
     fun visitMethod(
         name: String,

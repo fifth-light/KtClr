@@ -32,6 +32,10 @@ class ILTextClassWriter internal constructor(
         }
     }
 
+    override fun visitCustomAttribute(reference: CustomAttributeReference, blob: ByteArray?) = writer.write {
+        customAttributeRef(reference, blob)
+    }
+
     @Suppress("RedundantNullableReturnType")
     override fun visitMethod(
         name: String,

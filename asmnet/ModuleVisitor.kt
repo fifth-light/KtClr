@@ -61,6 +61,9 @@ interface ModuleVisitor {
         parameters: List<Parameter> = emptyList(),
     ): MethodVisitor?
 
+    // ECMA-335 II.21
+    fun visitCustomAttribute(reference: CustomAttributeReference, blob: ByteArray?)
+
     // ECMA-335 II.16
     fun visitField(
         name: String,

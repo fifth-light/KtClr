@@ -2,6 +2,7 @@ package top.fifthlight.asmnet.il.writer.test
 
 import org.junit.Test
 import top.fifthlight.asmnet.CallConv
+import top.fifthlight.asmnet.CustomAttributeReference
 import top.fifthlight.asmnet.EventAttributes
 import top.fifthlight.asmnet.MethodReference
 import top.fifthlight.asmnet.Parameter
@@ -293,6 +294,83 @@ class EventTest {
                             callConv = CallConv(instance = true),
                             declaringType = eventType,
                             name = "remove_MyEvent",
+                            returnType = Type.Void,
+                            parameterTypes = listOf(delegateType),
+                        ))
+                    }
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testEventCustomAttributeWithoutBlob() {
+        assertContentEquals(
+            expected = """
+                .class public auto ansi MyClass
+                {
+                  .event class [System.Runtime]System.EventHandler MyEvent
+                  {
+                    .custom instance void [System.Runtime]System.CLSCompliantAttribute::.ctor()
+                    .addon instance void MyClass::add_MyEvent(class [System.Runtime]System.EventHandler)
+                  } // end of event MyEvent
+                } // end of class MyClass
+            """.trimIndent(),
+            actual = generateText {
+                class_("MyClass") {
+                    event("MyEvent", delegateType) {
+                        custom(
+                            CustomAttributeReference(
+                                attributeType = TypeReference(
+                                    resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                                    name = "System.CLSCompliantAttribute",
+                                ),
+                            ),
+                            blob = null,
+                        )
+                        addOn(MethodReference(
+                            callConv = CallConv(instance = true),
+                            declaringType = eventType,
+                            name = "add_MyEvent",
+                            returnType = Type.Void,
+                            parameterTypes = listOf(delegateType),
+                        ))
+                    }
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testEventCustomAttributeWithBlob() {
+        assertContentEquals(
+            expected = """
+                .class public auto ansi MyClass
+                {
+                  .event class [System.Runtime]System.EventHandler MyEvent
+                  {
+                    .custom instance void [System.Runtime]System.ObsoleteAttribute::.ctor(string) = ( 01 00 05 68 65 6C 6C 6F 00 00 )
+                    .addon instance void MyClass::add_MyEvent(class [System.Runtime]System.EventHandler)
+                  } // end of event MyEvent
+                } // end of class MyClass
+            """.trimIndent(),
+            actual = generateText {
+                class_("MyClass") {
+                    event("MyEvent", delegateType) {
+                        custom(
+                            CustomAttributeReference(
+                                attributeType = TypeReference(
+                                    resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                                    name = "System.ObsoleteAttribute",
+                                ),
+                                parameterTypes = listOf(Type.String),
+                            ),
+                            blob = byteArrayOf(0x01, 0x00, 0x05, 0x68, 0x65, 0x6C, 0x6C, 0x6F, 0x00, 0x00),
+                        )
+                        addOn(MethodReference(
+                            callConv = CallConv(instance = true),
+                            declaringType = eventType,
+                            name = "add_MyEvent",
                             returnType = Type.Void,
                             parameterTypes = listOf(delegateType),
                         ))

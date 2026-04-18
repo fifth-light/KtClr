@@ -78,6 +78,8 @@ class ModuleDslScope(val visitor: ModuleVisitor) {
         }
     }
 
+    fun custom(reference: CustomAttributeReference, blob: ByteArray?) = visitor.visitCustomAttribute(reference, blob)
+
     fun field(
         name: String,
         type: TypeSpec,

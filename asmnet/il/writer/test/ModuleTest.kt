@@ -1,8 +1,12 @@
 package top.fifthlight.asmnet.il.writer.test
 
 import org.junit.Test
+import top.fifthlight.asmnet.CustomAttributeReference
+import top.fifthlight.asmnet.ResolutionScope
 import top.fifthlight.asmnet.RuntimeFlags
 import top.fifthlight.asmnet.Subsystem
+import top.fifthlight.asmnet.Type
+import top.fifthlight.asmnet.TypeReference
 import java.util.*
 
 class ModuleTest {
@@ -151,6 +155,27 @@ class ModuleTest {
                     RuntimeFlags.STRONGNAMESIGNED,
                     RuntimeFlags.TRACKDEBUGDATA,
                 ))
+            }
+        )
+    }
+
+    @Test
+    fun testModuleCustomAttribute() {
+        assertContentEquals(
+            expected = """
+                .custom instance void [System.Runtime]System.Reflection.AssemblyTitleAttribute::.ctor(string) = ( 01 00 04 54 65 73 74 00 00 )
+            """.trimIndent(),
+            actual = generateText {
+                custom(
+                    CustomAttributeReference(
+                        attributeType = TypeReference(
+                            resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                            name = "System.Reflection.AssemblyTitleAttribute",
+                        ),
+                        parameterTypes = listOf(Type.String),
+                    ),
+                    blob = byteArrayOf(0x01, 0x00, 0x04, 0x54, 0x65, 0x73, 0x74, 0x00, 0x00),
+                )
             }
         )
     }
