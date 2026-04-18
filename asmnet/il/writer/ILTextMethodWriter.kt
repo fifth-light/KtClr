@@ -67,6 +67,11 @@ class ILTextMethodWriter internal constructor(
         line()
     }
 
+    // ECMA-335 II.5.7
+    override fun visitLine(sourceLine: SourceLineInfo) = writer.write {
+        lineDirective(sourceLine)
+    }
+
     // ECMA-335 II.15.4.1.4
     override fun visitParam(index: Int, defaultValue: FieldInitValue) = writer.write {
         +".param [$index] = "

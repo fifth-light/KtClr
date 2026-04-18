@@ -59,5 +59,8 @@ interface MethodVisitor {
         filterStart: Label? = null,
     )
 
+    // ECMA-335 II.5.7
+    fun visitLine(sourceLine: SourceLineInfo)
+
     fun visitEnd()
 }

@@ -811,6 +811,159 @@ class MethodTest {
     }
 
     @Test
+    fun testSourceLineLineOnly() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .maxstack 8
+                  .line 42
+                  nop
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    maxStack(8)
+                    code()
+                    sourceLine(42)
+                    insn(OpCode.Code.nop)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testSourceLineWithFilename() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .maxstack 8
+                  .line 42 'test.cs'
+                  nop
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    maxStack(8)
+                    code()
+                    sourceLine(42, filename = "test.cs")
+                    insn(OpCode.Code.nop)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testSourceLineWithColumn() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .maxstack 8
+                  .line 42: 10
+                  nop
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    maxStack(8)
+                    code()
+                    sourceLine(42, column = 10)
+                    insn(OpCode.Code.nop)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testSourceLineWithColumnAndFilename() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .maxstack 8
+                  .line 42: 10 'test.cs'
+                  nop
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    maxStack(8)
+                    code()
+                    sourceLine(42, column = 10, filename = "test.cs")
+                    insn(OpCode.Code.nop)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testSourceLineWithInstructions() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .maxstack 8
+                  .line 10 'Program.cs'
+                  nop
+                  .line 11 'Program.cs'
+                  ldstr "hello"
+                  .line 12 'Program.cs'
+                  ret
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    maxStack(8)
+                    code()
+                    sourceLine(10, filename = "Program.cs")
+                    insn(OpCode.Code.nop)
+                    sourceLine(11, filename = "Program.cs")
+                    ldc("hello")
+                    sourceLine(12, filename = "Program.cs")
+                    insn(OpCode.Code.ret)
+                }
+            }
+        )
+    }
+
+    @Test
     fun testMethodCustomAttributeWithoutBlob() {
         assertContentEquals(
             expected = """

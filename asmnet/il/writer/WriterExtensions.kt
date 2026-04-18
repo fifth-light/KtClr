@@ -100,6 +100,15 @@ fun WriteScope.typeSpec(type: TypeSpec) {
     }
 }
 
+// ECMA-335 II.5.7
+fun WriteScope.lineDirective(sourceLine: SourceLineInfo) {
+    +".line "
+    +"${sourceLine.line}"
+    sourceLine.column?.let { +": $it" }
+    sourceLine.filename?.let { +' '; singleQuoted(it) }
+    line()
+}
+
 // ECMA-335 II.15.4.1.3
 fun WriteScope.localsSignature(init: Boolean, locals: List<LocalVariable>) {
     if (locals.isEmpty()) return

@@ -1,0 +1,17 @@
+load("//asmnet/il/writer/test/integration:integration.bzl", "integration_test")
+
+integration_test(
+    name = "source_line",
+    srcs = ["SourceLineGenerator.kt"],
+    expected = [
+        "Hello with source line!",
+        "",
+    ],
+    main_class = "top.fifthlight.asmnet.il.writer.test.integration.source_line.SourceLineGeneratorKt",
+    runtimeconfig = "source_line.runtimeconfig.json",
+    deps = [
+        "//asmnet",
+        "//asmnet/dsl",
+        "//asmnet/il/writer",
+    ],
+)

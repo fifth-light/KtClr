@@ -12,6 +12,9 @@ class MethodDslScope(val visitor: MethodVisitor) {
 
     fun emitByte(value: UByte) = visitor.visitEmitByte(value)
 
+    fun sourceLine(line: Int, column: Int? = null, filename: String? = null) =
+        visitor.visitLine(SourceLineInfo(line, column, filename))
+
     fun param(index: Int, defaultValue: FieldInitValue) = visitor.visitParam(index, defaultValue)
 
     fun label(): Label = Label().also { visitor.visitLabel(it) }
