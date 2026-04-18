@@ -24,10 +24,10 @@ class ExceptionHandlerTest {
             """.trimIndent(),
             actual = generateText {
                 method("Main",
-                    attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
@@ -80,10 +80,10 @@ class ExceptionHandlerTest {
             """.trimIndent(),
             actual = generateText {
                 method("Main",
-                    attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
@@ -132,10 +132,10 @@ class ExceptionHandlerTest {
             """.trimIndent(),
             actual = generateText {
                 method("Main",
-                    attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
@@ -179,10 +179,10 @@ class ExceptionHandlerTest {
             """.trimIndent(),
             actual = generateText {
                 method("Main",
-                    attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {

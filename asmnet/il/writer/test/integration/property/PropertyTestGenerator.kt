@@ -48,11 +48,11 @@ private fun generatePropertyTest(): String = StringWriter().use {
 
             method(".ctor",
                 callConv = CallConv(instance = true),
-                attributes = MethodAttributes(
-                    MethodAttributes.Public,
-                    MethodAttributes.HideBySig,
-                    MethodAttributes.SpecialName,
-                    MethodAttributes.RTSpecialName,
+                attributes = listOf(
+                    MethodAttribute.Public,
+                    MethodAttribute.HideBySig,
+                    MethodAttribute.SpecialName,
+                    MethodAttribute.RTSpecialName,
                 ),
             ) {
                 maxStack(8)
@@ -76,10 +76,10 @@ private fun generatePropertyTest(): String = StringWriter().use {
             method("get_Value",
                 callConv = CallConv(instance = true),
                 returnType = Type.Int32,
-                attributes = MethodAttributes(
-                    MethodAttributes.Public,
-                    MethodAttributes.HideBySig,
-                    MethodAttributes.SpecialName,
+                attributes = listOf(
+                    MethodAttribute.Public,
+                    MethodAttribute.HideBySig,
+                    MethodAttribute.SpecialName,
                 ),
             ) {
                 maxStack(8)
@@ -90,10 +90,10 @@ private fun generatePropertyTest(): String = StringWriter().use {
 
             method("set_Value",
                 callConv = CallConv(instance = true),
-                attributes = MethodAttributes(
-                    MethodAttributes.Public,
-                    MethodAttributes.HideBySig,
-                    MethodAttributes.SpecialName,
+                attributes = listOf(
+                    MethodAttribute.Public,
+                    MethodAttribute.HideBySig,
+                    MethodAttribute.SpecialName,
                 ),
                 parameters = listOf(Parameter(Type.Int32, "value")),
             ) {
@@ -121,10 +121,10 @@ private fun generatePropertyTest(): String = StringWriter().use {
             }
 
             method("Main",
-                attributes = MethodAttributes(
-                    MethodAttributes.Public,
-                    MethodAttributes.Static,
-                    MethodAttributes.HideBySig,
+                attributes = listOf(
+                    MethodAttribute.Public,
+                    MethodAttribute.Static,
+                    MethodAttribute.HideBySig,
                 ),
                 parameters = listOf(Parameter(Type.Array(Type.String), "args")),
                 entryPoint = true,

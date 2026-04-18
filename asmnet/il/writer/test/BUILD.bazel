@@ -118,3 +118,15 @@ kt_jvm_test(
         "@maven//:junit_junit",
     ],
 )
+
+kt_jvm_test(
+    name = "pinvoke",
+    srcs = ["PInvokeTest.kt"],
+    test_class = "top.fifthlight.asmnet.il.writer.test.PInvokeTest",
+    deps = [
+        ":util",
+        "//asmnet",
+        "//asmnet/dsl",
+        "@maven//:junit_junit",
+    ],
+)

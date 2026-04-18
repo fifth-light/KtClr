@@ -207,36 +207,70 @@ fun WriteScope.typeAttr(attrs: TypeAttributes) {
 }
 
 // ECMA-335 II.15.4.2
-fun WriteScope.methodAttr(attrs: MethodAttributes) {
-    when (val memberAccess = attrs.memberAccess) {
-        MethodAttributes.CompilerControlled -> +"compilercontrolled "
-        MethodAttributes.Private -> +"private "
-        MethodAttributes.FamANDAssem -> +"famandassem "
-        MethodAttributes.Assem -> +"assembly "
-        MethodAttributes.Family -> +"family "
-        MethodAttributes.FamORAssem -> +"famorassem "
-        MethodAttributes.Public -> +"public "
-        else -> throw IllegalArgumentException("Unknown member access: $memberAccess")
+fun WriteScope.methodAttr(attrs: List<MethodAttribute>) {
+    for (attr in attrs) {
+        when (attr) {
+            MethodAttribute.CompilerControlled -> {}
+            MethodAttribute.Private -> +"private "
+            MethodAttribute.FamANDAssem -> +"famandassem "
+            MethodAttribute.Assem -> +"assembly "
+            MethodAttribute.Family -> +"family "
+            MethodAttribute.FamORAssem -> +"famorassem "
+            MethodAttribute.Public -> +"public "
+
+            MethodAttribute.UnmanagedExport -> throw IllegalArgumentException("Unmanaged export is unused")
+            MethodAttribute.Static -> +"static "
+            MethodAttribute.Final -> +"final "
+            MethodAttribute.Virtual -> +"virtual "
+            MethodAttribute.HideBySig -> +"hidebysig "
+
+            MethodAttribute.ReuseSlot -> {}
+            MethodAttribute.NewSlot -> +"newslot "
+
+            MethodAttribute.Strict -> +"strict "
+            MethodAttribute.Abstract -> +"abstract "
+            MethodAttribute.SpecialName -> +"specialname "
+            MethodAttribute.RTSpecialName -> +"rtspecialname "
+            MethodAttribute.HasSecurity -> +"hassecurity "
+            MethodAttribute.RequireSecObject -> +"requiresecobject "
+
+            is MethodAttribute.PInvokeImpl -> {
+                +"pinvokeimpl("
+                quoted(attr.moduleName)
+                attr.methodName?.let {
+                    +" as "
+                    quoted(it)
+                }
+                pinvokeAttr(attr.attributes)
+                +") "
+            }
+            else -> throw IllegalArgumentException("Unknown method attribute: $attr")
+        }
+    }
+}
+
+// ECMA-335 II.15.5.2
+fun WriteScope.pinvokeAttr(attrs: PInvokeAttributes) {
+    if (attrs.noMangle) +" nomangle"
+
+    when (attrs.charSet) {
+        PInvokeAttributes.CharSetNotSpec -> {}
+        PInvokeAttributes.CharSetAnsi -> +" ansi"
+        PInvokeAttributes.CharSetUnicode -> +" unicode"
+        PInvokeAttributes.CharSetAuto -> +" autochar"
+        else -> throw IllegalArgumentException("Unknown charset: ${attrs.charSet}")
     }
 
-    if (attrs.static) +"static "
-    if (attrs.final) +"final "
-    if (attrs.virtual) +"virtual "
-    if (attrs.hideBySig) +"hidebysig "
+    if (attrs.supportsLastError) +" lasterr"
 
-    when (val vtableLayout = attrs.vtableLayout) {
-        MethodAttributes.ReuseSlot -> {}
-        MethodAttributes.NewSlot -> +"newslot "
-        else -> throw IllegalArgumentException("Unknown vtable layout: $vtableLayout")
+    when (attrs.callConv) {
+        PInvokeAttributes.CallConvPlatformApi -> +" platformapi"
+        PInvokeAttributes.CallConvCdecl -> +" cdecl"
+        PInvokeAttributes.CallConvStdCall -> +" stdcall"
+        PInvokeAttributes.CallConvThisCall -> +" thiscall"
+        PInvokeAttributes.CallConvFastCall -> +" fastcall"
+        else -> throw IllegalArgumentException("Unknown calling convention: ${attrs.callConv}")
     }
-
-    if (attrs.strict) +"strict "
-    if (attrs.abstract) +"abstract "
-    if (attrs.specialName) +"specialname "
-
-    if (attrs.pInvokeImpl) TODO()
-    if (attrs.unmanagedExport) throw IllegalArgumentException("Unmanaged export is unused")
-    if (attrs.rTSpecialName) +"rtspecialname "
 }
 
 // ECMA-335 II.15.4.3

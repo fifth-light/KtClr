@@ -59,8 +59,8 @@ class ModuleDslScope(val visitor: ModuleVisitor) {
         name: String,
         returnType: TypeSpec = Type.Void,
         callConv: CallConv = CallConv(),
-        attributes: MethodAttributes = MethodAttributes(
-            MethodAttributes.Public,
+        attributes: List<MethodAttribute> = listOf(
+            MethodAttribute.Public,
         ),
         implAttributes: ImplementationAttributes = ImplementationAttributes(
             ImplementationAttributes.IL,

@@ -8,7 +8,7 @@ class ILTextMethodWriter internal constructor(
     private val name: String,
     private val returnType: TypeSpec,
     private val callConv: CallConv,
-    private val attributes: MethodAttributes,
+    private val attributes: List<MethodAttribute>,
     private val implAttributes: ImplementationAttributes,
     private val entryPoint: Boolean,
     private val parameters: List<Parameter>,

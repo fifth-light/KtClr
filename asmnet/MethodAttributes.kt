@@ -1,71 +1,83 @@
 package top.fifthlight.asmnet
 
-// ECMA-335 II.23.1.10
-@JvmInline
-value class MethodAttributes(val value: Short) {
-    constructor(vararg flags: Short): this(flags.or())
+sealed interface MethodAttribute {
+    val value: Short
 
-    val memberAccess: Short
-        get() = value and MemberAccessMask
+    @ConsistentCopyVisibility
+    data class Normal internal constructor(override val value: Short) : MethodAttribute
 
-    val static: Boolean
-        get() = (value and Static) != 0.toShort()
-    val final: Boolean
-        get() = (value and Final) != 0.toShort()
-    val virtual: Boolean
-        get() = (value and Virtual) != 0.toShort()
-    val hideBySig: Boolean
-        get() = (value and HideBySig) != 0.toShort()
-
-    val vtableLayout: Short
-        get() = value and VtableLayoutMask
-
-    val strict: Boolean
-        get() = (value and Strict) != 0.toShort()
-    val abstract: Boolean
-        get() = (value and Abstract) != 0.toShort()
-    val specialName: Boolean
-        get() = (value and SpecialName) != 0.toShort()
-
-    val pInvokeImpl: Boolean
-        get() = (value and PInvokeImpl) != 0.toShort()
-    val unmanagedExport: Boolean
-        get() = (value and UnmanagedExport) != 0.toShort()
-    val rTSpecialName: Boolean
-        get() = (value and RTSpecialName) != 0.toShort()
-    val hasSecurity: Boolean
-        get() = (value and HasSecurity) != 0.toShort()
-    val requireSecObject: Boolean
-        get() = (value and RequireSecObject) != 0.toShort()
+    // ECMA-335 II.15.5.2
+    data class PInvokeImpl(
+        val moduleName: String,
+        val methodName: String? = null,
+        val attributes: PInvokeAttributes = PInvokeAttributes(),
+    ) : MethodAttribute {
+        override val value: Short = 0x2000
+    }
 
     companion object {
-        const val MemberAccessMask: Short = 0x0007
-        const val CompilerControlled: Short = 0x0000
-        const val Private: Short = 0x0001
-        const val FamANDAssem: Short = 0x0002
-        const val Assem: Short = 0x0003
-        const val Family: Short = 0x0004
-        const val FamORAssem: Short = 0x0005
-        const val Public: Short = 0x0006
+        // ECMA-335 II.23.1.10
+        // MemberAccess (mask 0x0007)
+        val CompilerControlled = Normal(0x0000)
+        val Private = Normal(0x0001)
+        val FamANDAssem = Normal(0x0002)
+        val Assem = Normal(0x0003)
+        val Family = Normal(0x0004)
+        val FamORAssem = Normal(0x0005)
+        val Public = Normal(0x0006)
 
-        const val Static: Short = 0x0010
-        const val Final: Short = 0x0020
-        const val Virtual: Short = 0x0040
-        const val HideBySig: Short = 0x0080
+        val UnmanagedExport = Normal(0x0008)
+        val Static = Normal(0x0010)
+        val Final = Normal(0x0020)
+        val Virtual = Normal(0x0040)
+        val HideBySig = Normal(0x0080)
 
-        const val VtableLayoutMask: Short = 0x0100
-        const val ReuseSlot: Short = 0x00000
-        const val NewSlot: Short = 0x0100
+        // VtableLayout (mask 0x0100)
+        val ReuseSlot = Normal(0x0000)
+        val NewSlot = Normal(0x0100)
 
-        const val Strict: Short = 0x0200
-        const val Abstract: Short = 0x0400
-        const val SpecialName: Short = 0x0800
+        val Strict = Normal(0x0200)
+        val Abstract = Normal(0x0400)
+        val SpecialName = Normal(0x0800)
+        val RTSpecialName = Normal(0x1000)
+        val HasSecurity = Normal(0x4000)
+        val RequireSecObject = Normal(0x8000.toShort())
+    }
+}
 
-        // Interop attributes
-        const val PInvokeImpl: Short = 0x2000
-        const val UnmanagedExport: Short = 0x0008
-        const val RTSpecialName: Short = 0x1000
-        const val HasSecurity: Short = 0x4000
-        const val RequireSecObject: Short = 0.toShort()
+@JvmInline
+value class PInvokeAttributes(val value: Short) {
+    constructor(vararg flags: Short) : this(flags.or())
+
+    val noMangle: Boolean
+        get() = (value and NoMangle) != 0.toShort()
+
+    val charSet: Short
+        get() = value and CharSetMask
+
+    val callConv: Short
+        get() = value and CallConvMask
+
+    val supportsLastError: Boolean
+        get() = (value and SupportsLastError) != 0.toShort()
+
+    companion object {
+        // ECMA-335 II.23.1.8
+        const val NoMangle: Short = 0x0001
+
+        const val CharSetMask: Short = 0x0006
+        const val CharSetNotSpec: Short = 0x0000
+        const val CharSetAnsi: Short = 0x0002
+        const val CharSetUnicode: Short = 0x0004
+        const val CharSetAuto: Short = 0x0006
+
+        const val SupportsLastError: Short = 0x0040
+
+        const val CallConvMask: Short = 0x0700
+        const val CallConvPlatformApi: Short = 0x0100
+        const val CallConvCdecl: Short = 0x0200
+        const val CallConvStdCall: Short = 0x0300
+        const val CallConvThisCall: Short = 0x0400
+        const val CallConvFastCall: Short = 0x0500
     }
 }

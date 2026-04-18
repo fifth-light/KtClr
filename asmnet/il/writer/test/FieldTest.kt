@@ -299,10 +299,10 @@ class FieldTest {
             actual = generateText {
                 class_("MyClass") {
                     field("x", Type.Int32, attributes = FieldAttributes(FieldAttributes.Private))
-                    method("Main", attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    method("Main", attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     )) {}
                 }
             }

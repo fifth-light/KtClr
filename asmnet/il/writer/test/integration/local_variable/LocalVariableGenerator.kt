@@ -43,10 +43,10 @@ private fun generateLocalVariableTest(): String = StringWriter().use {
             ),
         ) {
             method("Main",
-                attributes = MethodAttributes(
-                    MethodAttributes.Public,
-                    MethodAttributes.Static,
-                    MethodAttributes.HideBySig,
+                attributes = listOf(
+                    MethodAttribute.Public,
+                    MethodAttribute.Static,
+                    MethodAttribute.HideBySig,
                 ),
                 parameters = listOf(Parameter(Type.Array(Type.String), "args")),
                 entryPoint = true,

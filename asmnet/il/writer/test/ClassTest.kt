@@ -3,7 +3,7 @@ package top.fifthlight.asmnet.il.writer.test
 import org.junit.Test
 import top.fifthlight.asmnet.CallConv
 import top.fifthlight.asmnet.CustomAttributeReference
-import top.fifthlight.asmnet.MethodAttributes
+import top.fifthlight.asmnet.MethodAttribute
 import top.fifthlight.asmnet.MethodReference
 import top.fifthlight.asmnet.ResolutionScope
 import top.fifthlight.asmnet.Type
@@ -273,10 +273,10 @@ class ClassTest {
             """.trimIndent(),
             actual = generateText {
                 class_("MyClass") {
-                    method("Main", attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    method("Main", attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     )) {}
                 }
             }

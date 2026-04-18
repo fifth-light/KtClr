@@ -60,10 +60,10 @@ private fun generateTypeInsnTest(): String = StringWriter().use {
             ),
         ) {
             method("Main",
-                attributes = MethodAttributes(
-                    MethodAttributes.Public,
-                    MethodAttributes.HideBySig,
-                    MethodAttributes.Static,
+                attributes = listOf(
+                    MethodAttribute.Public,
+                    MethodAttribute.HideBySig,
+                    MethodAttribute.Static,
                 ),
                 parameters = listOf(Parameter(Type.Array(Type.String), "args")),
                 entryPoint = true,

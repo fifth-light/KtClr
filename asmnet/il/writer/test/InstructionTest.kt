@@ -17,10 +17,10 @@ class InstructionTest {
             """.trimIndent(),
             actual = generateText {
                 method("Main",
-                    attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
@@ -51,10 +51,10 @@ class InstructionTest {
             """.trimIndent(),
             actual = generateText {
                 method("Main",
-                    attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
@@ -88,10 +88,10 @@ class InstructionTest {
             """.trimIndent(),
             actual = generateText {
                 method("Main",
-                    attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
@@ -125,9 +125,9 @@ class InstructionTest {
             actual = generateText {
                 method(".ctor",
                     callConv = CallConv(instance = true),
-                    attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.HideBySig,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
@@ -155,10 +155,10 @@ class InstructionTest {
             """.trimIndent(),
             actual = generateText {
                 method("Foo",
-                    attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                     parameters = listOf(
@@ -192,10 +192,10 @@ class InstructionTest {
             """.trimIndent(),
             actual = generateText {
                 method("Main",
-                    attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
@@ -234,10 +234,10 @@ class InstructionTest {
             """.trimIndent(),
             actual = generateText {
                 method("Main",
-                    attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
@@ -266,10 +266,10 @@ class InstructionTest {
             """.trimIndent(),
             actual = generateText {
                 method("Main",
-                    attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
@@ -298,10 +298,10 @@ class InstructionTest {
             """.trimIndent(),
             actual = generateText {
                 method("Main",
-                    attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
@@ -330,10 +330,10 @@ class InstructionTest {
             """.trimIndent(),
             actual = generateText {
                 method("Main",
-                    attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
@@ -360,10 +360,10 @@ class InstructionTest {
             """.trimIndent(),
             actual = generateText {
                 method("Main",
-                    attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
@@ -391,10 +391,10 @@ class InstructionTest {
             """.trimIndent(),
             actual = generateText {
                 method("Main",
-                    attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
@@ -425,10 +425,10 @@ class InstructionTest {
             """.trimIndent(),
             actual = generateText {
                 method("Main",
-                    attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
@@ -459,10 +459,10 @@ class InstructionTest {
             """.trimIndent(),
             actual = generateText {
                 method("Main",
-                    attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
@@ -488,10 +488,10 @@ class InstructionTest {
             """.trimIndent(),
             actual = generateText {
                 method("Main",
-                    attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
@@ -519,10 +519,10 @@ class InstructionTest {
             """.trimIndent(),
             actual = generateText {
                 method("Main",
-                    attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
@@ -551,10 +551,10 @@ class InstructionTest {
             """.trimIndent(),
             actual = generateText {
                 method("Main",
-                    attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
@@ -585,10 +585,10 @@ class InstructionTest {
             """.trimIndent(),
             actual = generateText {
                 method("Main",
-                    attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
@@ -619,10 +619,10 @@ class InstructionTest {
             """.trimIndent(),
             actual = generateText {
                 method("Main",
-                    attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
@@ -649,10 +649,10 @@ class InstructionTest {
             """.trimIndent(),
             actual = generateText {
                 method("Main",
-                    attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
@@ -686,10 +686,10 @@ class InstructionTest {
             """.trimIndent(),
             actual = generateText {
                 method("Main",
-                    attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
@@ -720,10 +720,10 @@ class InstructionTest {
             """.trimIndent(),
             actual = generateText {
                 method("Main",
-                    attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
@@ -753,10 +753,10 @@ class InstructionTest {
             """.trimIndent(),
             actual = generateText {
                 method("Main",
-                    attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
@@ -791,10 +791,10 @@ class InstructionTest {
             """.trimIndent(),
             actual = generateText {
                 method("Main",
-                    attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {
@@ -829,10 +829,10 @@ class InstructionTest {
             """.trimIndent(),
             actual = generateText {
                 method("Main",
-                    attributes = MethodAttributes(
-                        MethodAttributes.Public,
-                        MethodAttributes.Static,
-                        MethodAttributes.HideBySig,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
                     ),
                     implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
                 ) {

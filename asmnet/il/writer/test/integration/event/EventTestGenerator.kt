@@ -168,11 +168,11 @@ private fun generateEventTest(): String = StringWriter().use {
 
             method(".ctor",
                 callConv = CallConv(instance = true),
-                attributes = MethodAttributes(
-                    MethodAttributes.Public,
-                    MethodAttributes.HideBySig,
-                    MethodAttributes.SpecialName,
-                    MethodAttributes.RTSpecialName,
+                attributes = listOf(
+                    MethodAttribute.Public,
+                    MethodAttribute.HideBySig,
+                    MethodAttribute.SpecialName,
+                    MethodAttribute.RTSpecialName,
                 ),
             ) {
                 maxStack(8)
@@ -192,10 +192,10 @@ private fun generateEventTest(): String = StringWriter().use {
 
             method("add_TimeUp",
                 callConv = CallConv(instance = true),
-                attributes = MethodAttributes(
-                    MethodAttributes.Public,
-                    MethodAttributes.HideBySig,
-                    MethodAttributes.SpecialName,
+                attributes = listOf(
+                    MethodAttribute.Public,
+                    MethodAttribute.HideBySig,
+                    MethodAttribute.SpecialName,
                 ),
                 parameters = listOf(Parameter(eventHandlerType, "value")),
             ) {
@@ -212,10 +212,10 @@ private fun generateEventTest(): String = StringWriter().use {
 
             method("remove_TimeUp",
                 callConv = CallConv(instance = true),
-                attributes = MethodAttributes(
-                    MethodAttributes.Public,
-                    MethodAttributes.HideBySig,
-                    MethodAttributes.SpecialName,
+                attributes = listOf(
+                    MethodAttribute.Public,
+                    MethodAttribute.HideBySig,
+                    MethodAttribute.SpecialName,
                 ),
                 parameters = listOf(Parameter(eventHandlerType, "value")),
             ) {
@@ -232,9 +232,9 @@ private fun generateEventTest(): String = StringWriter().use {
 
             method("OnTimeUp",
                 callConv = CallConv(instance = true),
-                attributes = MethodAttributes(
-                    MethodAttributes.Public,
-                    MethodAttributes.HideBySig,
+                attributes = listOf(
+                    MethodAttribute.Public,
+                    MethodAttribute.HideBySig,
                 ),
             ) {
                 maxStack(8)
@@ -264,10 +264,10 @@ private fun generateEventTest(): String = StringWriter().use {
             }
 
             method("Handler1",
-                attributes = MethodAttributes(
-                    MethodAttributes.Private,
-                    MethodAttributes.HideBySig,
-                    MethodAttributes.Static,
+                attributes = listOf(
+                    MethodAttribute.Private,
+                    MethodAttribute.HideBySig,
+                    MethodAttribute.Static,
                 ),
                 parameters = listOf(Parameter(objectRef, "sender"), Parameter(eventArgsRef, "e")),
             ) {
@@ -282,10 +282,10 @@ private fun generateEventTest(): String = StringWriter().use {
             }
 
             method("Handler2",
-                attributes = MethodAttributes(
-                    MethodAttributes.Private,
-                    MethodAttributes.HideBySig,
-                    MethodAttributes.Static,
+                attributes = listOf(
+                    MethodAttribute.Private,
+                    MethodAttribute.HideBySig,
+                    MethodAttribute.Static,
                 ),
                 parameters = listOf(Parameter(objectRef, "sender"), Parameter(eventArgsRef, "e")),
             ) {
@@ -300,10 +300,10 @@ private fun generateEventTest(): String = StringWriter().use {
             }
 
             method("Main",
-                attributes = MethodAttributes(
-                    MethodAttributes.Public,
-                    MethodAttributes.Static,
-                    MethodAttributes.HideBySig,
+                attributes = listOf(
+                    MethodAttribute.Public,
+                    MethodAttribute.Static,
+                    MethodAttribute.HideBySig,
                 ),
                 parameters = listOf(Parameter(Type.Array(Type.String), "args")),
                 entryPoint = true,

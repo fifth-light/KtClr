@@ -41,7 +41,7 @@ class ILTextClassWriter internal constructor(
         name: String,
         returnType: TypeSpec,
         callConv: CallConv,
-        attributes: MethodAttributes,
+        attributes: List<MethodAttribute>,
         implAttributes: ImplementationAttributes,
         entryPoint: Boolean,
         parameters: List<Parameter>,
