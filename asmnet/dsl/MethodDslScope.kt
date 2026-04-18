@@ -14,22 +14,22 @@ class MethodDslScope(val visitor: MethodVisitor) {
 
     fun label(label: Label) = visitor.visitLabel(label)
 
-    fun insn(code: OpCode.Code, vararg prefixes: Short) =
+    fun insn(code: OpCode.Code, vararg prefixes: OpCode.Prefix) =
         visitor.visitInsn(OpCode(code, *prefixes))
 
-    fun insn(code: OpCode.Code, ref: MethodReference, vararg prefixes: Short) =
+    fun insn(code: OpCode.Code, ref: MethodReference, vararg prefixes: OpCode.Prefix) =
         visitor.visitMethodInsn(OpCode(code, *prefixes), ref)
 
-    fun insn(code: OpCode.Code, ref: FieldReference, vararg prefixes: Short) =
+    fun insn(code: OpCode.Code, ref: FieldReference, vararg prefixes: OpCode.Prefix) =
         visitor.visitFieldInsn(OpCode(code, *prefixes), ref)
 
-    fun insn(code: OpCode.Code, varIndex: Int, vararg prefixes: Short) =
+    fun insn(code: OpCode.Code, varIndex: Int, vararg prefixes: OpCode.Prefix) =
         visitor.visitVarInsn(OpCode(code, *prefixes), varIndex)
 
-    fun insn(code: OpCode.Code, label: Label, vararg prefixes: Short) =
+    fun insn(code: OpCode.Code, label: Label, vararg prefixes: OpCode.Prefix) =
         visitor.visitJumpInsn(OpCode(code, *prefixes), label)
 
-    fun insn(code: OpCode.Code, type: TypeSpec, vararg prefixes: Short) =
+    fun insn(code: OpCode.Code, type: TypeSpec, vararg prefixes: OpCode.Prefix) =
         visitor.visitTypeInsn(OpCode(code, *prefixes), type)
 
     fun switch(labels: List<Label>) = visitor.visitSwitchInsn(labels)

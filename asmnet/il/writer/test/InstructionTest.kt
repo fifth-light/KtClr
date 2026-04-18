@@ -543,6 +543,280 @@ class InstructionTest {
     }
 
     @Test
+    fun testTailPrefix() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .maxstack 8
+                  tail.
+                  call void MyClass::Foo()
+                  ret
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = MethodAttributes(
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    maxStack(8)
+                    code()
+                    insn(OpCode.Code.call, MethodReference(
+                        declaringType = TypeReference("MyClass"),
+                        name = "Foo",
+                        returnType = Type.Void,
+                    ), OpCode.Prefix.Tail)
+                    insn(OpCode.Code.ret)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testVolatilePrefix() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .maxstack 8
+                  volatile.
+                  ldfld int32 MyClass::_count
+                  ret
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = MethodAttributes(
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    maxStack(8)
+                    code()
+                    insn(OpCode.Code.ldfld, FieldReference(
+                        declaringType = TypeReference("MyClass"),
+                        name = "_count",
+                        fieldType = Type.Int32,
+                    ), OpCode.Prefix.Volatile)
+                    insn(OpCode.Code.ret)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testReadonlyPrefix() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .maxstack 8
+                  readonly.
+                  ldelema int32
+                  ret
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = MethodAttributes(
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    maxStack(8)
+                    code()
+                    insn(OpCode.Code.ldelema, Type.Int32, OpCode.Prefix.Readonly)
+                    insn(OpCode.Code.ret)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testConstrainedPrefix() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .maxstack 8
+                  constrained. int32
+                  callvirt void [System.Runtime]System.Object::ToString()
+                  ret
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = MethodAttributes(
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    maxStack(8)
+                    code()
+                    insn(OpCode.Code.callvirt, MethodReference(
+                        declaringType = TypeReference(
+                            resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                            name = "System.Object",
+                        ),
+                        name = "ToString",
+                        returnType = Type.Void,
+                    ), OpCode.Prefix.Constrained(Type.Int32))
+                    insn(OpCode.Code.ret)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testUnalignedPrefix() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .maxstack 8
+                  unaligned. 2
+                  ldfld int32 MyClass::_data
+                  ret
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = MethodAttributes(
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    maxStack(8)
+                    code()
+                    insn(OpCode.Code.ldfld, FieldReference(
+                        declaringType = TypeReference("MyClass"),
+                        name = "_data",
+                        fieldType = Type.Int32,
+                    ), OpCode.Prefix.Unaligned(2))
+                    insn(OpCode.Code.ret)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testNoPrefixSingleFlag() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .maxstack 8
+                  no. 1
+                  castclass [System.Runtime]System.Object
+                  ret
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = MethodAttributes(
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    maxStack(8)
+                    code()
+                    insn(OpCode.Code.castclass, TypeReference(
+                        resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                        name = "System.Object",
+                    ), OpCode.Prefix.No(OpCode.Prefix.No.Flag(OpCode.Prefix.No.Flag.typeCheck)))
+                    insn(OpCode.Code.ret)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testNoPrefixMultipleFlags() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .maxstack 8
+                  no. 7
+                  ldelem.ref
+                  ret
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = MethodAttributes(
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    maxStack(8)
+                    code()
+                    insn(
+                        OpCode.Code.ldelemRef,
+                        OpCode.Prefix.No(OpCode.Prefix.No.Flag(
+                            OpCode.Prefix.No.Flag.typeCheck,
+                            OpCode.Prefix.No.Flag.rangeCheck,
+                            OpCode.Prefix.No.Flag.nullCheck,
+                        )),
+                    )
+                    insn(OpCode.Code.ret)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testCombinedUnalignedVolatilePrefix() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .maxstack 8
+                  unaligned. 4
+                  volatile.
+                  ldfld int32 MyClass::_data
+                  ret
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = MethodAttributes(
+                        MethodAttributes.Public,
+                        MethodAttributes.Static,
+                        MethodAttributes.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    maxStack(8)
+                    code()
+                    insn(OpCode.Code.ldfld, FieldReference(
+                        declaringType = TypeReference("MyClass"),
+                        name = "_data",
+                        fieldType = Type.Int32,
+                    ), OpCode.Prefix.Unaligned(4), OpCode.Prefix.Volatile)
+                    insn(OpCode.Code.ret)
+                }
+            }
+        )
+    }
+
+    @Test
     fun testSwitchInsn() {
         val l0 = Label()
         val l1 = Label()

@@ -2,7 +2,7 @@ package top.fifthlight.asmnet
 
 data class OpCode(
     val code: Code,
-    val prefixes: ShortArray? = null,
+    val prefixes: List<Prefix>? = null,
 ) {
     @JvmInline
     value class Code(val value: Short) {
@@ -235,36 +235,51 @@ data class OpCode(
         }
     }
 
-    @JvmInline
-    value class Prefix(val value: Short) {
-        companion object {
-            const val unaligned: Short = 0xFE12.toShort()
-            const val volatile: Short = 0xFE13.toShort()
-            const val tail: Short = 0xFE14.toShort()
-            const val constrained: Short = 0xFE16.toShort()
-            const val no: Short = 0xFE19.toShort()
-            const val readonly: Short = 0xFE1E.toShort()
+    sealed interface Prefix {
+        val value: Short
+
+        @ConsistentCopyVisibility
+        data class Normal internal constructor(override val value: Short): Prefix
+
+        // III.2.5
+        data class Unaligned(
+            val alignment: Int
+        ): Prefix {
+            override val value = 0xFE12.toShort()
         }
-    }
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
+        // III.2.1
+        data class Constrained(
+            val thisType: TypeSpec,
+        ): Prefix {
+            override val value = 0xFE16.toShort()
+        }
 
-        other as OpCode
+        // III.2.2
+        data class No(
+            val flags: Flag,
+        ): Prefix {
+            override val value = 0xFE19.toShort()
 
-        if (code != other.code) return false
-        if (!prefixes.contentEquals(other.prefixes)) return false
+            @JvmInline
+            value class Flag(val value: Byte) {
+                constructor(vararg flags: Byte): this(flags.or())
 
-        return true
-    }
+                companion object {
+                    val typeCheck: Byte = 0x01
+                    val rangeCheck: Byte = 0x02
+                    val nullCheck: Byte = 0x04
+                }
+            }
+        }
 
-    override fun hashCode(): Int {
-        var result = code.hashCode()
-        result = 31 * result + (prefixes?.contentHashCode() ?: 0)
-        return result
+        companion object {
+            val Volatile = Normal(0xFE13.toShort())
+            val Tail = Normal(0xFE14.toShort())
+            val Readonly = Normal(0xFE1E.toShort())
+        }
     }
 }
 
 fun OpCode(code: OpCode.Code) = OpCode(code, null)
-fun OpCode(code: OpCode.Code, vararg prefixes: Short) = OpCode(code, prefixes)
+fun OpCode(code: OpCode.Code, vararg prefixes: OpCode.Prefix) = OpCode(code, prefixes.toList())

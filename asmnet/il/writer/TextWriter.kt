@@ -119,6 +119,15 @@ class TextWriter(
         }
     }
 
+    fun write(int8: Byte) = write(int8.toString())
+    fun write(int16: Short) = write(int16.toString())
+    fun write(int32: Int) = write(int32.toString())
+    fun write(int64: Long) = write(int64.toString())
+    fun write(int8: UByte) = write(int8.toString())
+    fun write(int16: UShort) = write(int16.toString())
+    fun write(int32: UInt) = write(int32.toString())
+    fun write(int64: ULong) = write(int64.toString())
+
     fun writeHex(int8: Byte) = write(String.format("0x%02X", int8))
     fun writeHex(int16: Short) = write(String.format("0x%04X", int16))
     fun writeHex(int32: Int) = write(String.format("0x%08X", int32))

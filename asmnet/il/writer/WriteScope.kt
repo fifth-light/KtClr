@@ -10,6 +10,15 @@ interface WriteScope {
     fun write(text: String)
     fun write(text: Char)
 
+    fun num(int8: Byte)
+    fun num(int16: Short)
+    fun num(int32: Int)
+    fun num(int64: Long)
+    fun num(int8: UByte)
+    fun num(int16: UShort)
+    fun num(int32: UInt)
+    fun num(int64: ULong)
+
     fun hex(int8: Byte)
     fun hex(int16: Short)
     fun hex(int32: Int)
@@ -46,6 +55,15 @@ value class WriteScopeImpl(private val writer: TextWriter) : WriteScope {
 
     override fun write(text: String) = writer.write(text)
     override fun write(text: Char) = writer.write(text)
+
+    override fun num(int8: Byte) = writer.write(int8)
+    override fun num(int16: Short) = writer.write(int16)
+    override fun num(int32: Int) = writer.write(int32)
+    override fun num(int64: Long) = writer.write(int64)
+    override fun num(int8: UByte) = writer.write(int8)
+    override fun num(int16: UShort) = writer.write(int16)
+    override fun num(int32: UInt) = writer.write(int32)
+    override fun num(int64: ULong) = writer.write(int64)
 
     override fun hex(int8: Byte) = writer.writeHex(int8)
     override fun hex(int16: Short) = writer.writeHex(int16)

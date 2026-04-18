@@ -524,15 +524,29 @@ fun WriteScope.opcode(code: OpCode.Code) {
 
 fun WriteScope.opcode(opcode: OpCode) {
     opcode.prefixes?.forEach {
+        // Prefix is also an instruction per spec III.2, so we emit a line after each prefixes
         when (it) {
-            OpCode.Prefix.unaligned -> +"unaligned."
-            OpCode.Prefix.volatile -> +"volatile."
-            OpCode.Prefix.tail -> +"tail."
-            OpCode.Prefix.constrained -> +"constrained."
-            OpCode.Prefix.no -> +"no."
-            OpCode.Prefix.readonly -> +"readonly."
+            is OpCode.Prefix.Unaligned -> {
+                +"unaligned. "
+                num(it.alignment)
+            }
+
+            is OpCode.Prefix.Constrained -> {
+                +"constrained. "
+                typeSpec(it.thisType)
+            }
+
+            is OpCode.Prefix.No -> {
+                +"no. "
+                num(it.flags.value)
+            }
+
+            OpCode.Prefix.Volatile -> +"volatile."
+            OpCode.Prefix.Tail -> +"tail."
+            OpCode.Prefix.Readonly -> +"readonly."
             else -> throw IllegalArgumentException("Unknown prefix: $it")
         }
+        line()
     }
     opcode(opcode.code)
 }
