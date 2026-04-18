@@ -140,4 +140,11 @@ sealed interface Type : TypeSpec {
     ) : Type {
         override fun toString() = "valuetype $type"
     }
+
+    // ECMA-335 II.7.1.2
+    data class Pinned(
+        val type: Type,
+    ) : Type {
+        override fun toString() = "$type pinned"
+    }
 }

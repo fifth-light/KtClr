@@ -436,6 +436,34 @@ class MethodTest {
     }
 
     @Test
+    fun testMethodWithPinnedLocal() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .locals init (string& pinned p)
+                  .maxstack 8
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    locals(
+                        LocalVariable(Type.Pinned(Type.ManagedTypePointer(Type.String)), "p"),
+                    )
+                    maxStack(8)
+                }
+            }
+        )
+    }
+
+    @Test
     fun testJumpInsnBackwardReference() {
         val target = Label()
         assertContentEquals(

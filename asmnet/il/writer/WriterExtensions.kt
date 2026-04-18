@@ -69,6 +69,11 @@ fun WriteScope.type(type: TypeSpec) {
             typeSpec(type.type)
         }
 
+        is Type.Pinned -> {
+            type(type.type)
+            +" pinned"
+        }
+
         is TypeReference -> {
             +"class "
             type.resolutionScope?.let { resolutionScope(it) }
