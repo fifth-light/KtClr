@@ -752,6 +752,37 @@ class MethodTest {
     }
 
     @Test
+    fun testEmitByte() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .maxstack 8
+                  .emitbyte 0xFF
+                  .emitbyte 0x00
+                  .emitbyte 0x2A
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    maxStack(8)
+                    code()
+                    emitByte(0xFFu)
+                    emitByte(0x00u)
+                    emitByte(0x2Au)
+                }
+            }
+        )
+    }
+
+    @Test
     fun testMethodCustomAttributeWithoutBlob() {
         assertContentEquals(
             expected = """

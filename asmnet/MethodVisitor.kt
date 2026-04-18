@@ -9,6 +9,9 @@ interface MethodVisitor {
 
     fun visitCode()
 
+    // ECMA-335 II.15.4.1.1
+    fun visitEmitByte(value: UByte)
+
     // ECMA-335 II.21
     fun visitCustomAttribute(reference: CustomAttributeReference, blob: ByteArray?)
 

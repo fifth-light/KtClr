@@ -10,6 +10,8 @@ class MethodDslScope(val visitor: MethodVisitor) {
 
     fun code() = visitor.visitCode()
 
+    fun emitByte(value: UByte) = visitor.visitEmitByte(value)
+
     fun label(): Label = Label().also { visitor.visitLabel(it) }
 
     fun label(label: Label) = visitor.visitLabel(label)

@@ -60,6 +60,13 @@ class ILTextMethodWriter internal constructor(
 
     override fun visitCode() {}
 
+    // ECMA-335 II.15.4.1.1
+    override fun visitEmitByte(value: UByte) = writer.write {
+        +".emitbyte "
+        hex(value)
+        line()
+    }
+
     override fun visitLabel(label: Label) {
         require(label !in emittedLabels) { "Label $label already emitted" }
         val labelIndex = getOrCreateLabelIndex(label)
