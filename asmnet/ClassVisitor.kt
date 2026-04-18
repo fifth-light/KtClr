@@ -41,7 +41,7 @@ interface ClassVisitor {
         offset: Int? = null,
         initValue: FieldInitValue? = null,
         // TODO: DataLabel
-    )
+    ): FieldVisitor?
 
     // ECMA-335 II.17
     fun visitProperty(

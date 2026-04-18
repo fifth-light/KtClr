@@ -72,7 +72,7 @@ interface ModuleVisitor {
         offset: Int? = null,
         initValue: FieldInitValue? = null,
         // TODO: DataLabel
-    )
+    ): FieldVisitor?
 
     fun visitEnd()
 }

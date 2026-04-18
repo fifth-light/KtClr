@@ -435,4 +435,129 @@ class FieldTest {
             }
         )
     }
+
+    @Test
+    fun testFieldCustomAttributeWithoutBlob() {
+        assertContentEquals(
+            expected = """
+                .class public auto ansi MyClass
+                {
+                  .field private int32 x
+                  .custom instance void [System.Runtime]System.ObsoleteAttribute::.ctor()
+                } // end of class MyClass
+            """.trimIndent(),
+            actual = generateText {
+                class_("MyClass") {
+                    field("x", Type.Int32, attributes = FieldAttributes(FieldAttributes.Private)) {
+                        custom(
+                            CustomAttributeReference(
+                                attributeType = TypeReference(
+                                    resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                                    name = "System.ObsoleteAttribute",
+                                ),
+                            ),
+                            blob = null,
+                        )
+                    }
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testFieldCustomAttributeWithBlob() {
+        assertContentEquals(
+            expected = """
+                .class public auto ansi MyClass
+                {
+                  .field private int32 x
+                  .custom instance void [System.Runtime]System.ObsoleteAttribute::.ctor(string) = ( 01 00 05 68 65 6C 6C 6F 00 00 )
+                } // end of class MyClass
+            """.trimIndent(),
+            actual = generateText {
+                class_("MyClass") {
+                    field("x", Type.Int32, attributes = FieldAttributes(FieldAttributes.Private)) {
+                        custom(
+                            CustomAttributeReference(
+                                attributeType = TypeReference(
+                                    resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                                    name = "System.ObsoleteAttribute",
+                                ),
+                                parameterTypes = listOf(Type.String),
+                            ),
+                            blob = byteArrayOf(0x01, 0x00, 0x05, 0x68, 0x65, 0x6C, 0x6C, 0x6F, 0x00, 0x00),
+                        )
+                    }
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testGlobalFieldCustomAttribute() {
+        assertContentEquals(
+            expected = """
+                .field public static int32 globalCount
+                .custom instance void [System.Runtime]System.CLSCompliantAttribute::.ctor(bool) = ( 01 00 01 00 00 )
+            """.trimIndent(),
+            actual = generateText {
+                field("globalCount", Type.Int32, attributes = FieldAttributes(
+                    FieldAttributes.Public,
+                    FieldAttributes.Static,
+                )) {
+                    custom(
+                        CustomAttributeReference(
+                            attributeType = TypeReference(
+                                resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                                name = "System.CLSCompliantAttribute",
+                            ),
+                            parameterTypes = listOf(Type.Bool),
+                        ),
+                        blob = byteArrayOf(0x01, 0x00, 0x01, 0x00, 0x00),
+                    )
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testMultipleFieldsWithCustomAttributes() {
+        assertContentEquals(
+            expected = """
+                .class public auto ansi MyClass
+                {
+                  .field private int32 x
+                  .custom instance void [System.Runtime]System.NonSerializedAttribute::.ctor()
+                  .field private int32 y
+                  .custom instance void [System.Runtime]System.NonSerializedAttribute::.ctor()
+                } // end of class MyClass
+            """.trimIndent(),
+            actual = generateText {
+                class_("MyClass") {
+                    field("x", Type.Int32, attributes = FieldAttributes(FieldAttributes.Private)) {
+                        custom(
+                            CustomAttributeReference(
+                                attributeType = TypeReference(
+                                    resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                                    name = "System.NonSerializedAttribute",
+                                ),
+                            ),
+                            blob = null,
+                        )
+                    }
+                    field("y", Type.Int32, attributes = FieldAttributes(FieldAttributes.Private)) {
+                        custom(
+                            CustomAttributeReference(
+                                attributeType = TypeReference(
+                                    resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                                    name = "System.NonSerializedAttribute",
+                                ),
+                            ),
+                            blob = null,
+                        )
+                    }
+                }
+            }
+        )
+    }
 }

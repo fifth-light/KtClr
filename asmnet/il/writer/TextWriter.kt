@@ -10,11 +10,11 @@ class TextWriter(
     companion object {
         private val acceptableIdentifierBeginning = setOf(
             '_', '$', "@", "`", "?", '.'
-        ) + ('A' until 'Z') + ('a' until 'z')
+        ) + ('A'..'Z') + ('a'..'z')
 
         private val acceptableIdentifierChars = setOf(
             '_', '$', "@", "`", "?", '.'
-        ) + ('0' until '9') + ('A' until 'Z') + ('a' until 'z')
+        ) + ('0'..'9') + ('A'..'Z') + ('a'..'z')
 
         private val keywords = setOf(
             ".addon", ".assembly", ".cctor", ".class", ".corflags", ".ctor",

@@ -197,14 +197,18 @@ class ILTextModuleWriter internal constructor(
     }
 
     // ECMA-335 II.16
+    @Suppress("RedundantNullableReturnType")
     override fun visitField(
         name: String,
         type: TypeSpec,
         attributes: FieldAttributes,
         offset: Int?,
         initValue: FieldInitValue?,
-    ) = writer.write {
-        fieldDecl(name, type, attributes, offset, initValue)
+    ): FieldVisitor? {
+        writer.write {
+            fieldDecl(name, type, attributes, offset, initValue)
+        }
+        return ILTextFieldWriter(writer)
     }
 
     override fun visitEnd() {}
