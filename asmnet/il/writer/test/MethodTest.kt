@@ -234,8 +234,8 @@ class MethodTest {
                   .method public static hidebysig void Main() cil managed
                   {
                     .maxstack 8
-                    LABEL_0: nop
-                    LABEL_1: ret
+                    nop
+                    ret
                   } // end of method MyClass::Main
                 } // end of class MyClass
             """.trimIndent(),
@@ -248,9 +248,7 @@ class MethodTest {
                     )) {
                         maxStack(8)
                         code()
-                        label()
                         insn(OpCode.Code.nop)
-                        label()
                         insn(OpCode.Code.ret)
                     }
                 }

@@ -149,8 +149,8 @@ class InstructionTest {
                 .method public static hidebysig void Foo(string a, string b, string c, string d, string e) cil managed
                 {
                   .maxstack 8
-                  LABEL_0: ldarg.s 4
-                  LABEL_1: ret
+                  ldarg.s 4
+                  ret
                 }
             """.trimIndent(),
             actual = generateText {
@@ -171,9 +171,7 @@ class InstructionTest {
                 ) {
                     maxStack(8)
                     code()
-                    label()
                     insn(OpCode.Code.ldargS, 4)
-                    label()
                     insn(OpCode.Code.ret)
                 }
             }
@@ -326,8 +324,8 @@ class InstructionTest {
                 .method public static hidebysig void Main() cil managed
                 {
                   .maxstack 8
-                  LABEL_0: leave LABEL_1
-                  LABEL_1: ret
+                  leave LABEL_0
+                  LABEL_0: ret
                 }
             """.trimIndent(),
             actual = generateText {
@@ -341,7 +339,6 @@ class InstructionTest {
                 ) {
                     maxStack(8)
                     code()
-                    label()
                     insn(OpCode.Code.leave, target)
                     label(target)
                     insn(OpCode.Code.ret)
@@ -456,8 +453,8 @@ class InstructionTest {
                 .method public static hidebysig void Main() cil managed
                 {
                   .maxstack 8
-                  LABEL_0: box int32
-                  LABEL_1: ret
+                  box int32
+                  ret
                 }
             """.trimIndent(),
             actual = generateText {
@@ -471,9 +468,7 @@ class InstructionTest {
                 ) {
                     maxStack(8)
                     code()
-                    label()
                     insn(OpCode.Code.box, Type.Int32)
-                    label()
                     insn(OpCode.Code.ret)
                 }
             }
