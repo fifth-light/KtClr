@@ -638,7 +638,7 @@ fun WriteScope.fieldAttr(attrs: FieldAttributes) {
     if (attrs.notSerialized) +"notserialized "
     if (attrs.specialName) +"specialname "
 
-    if (attrs.pInvokeImpl) TODO("pinvokeimpl attribute is not yet supported")
+    if (attrs.pInvokeImpl) error("pinvokeimpl attribute can't be set on fields")
 
     if (attrs.rtSpecialName) +"rtspecialname "
     if (attrs.hasFieldMarshal) TODO("marshal attribute is not yet supported")
