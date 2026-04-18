@@ -12,6 +12,8 @@ class MethodDslScope(val visitor: MethodVisitor) {
 
     fun emitByte(value: UByte) = visitor.visitEmitByte(value)
 
+    fun param(index: Int, defaultValue: FieldInitValue) = visitor.visitParam(index, defaultValue)
+
     fun label(): Label = Label().also { visitor.visitLabel(it) }
 
     fun label(label: Label) = visitor.visitLabel(label)

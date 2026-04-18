@@ -873,4 +873,126 @@ class MethodTest {
             }
         )
     }
+
+    @Test
+    fun testParamStringAndInt32() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main(string s, int32 x) cil managed
+                {
+                  .param [1] = "hello"
+                  .param [2] = int32(0x0000002A)
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method(
+                    "Main",
+                    parameters = listOf(
+                        Parameter(Type.String, "s"),
+                        Parameter(Type.Int32, "x"),
+                    ),
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    param(1, FieldInitValue.String("hello"))
+                    param(2, FieldInitValue.Int32(42))
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testParamReturnValue() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig int32 Foo() cil managed
+                {
+                  .param [0] = int32(0x00000000)
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method(
+                    "Foo",
+                    returnType = Type.Int32,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    param(0, FieldInitValue.Int32(0))
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testParamMixedTypes() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Bar(bool b, float32 f, float64 d, string s) cil managed
+                {
+                  .param [1] = bool(true)
+                  .param [2] = float32(3.14)
+                  .param [3] = float64(2.718281828)
+                  .param [4] = nullref
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method(
+                    "Bar",
+                    parameters = listOf(
+                        Parameter(Type.Bool, "b"),
+                        Parameter(Type.Float32, "f"),
+                        Parameter(Type.Float64, "d"),
+                        Parameter(Type.String, "s"),
+                    ),
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    param(1, FieldInitValue.Boolean(true))
+                    param(2, FieldInitValue.Float32(3.14f))
+                    param(3, FieldInitValue.Float64(2.718281828))
+                    param(4, FieldInitValue.NullRef)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testParamInt64() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Baz(int64 n) cil managed
+                {
+                  .param [1] = int64(0x7FFFFFFFFFFFFFFF)
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method(
+                    "Baz",
+                    parameters = listOf(
+                        Parameter(Type.Int64, "n"),
+                    ),
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    param(1, FieldInitValue.Int64(Long.MAX_VALUE))
+                }
+            }
+        )
+    }
 }

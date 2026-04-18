@@ -12,6 +12,9 @@ interface MethodVisitor {
     // ECMA-335 II.15.4.1.1
     fun visitEmitByte(value: UByte)
 
+    // ECMA-335 II.15.4.1.4
+    fun visitParam(index: Int, defaultValue: FieldInitValue)
+
     // ECMA-335 II.21
     fun visitCustomAttribute(reference: CustomAttributeReference, blob: ByteArray?)
 
