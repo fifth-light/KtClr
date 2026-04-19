@@ -105,7 +105,7 @@ class HeaderReaderTest {
         val buf = ByteBuffer.allocate(10).order(ByteOrder.LITTLE_ENDIAN)
 
         assertFailsWith<IllegalArgumentException> {
-            top.fifthlight.asmnet.binary.reader.CoffHeader(buf)
+            CoffHeader(buf)
         }
     }
 

@@ -81,8 +81,7 @@ private fun readPE32Plus(buf: ByteBuffer): OptionalHeader.PE32Plus = OptionalHea
 )
 
 internal fun OptionalHeader(buffer: ByteBuffer): OptionalHeader = buffer.slice().order(ByteOrder.LITTLE_ENDIAN).let { buf ->
-    val magic = buf.ushort
-    when (magic) {
+    when (val magic = buf.ushort) {
         OptionalHeader.MAGIC_PE32 -> {
             require(buf.remaining() >= 94) { "Buffer too small for PE32 optional header: ${buf.remaining()} < 94" }
             readPE32(buf)
