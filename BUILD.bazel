@@ -3,6 +3,7 @@ load("@rules_kotlin//kotlin:core.bzl", "define_kt_toolchain", "kt_kotlinc_option
 kt_kotlinc_options(
     name = "kotlinc_opts",
     x_lambdas = "indy",
+    x_optin = ["kotlin.ExperimentalUnsignedTypes"],
 )
 
 define_kt_toolchain(

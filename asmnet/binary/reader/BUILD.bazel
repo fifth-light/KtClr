@@ -4,5 +4,5 @@ kt_jvm_library(
     name = "reader",
     srcs = glob(["*.kt"]),
     visibility = ["//visibility:public"],
-    deps = ["//asmnet"],
+    deps = ["//asmnet", "//asmnet/binary"],
 )

@@ -1,0 +1,12 @@
+load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_test")
+
+kt_jvm_test(
+    name = "header_reader",
+    srcs = ["HeaderReaderTest.kt"],
+    test_class = "top.fifthlight.asmnet.binary.reader.test.HeaderReaderTest",
+    associates = ["//asmnet/binary/reader"],
+    deps = [
+        "@maven//:junit_junit",
+        "@maven//:org_jetbrains_kotlin_kotlin_test",
+    ],
+)
