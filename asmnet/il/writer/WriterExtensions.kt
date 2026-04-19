@@ -25,12 +25,12 @@ fun WriteScope.type(type: TypeSpec) {
         Type.Void -> +"void"
 
         is Type.MethodPointer -> {
+            +"method"
             callConv(type.callConv)
             +' '
             type(type.returnType)
-            +"*("
+            +"*"
             params(type.parameterTypes)
-            +')'
         }
 
         is Type.UnmanagedTypePointer -> {
