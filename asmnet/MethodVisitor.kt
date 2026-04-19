@@ -62,5 +62,12 @@ interface MethodVisitor {
     // ECMA-335 II.5.7
     fun visitLine(sourceLine: SourceLineInfo)
 
+    // ECMA-335 II.16.3
+    fun visitData(
+        label: DataLabel? = null,
+        tls: Boolean = false,
+        items: List<DataItem>,
+    )
+
     fun visitEnd()
 }

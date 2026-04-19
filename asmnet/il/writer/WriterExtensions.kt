@@ -138,6 +138,7 @@ fun WriteScope.fieldDecl(
     attributes: FieldAttributes,
     offset: Int?,
     initValue: FieldInitValue?,
+    dataLabelName: String? = null,
 ) {
     +".field "
     offset?.let {
@@ -150,6 +151,10 @@ fun WriteScope.fieldDecl(
     initValue?.let {
         +" = "
         fieldInitValue(it)
+    }
+    dataLabelName?.let {
+        +" at "
+        identifier(it)
     }
     line()
 }
@@ -707,4 +712,94 @@ fun WriteScope.fieldInitValue(value: FieldInitValue) {
             +')'
         }
     }
+}
+
+// ECMA-335 II.16.3.1
+fun WriteScope.dataItem(item: DataItem, registry: DataLabelRegistry) {
+    when (item) {
+        is DataItem.Int8 -> {
+            +"int8("; hex(item.value); +')'
+            item.repeatCount?.let { +"[${it}]" }
+        }
+
+        is DataItem.Int16 -> {
+            +"int16("; hex(item.value); +')'
+            item.repeatCount?.let { +"[${it}]" }
+        }
+
+        is DataItem.Int32 -> {
+            +"int32("; hex(item.value); +')'
+            item.repeatCount?.let { +"[${it}]" }
+        }
+
+        is DataItem.Int64 -> {
+            +"int64("; hex(item.value); +')'
+            item.repeatCount?.let { +"[${it}]" }
+        }
+
+        is DataItem.Float32 -> {
+            +"float32(${item.value})"
+            item.repeatCount?.let { +"[${it}]" }
+        }
+
+        is DataItem.Float64 -> {
+            +"float64(${item.value})"
+            item.repeatCount?.let { +"[${it}]" }
+        }
+
+        is DataItem.ByteArray -> {
+            +"bytearray("
+            hex(item.value)
+            +')'
+        }
+
+        is DataItem.CharArray -> {
+            +"char*("
+            quoted(item.value.concatToString())
+            +')'
+        }
+
+        is DataItem.AddressOf -> {
+            +"&("
+            identifier("D_${registry.getOrCreateLabelIndex(item.label)}")
+            +')'
+        }
+    }
+}
+
+fun WriteScope.dataDecl(
+    labelIndex: Int?,
+    tls: Boolean,
+    items: List<DataItem>,
+    registry: DataLabelRegistry,
+) {
+    +".data"
+    if (tls) {
+        +" tls"
+    }
+    labelIndex?.let {
+        +' '
+        identifier("D_${it}")
+        +" ="
+    }
+    if (items.size == 1) {
+        +' '
+        dataItem(items[0], registry)
+    } else {
+        line()
+        +"{"
+        indent()
+        line()
+        items.forEachIndexed { index, item ->
+            dataItem(item, registry)
+            if (index < items.size - 1) {
+                +','
+            }
+            line()
+        }
+        unindent()
+        line()
+        +'}'
+    }
+    line()
 }

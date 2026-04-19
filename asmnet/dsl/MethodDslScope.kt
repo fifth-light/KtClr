@@ -159,4 +159,10 @@ class MethodDslScope(val visitor: MethodVisitor) {
         exceptionType = exceptionType,
         filterStart = filterStart,
     )
+
+    fun data(
+        label: DataLabel? = null,
+        tls: Boolean = false,
+        items: List<DataItem>,
+    ) = visitor.visitData(label, tls, items)
 }

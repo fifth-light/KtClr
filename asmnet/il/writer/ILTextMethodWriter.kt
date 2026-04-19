@@ -12,6 +12,7 @@ class ILTextMethodWriter internal constructor(
     private val implAttributes: ImplementationAttributes,
     private val entryPoint: Boolean,
     private val parameters: List<Parameter>,
+    private val dataLabelRegistry: DataLabelRegistry,
 ) : MethodVisitor {
     private val labels = mutableMapOf<Label, Int>()
     private val emittedLabels = mutableSetOf<Label>()
@@ -70,6 +71,15 @@ class ILTextMethodWriter internal constructor(
     // ECMA-335 II.5.7
     override fun visitLine(sourceLine: SourceLineInfo) = writer.write {
         lineDirective(sourceLine)
+    }
+
+    // ECMA-335 II.16.3
+    override fun visitData(
+        label: DataLabel?,
+        tls: Boolean,
+        items: List<DataItem>,
+    ) = writer.write {
+        dataDecl(dataLabelRegistry.getOrCreateLabelIndex(label), tls, items, dataLabelRegistry)
     }
 
     // ECMA-335 II.15.4.1.4

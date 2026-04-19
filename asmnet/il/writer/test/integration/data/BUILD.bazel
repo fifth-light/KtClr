@@ -1,0 +1,16 @@
+load("//asmnet/il/writer/test/integration:integration.bzl", "integration_test")
+
+integration_test(
+    name = "data",
+    srcs = ["DataTestGenerator.kt"],
+    expected = [
+        "42",
+    ],
+    main_class = "top.fifthlight.asmnet.il.writer.test.integration.data.DataTestGeneratorKt",
+    runtimeconfig = "data.runtimeconfig.json",
+    deps = [
+        "//asmnet",
+        "//asmnet/dsl",
+        "//asmnet/il/writer",
+    ],
+)

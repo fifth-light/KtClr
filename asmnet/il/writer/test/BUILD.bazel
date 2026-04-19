@@ -130,3 +130,15 @@ kt_jvm_test(
         "@maven//:junit_junit",
     ],
 )
+
+kt_jvm_test(
+    name = "data",
+    srcs = ["DataTest.kt"],
+    test_class = "top.fifthlight.asmnet.il.writer.test.DataTest",
+    deps = [
+        ":util",
+        "//asmnet",
+        "//asmnet/dsl",
+        "@maven//:junit_junit",
+    ],
+)

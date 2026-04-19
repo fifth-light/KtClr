@@ -40,7 +40,7 @@ interface ClassVisitor {
         attributes: FieldAttributes = FieldAttributes(),
         offset: Int? = null,
         initValue: FieldInitValue? = null,
-        // TODO: DataLabel
+        dataLabel: DataLabel? = null,
     ): FieldVisitor?
 
     // ECMA-335 II.17
@@ -67,6 +67,13 @@ interface ClassVisitor {
 
     // ECMA-335 II.10.3.2
     fun visitOverride(baseType: TypeSpec, baseName: String, implementation: MethodReference)
+
+    // ECMA-335 II.16.3
+    fun visitData(
+        label: DataLabel? = null,
+        tls: Boolean = false,
+        items: List<DataItem>,
+    )
 
     fun visitEnd()
 }

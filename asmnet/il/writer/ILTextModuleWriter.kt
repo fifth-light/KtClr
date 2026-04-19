@@ -8,6 +8,7 @@ import java.util.*
 class ILTextModuleWriter internal constructor(
     private val writer: TextWriter,
 ) : ModuleVisitor, AutoCloseable {
+    private val dataLabelRegistry = DataLabelRegistry()
     constructor(writer: Writer) : this(TextWriter(writer))
 
     override fun visitAssembly(name: String, declaration: AssemblyDeclaration) = writer.write {
@@ -168,7 +169,7 @@ class ILTextModuleWriter internal constructor(
     }
 
     @Suppress("RedundantNullableReturnType")
-    override fun visitClass(name: String): ClassVisitor? = ILTextClassWriter(writer, name)
+    override fun visitClass(name: String): ClassVisitor? = ILTextClassWriter(writer, name, dataLabelRegistry)
 
     @Suppress("RedundantNullableReturnType")
     override fun visitMethod(
@@ -189,6 +190,7 @@ class ILTextModuleWriter internal constructor(
         implAttributes = implAttributes,
         entryPoint = entryPoint,
         parameters = parameters,
+        dataLabelRegistry = dataLabelRegistry,
     )
 
     // ECMA-335 II.6.2.2
@@ -225,11 +227,22 @@ class ILTextModuleWriter internal constructor(
         attributes: FieldAttributes,
         offset: Int?,
         initValue: FieldInitValue?,
+        dataLabel: DataLabel?,
     ): FieldVisitor? {
+        val dataLabelName = dataLabel?.let { "D_${dataLabelRegistry.getOrCreateLabelIndex(it)}" }
         writer.write {
-            fieldDecl(name, type, attributes, offset, initValue)
+            fieldDecl(name, type, attributes, offset, initValue, dataLabelName)
         }
         return ILTextFieldWriter(writer)
+    }
+
+    // ECMA-335 II.16.3
+    override fun visitData(
+        label: DataLabel?,
+        tls: Boolean,
+        items: List<DataItem>,
+    ) = writer.write {
+        dataDecl(dataLabelRegistry.getOrCreateLabelIndex(label), tls, items, dataLabelRegistry)
     }
 
     override fun visitEnd() {}

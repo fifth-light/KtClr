@@ -97,11 +97,18 @@ class ModuleDslScope(val visitor: ModuleVisitor) {
         attributes: FieldAttributes = FieldAttributes(),
         offset: Int? = null,
         initValue: FieldInitValue? = null,
+        dataLabel: DataLabel? = null,
         block: FieldDslScope.() -> Unit = {},
     ) {
-        visitor.visitField(name, type, attributes, offset, initValue)?.let { fv ->
+        visitor.visitField(name, type, attributes, offset, initValue, dataLabel)?.let { fv ->
             FieldDslScope(fv).block()
             fv.visitEnd()
         }
     }
+
+    fun data(
+        label: DataLabel? = null,
+        tls: Boolean = false,
+        items: List<DataItem>,
+    ) = visitor.visitData(label, tls, items)
 }

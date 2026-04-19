@@ -77,8 +77,15 @@ interface ModuleVisitor {
         attributes: FieldAttributes = FieldAttributes(),
         offset: Int? = null,
         initValue: FieldInitValue? = null,
-        // TODO: DataLabel
+        dataLabel: DataLabel? = null,
     ): FieldVisitor?
+
+    // ECMA-335 II.16.3
+    fun visitData(
+        label: DataLabel? = null,
+        tls: Boolean = false,
+        items: List<DataItem>,
+    )
 
     fun visitEnd()
 }

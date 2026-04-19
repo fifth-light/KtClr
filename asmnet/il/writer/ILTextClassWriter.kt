@@ -5,6 +5,7 @@ import top.fifthlight.asmnet.*
 class ILTextClassWriter internal constructor(
     private val writer: TextWriter,
     private val className: String,
+    private val dataLabelRegistry: DataLabelRegistry,
 ) : ClassVisitor {
     override fun visit(
         attrs: TypeAttributes,
@@ -55,6 +56,7 @@ class ILTextClassWriter internal constructor(
         implAttributes = implAttributes,
         entryPoint = entryPoint,
         parameters = parameters,
+        dataLabelRegistry = dataLabelRegistry,
     )
 
     // ECMA-335 II.16
@@ -65,9 +67,11 @@ class ILTextClassWriter internal constructor(
         attributes: FieldAttributes,
         offset: Int?,
         initValue: FieldInitValue?,
+        dataLabel: DataLabel?,
     ): FieldVisitor? {
+        val dataLabelName = dataLabel?.let { "D_${dataLabelRegistry.getOrCreateLabelIndex(it)}" }
         writer.write {
-            fieldDecl(name, type, attributes, offset, initValue)
+            fieldDecl(name, type, attributes, offset, initValue, dataLabelName)
         }
         return ILTextFieldWriter(writer)
     }
@@ -142,6 +146,15 @@ class ILTextClassWriter internal constructor(
         +" with "
         methodRef(implementation)
         line()
+    }
+
+    // ECMA-335 II.16.3
+    override fun visitData(
+        label: DataLabel?,
+        tls: Boolean,
+        items: List<DataItem>,
+    ) = writer.write {
+        dataDecl(dataLabelRegistry.getOrCreateLabelIndex(label), tls, items, dataLabelRegistry)
     }
 
     override fun visitEnd() {
