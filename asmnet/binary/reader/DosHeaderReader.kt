@@ -7,7 +7,7 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
 internal fun DosHeader(buffer: ByteBuffer): DosHeader = buffer.slice().order(ByteOrder.LITTLE_ENDIAN).let { buf ->
-    require(buf.remaining() >= 64) { "Buffer too small for DOS header: ${buf.remaining()} < 64" }
+    require(buf.remaining() >= DosHeader.SIZE) { "Buffer too small for DOS header: ${buf.remaining()} < ${DosHeader.SIZE}" }
     DosHeader(
         e_magic = buf.ushort.also { require(it == DosHeader.MAGIC_MZ) { "Invalid DOS header magic: 0x${it.toString(16)}" } },
         e_cblp = buf.ushort,

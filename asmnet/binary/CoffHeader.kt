@@ -9,4 +9,8 @@ data class CoffHeader(
     val numberOfSymbols: UInt,
     val sizeOfOptionalHeader: UShort,
     val characteristics: ImageCharacteristics,
-)
+) {
+    companion object {
+        const val SIZE = 20
+    }
+}

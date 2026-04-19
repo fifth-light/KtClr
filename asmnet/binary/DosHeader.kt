@@ -76,5 +76,6 @@ data class DosHeader(
 
     companion object {
         const val MAGIC_MZ: UShort = 0x5A4Du
+        const val SIZE = 64
     }
 }

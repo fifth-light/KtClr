@@ -9,7 +9,7 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
 internal fun CoffHeader(buffer: ByteBuffer): CoffHeader = buffer.slice().order(ByteOrder.LITTLE_ENDIAN).let { buf ->
-    require(buf.remaining() >= 20) { "Buffer too small for COFF header: ${buf.remaining()} < 20" }
+    require(buf.remaining() >= CoffHeader.SIZE) { "Buffer too small for COFF header: ${buf.remaining()} < ${CoffHeader.SIZE}" }
     CoffHeader(
         machine = MachineType(buf.ushort),
         numberOfSections = buf.ushort,

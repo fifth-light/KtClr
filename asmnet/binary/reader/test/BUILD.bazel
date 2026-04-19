@@ -1,4 +1,18 @@
 load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_test")
+load("@rules_java//java:defs.bzl", "java_library")
+load("//rule/dotnet:il.bzl", "ilasm_dll")
+
+ilasm_dll(
+    name = "hello_world_dll",
+    input = "hello_world.il",
+    visibility = ["//visibility:public"],
+)
+
+java_library(
+    name = "runfile_dummy_lib",
+    srcs = ["RunfileDummy.java"],
+    deps = ["@bazel_tools//tools/java/runfiles"],
+)
 
 kt_jvm_test(
     name = "header_reader",
@@ -6,6 +20,20 @@ kt_jvm_test(
     test_class = "top.fifthlight.asmnet.binary.reader.test.HeaderReaderTest",
     associates = ["//asmnet/binary/reader"],
     deps = [
+        "@maven//:junit_junit",
+        "@maven//:org_jetbrains_kotlin_kotlin_test",
+    ],
+)
+
+kt_jvm_test(
+    name = "pe_file_test",
+    srcs = ["PeFileTest.kt"],
+    test_class = "top.fifthlight.asmnet.binary.reader.test.PeFileTest",
+    data = [":hello_world_dll"],
+    jvm_flags = ["-Dhello_world_dll_path=$(rlocationpath :hello_world_dll)"],
+    associates = ["//asmnet/binary/reader"],
+    deps = [
+        ":runfile_dummy_lib",
         "@maven//:junit_junit",
         "@maven//:org_jetbrains_kotlin_kotlin_test",
     ],

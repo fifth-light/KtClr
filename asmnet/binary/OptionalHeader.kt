@@ -31,7 +31,6 @@ sealed interface OptionalHeader {
     val sizeOfHeapReserve: ULong
     val sizeOfHeapCommit: ULong
     val loaderFlags: UInt
-    val numberOfRvaAndSizes: UInt
     val dataDirectories: List<DataDirectory>
 
     data class PE32(
@@ -63,7 +62,6 @@ sealed interface OptionalHeader {
         override val sizeOfHeapReserve: ULong,
         override val sizeOfHeapCommit: ULong,
         override val loaderFlags: UInt,
-        override val numberOfRvaAndSizes: UInt,
         override val dataDirectories: List<DataDirectory>,
     ) : OptionalHeader
 
@@ -95,7 +93,6 @@ sealed interface OptionalHeader {
         override val sizeOfHeapReserve: ULong,
         override val sizeOfHeapCommit: ULong,
         override val loaderFlags: UInt,
-        override val numberOfRvaAndSizes: UInt,
         override val dataDirectories: List<DataDirectory>,
     ) : OptionalHeader
 

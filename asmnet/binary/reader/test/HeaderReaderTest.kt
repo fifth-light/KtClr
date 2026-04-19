@@ -163,7 +163,6 @@ class HeaderReaderTest {
         assertTrue(header.dllCharacteristics.isNxCompat)
         assertTrue(header.dllCharacteristics.isGuardCf)
         assertTrue(header.dllCharacteristics.isTerminalServerAware)
-        assertEquals(2u, header.numberOfRvaAndSizes)
         assertEquals(2, header.dataDirectories.size)
         assertEquals(0x00005000u, header.dataDirectories[1].rva)
         assertEquals(0x00000040u, header.dataDirectories[1].size)
@@ -220,7 +219,7 @@ class HeaderReaderTest {
         assertTrue(header.dllCharacteristics.isNxCompat)
         assertTrue(header.dllCharacteristics.isGuardCf)
         assertTrue(header.dllCharacteristics.isTerminalServerAware)
-        assertEquals(2u, header.numberOfRvaAndSizes)
+        assertEquals(2, header.dataDirectories.size)
         assertEquals(0x00005000u, header.dataDirectories[1].rva)
     }
 
