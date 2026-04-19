@@ -1,10 +1,11 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * Copyright (C) 2026 fifth_light
+ */
+
 package top.fifthlight.asmnet.binary.reader
 
-import top.fifthlight.asmnet.binary.CoffHeader
-import top.fifthlight.asmnet.binary.ImageCharacteristics
-import top.fifthlight.asmnet.binary.MachineType
-import top.fifthlight.asmnet.binary.uint
-import top.fifthlight.asmnet.binary.ushort
+import top.fifthlight.asmnet.binary.*
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 

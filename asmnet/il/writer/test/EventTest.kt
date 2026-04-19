@@ -1,15 +1,12 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * Copyright (C) 2026 fifth_light
+ */
+
 package top.fifthlight.asmnet.il.writer.test
 
 import org.junit.Test
-import top.fifthlight.asmnet.CallConv
-import top.fifthlight.asmnet.CustomAttributeReference
-import top.fifthlight.asmnet.EventAttributes
-import top.fifthlight.asmnet.MethodReference
-import top.fifthlight.asmnet.Parameter
-import top.fifthlight.asmnet.ResolutionScope
-import top.fifthlight.asmnet.Type
-import top.fifthlight.asmnet.TypeAttributes
-import top.fifthlight.asmnet.TypeReference
+import top.fifthlight.asmnet.*
 
 private val delegateType = TypeReference(
     resolutionScope = ResolutionScope.Assembly("System.Runtime"),

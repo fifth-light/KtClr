@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * Copyright (C) 2026 fifth_light
+ */
+
 package top.fifthlight.asmnet.binary
 
 internal infix fun Byte.or(other: Byte) = (this.toInt() or other.toInt()).toByte()

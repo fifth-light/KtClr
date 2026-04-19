@@ -1,18 +1,14 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * Copyright (C) 2026 fifth_light
+ */
+
 package top.fifthlight.asmnet.binary.reader.test
 
 import org.junit.Test
-import top.fifthlight.asmnet.binary.CoffHeader
-import top.fifthlight.asmnet.binary.DosHeader
-import top.fifthlight.asmnet.binary.MachineType
-import top.fifthlight.asmnet.binary.OptionalHeader
 import top.fifthlight.asmnet.Subsystem
-import top.fifthlight.asmnet.binary.PeSignature
-import top.fifthlight.asmnet.binary.SectionHeader
-import top.fifthlight.asmnet.binary.reader.DosHeader
-import top.fifthlight.asmnet.binary.reader.OptionalHeader
-import top.fifthlight.asmnet.binary.reader.PeHeader
-import top.fifthlight.asmnet.binary.reader.SectionHeader
-import top.fifthlight.asmnet.binary.reader.rvaToFileOffset
+import top.fifthlight.asmnet.binary.*
+import top.fifthlight.asmnet.binary.reader.*
 import java.nio.ByteBuffer
 import java.nio.file.Files
 import java.nio.file.Path
