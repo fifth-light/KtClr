@@ -283,7 +283,8 @@ fun WriteScope.pinvokeAttr(attrs: PInvokeAttributes) {
     if (attrs.supportsLastError) +" lasterr"
 
     when (attrs.callConv) {
-        PInvokeAttributes.CallConvPlatformApi -> +" platformapi"
+        // ECMA-335 II.15.5 calls this "platformapi", but the actual ILAsm grammar keyword is "winapi" (II.16.2.1)
+        PInvokeAttributes.CallConvPlatformApi -> +" winapi"
         PInvokeAttributes.CallConvCdecl -> +" cdecl"
         PInvokeAttributes.CallConvStdCall -> +" stdcall"
         PInvokeAttributes.CallConvThisCall -> +" thiscall"
