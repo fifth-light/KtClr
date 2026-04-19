@@ -74,7 +74,9 @@ class ILTextMethodWriter internal constructor(
 
     // ECMA-335 II.15.4.1.4
     override fun visitParam(index: Int, defaultValue: FieldInitValue) = writer.write {
-        +".param [$index] = "
+        +".param ["
+        num(index)
+        +"] = "
         fieldInitValue(defaultValue)
         line()
     }
