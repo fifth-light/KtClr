@@ -2,6 +2,7 @@ package top.fifthlight.asmnet.il.writer
 
 import top.fifthlight.asmnet.*
 
+// ECMA-335 II.7.3
 fun WriteScope.resolutionScope(resolutionScope: ResolutionScope) {
     when (resolutionScope) {
         is ResolutionScope.Assembly -> {
@@ -14,6 +15,15 @@ fun WriteScope.resolutionScope(resolutionScope: ResolutionScope) {
             +".module "
             identifier(resolutionScope.name)
         }
+    }
+}
+
+// ECMA-335 II.7.3
+fun WriteScope.typeRef(type: TypeReference) {
+    type.resolutionScope?.let { resolutionScope(it) }
+    type.names.forEachIndexed { index, name ->
+        identifier(name)
+        if (index < type.names.size - 1) +'/'
     }
 }
 
@@ -76,11 +86,7 @@ fun WriteScope.type(type: TypeSpec) {
 
         is TypeReference -> {
             +"class "
-            type.resolutionScope?.let { resolutionScope(it) }
-            type.names.forEachIndexed { index, name ->
-                identifier(name)
-                if (index < type.names.size - 1) +'/'
-            }
+            typeRef(type)
         }
     }
 }
@@ -88,14 +94,7 @@ fun WriteScope.type(type: TypeSpec) {
 // ECMA-335 II.7.3
 fun WriteScope.typeSpec(type: TypeSpec) {
     when (type) {
-        is TypeReference -> {
-            type.resolutionScope?.let { resolutionScope(it) }
-            type.names.forEachIndexed { index, name ->
-                identifier(name)
-                if (index < type.names.size - 1) +'/'
-            }
-        }
-
+        is TypeReference -> typeRef(type)
         else -> type(type)
     }
 }

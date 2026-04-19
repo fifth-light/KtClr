@@ -3,6 +3,7 @@ package top.fifthlight.asmnet
 import kotlin.String as KString
 
 // ECMA-335 II.7.1
+// ECMA-335 VI.C.3 typeSpec
 sealed interface TypeSpec
 
 // ECMA-335 II.7.2
@@ -17,6 +18,7 @@ sealed interface ResolutionScope {
 }
 
 // ECMA-335 II.7.2
+// ECMA-335 VI.C.3 className
 data class TypeReference(
     val resolutionScope: ResolutionScope? = null,
     val names: List<KString>,
@@ -46,6 +48,7 @@ data class TypeReference(
 }
 
 // ECMA-335 II.7.1
+// ECMA-335 VI.C.3 type
 sealed interface Type : TypeSpec {
     val hasType: Boolean
         get() = true
