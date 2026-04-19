@@ -4,7 +4,7 @@ package top.fifthlight.asmnet
 @JvmInline
 value class Subsystem(val value: Short) {
     companion object {
-        const val WINDOWS_GUI: Short = 0x0002
-        const val WINDOWS_CUI: Short = 0x0003
+        val WINDOWS_GUI = Subsystem(0x0002)
+        val WINDOWS_CUI = Subsystem(0x0003)
     }
 }

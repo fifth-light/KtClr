@@ -127,14 +127,14 @@ class ILTextModuleWriter internal constructor(
     override fun visitSubsystem(subsystem: Subsystem) = writer.write {
         +".subsystem "
         hex(subsystem.value)
-        subsystemName(subsystem.value)?.let { name ->
+        subsystemName(subsystem)?.let { name ->
             +" // "
             +name
         }
         line()
     }
 
-    private fun subsystemName(value: Short): String? = when (value) {
+    private fun subsystemName(subsystem: Subsystem): String? = when (subsystem) {
         Subsystem.WINDOWS_GUI -> "WINDOWS_GUI"
         Subsystem.WINDOWS_CUI -> "WINDOWS_CUI"
         else -> null

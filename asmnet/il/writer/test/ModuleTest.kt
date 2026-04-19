@@ -115,7 +115,7 @@ class ModuleTest {
                 .subsystem 0x0003 // WINDOWS_CUI
             """.trimIndent(),
             actual = generateText {
-                subsystem(Subsystem(Subsystem.WINDOWS_CUI))
+                subsystem(Subsystem.WINDOWS_CUI)
             }
         )
     }
