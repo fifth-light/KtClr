@@ -61,6 +61,12 @@ interface ModuleVisitor {
         parameters: List<Parameter> = emptyList(),
     ): MethodVisitor?
 
+    // ECMA-335 II.6.2.2
+    fun visitManifestResource(
+        name: String,
+        attributes: ManifestResourceAttributes = ManifestResourceAttributes(ManifestResourceAttributes.Public),
+    ): ManifestResourceVisitor?
+
     // ECMA-335 II.21
     fun visitCustomAttribute(reference: CustomAttributeReference, blob: ByteArray?)
 

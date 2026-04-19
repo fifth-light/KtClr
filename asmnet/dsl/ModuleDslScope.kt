@@ -80,6 +80,17 @@ class ModuleDslScope(val visitor: ModuleVisitor) {
 
     fun custom(reference: CustomAttributeReference, blob: ByteArray?) = visitor.visitCustomAttribute(reference, blob)
 
+    fun manifestResource(
+        name: String,
+        attributes: ManifestResourceAttributes = ManifestResourceAttributes(ManifestResourceAttributes.Public),
+        block: ManifestResourceDslScope.() -> Unit = {},
+    ) {
+        visitor.visitManifestResource(name, attributes)?.let { mv ->
+            ManifestResourceDslScope(mv).block()
+            mv.visitEnd()
+        }
+    }
+
     fun field(
         name: String,
         type: TypeSpec,

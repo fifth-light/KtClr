@@ -191,6 +191,27 @@ class ILTextModuleWriter internal constructor(
         parameters = parameters,
     )
 
+    // ECMA-335 II.6.2.2
+    @Suppress("RedundantNullableReturnType")
+    override fun visitManifestResource(
+        name: String,
+        attributes: ManifestResourceAttributes,
+    ): ManifestResourceVisitor? {
+        writer.write {
+            +".mresource "
+            when (attributes.visibility) {
+                ManifestResourceAttributes.Public -> +"public "
+                ManifestResourceAttributes.Private -> +"private "
+            }
+            identifier(name)
+            +" "
+            +"{"
+            indent()
+            line()
+        }
+        return ILTextManifestResourceWriter(writer, name)
+    }
+
     // ECMA-335 II.21
     override fun visitCustomAttribute(reference: CustomAttributeReference, blob: ByteArray?) = writer.write {
         customAttributeRef(reference, blob)

@@ -2,6 +2,7 @@ package top.fifthlight.asmnet.il.writer.test
 
 import org.junit.Test
 import top.fifthlight.asmnet.CustomAttributeReference
+import top.fifthlight.asmnet.ManifestResourceAttributes
 import top.fifthlight.asmnet.ResolutionScope
 import top.fifthlight.asmnet.RuntimeFlags
 import top.fifthlight.asmnet.Subsystem
@@ -160,22 +161,116 @@ class ModuleTest {
     }
 
     @Test
-    fun testModuleCustomAttribute() {
+    fun testManifestResourcePublic() {
         assertContentEquals(
             expected = """
-                .custom instance void [System.Runtime]System.Reflection.AssemblyTitleAttribute::.ctor(string) = ( 01 00 04 54 65 73 74 00 00 )
+                .mresource public MyResource.res {
+                } // end of mresource MyResource.res
             """.trimIndent(),
             actual = generateText {
-                custom(
-                    CustomAttributeReference(
-                        attributeType = TypeReference(
-                            resolutionScope = ResolutionScope.Assembly("System.Runtime"),
-                            name = "System.Reflection.AssemblyTitleAttribute",
-                        ),
-                        parameterTypes = listOf(Type.String),
-                    ),
-                    blob = byteArrayOf(0x01, 0x00, 0x04, 0x54, 0x65, 0x73, 0x74, 0x00, 0x00),
+                manifestResource("MyResource.res")
+            }
+        )
+    }
+
+    @Test
+    fun testManifestResourcePrivate() {
+        assertContentEquals(
+            expected = """
+                .mresource private MyResource.res {
+                } // end of mresource MyResource.res
+            """.trimIndent(),
+            actual = generateText {
+                manifestResource(
+                    "MyResource.res",
+                    attributes = ManifestResourceAttributes(ManifestResourceAttributes.Private),
                 )
+            }
+        )
+    }
+
+    @Test
+    fun testManifestResourceWithSpecialName() {
+        assertContentEquals(
+            expected = """
+                .mresource public 'my-resource.res' {
+                } // end of mresource my-resource.res
+            """.trimIndent(),
+            actual = generateText {
+                manifestResource("my-resource.res")
+            }
+        )
+    }
+
+    @Test
+    fun testManifestResourceWithFile() {
+        assertContentEquals(
+            expected = """
+                .mresource public MyResource.res {
+                  .file data.txt at 0x00000000
+                } // end of mresource MyResource.res
+            """.trimIndent(),
+            actual = generateText {
+                manifestResource("MyResource.res") {
+                    file("data.txt", 0)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testManifestResourceWithExternAssembly() {
+        assertContentEquals(
+            expected = """
+                .mresource public MyResource.res {
+                  .assembly extern SomeAssembly
+                } // end of mresource MyResource.res
+            """.trimIndent(),
+            actual = generateText {
+                manifestResource("MyResource.res") {
+                    externAssembly("SomeAssembly")
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testManifestResourceWithCustomAttribute() {
+        assertContentEquals(
+            expected = """
+                .mresource public MyResource.res {
+                  .custom instance void [System.Runtime]System.Reflection.AssemblyTitleAttribute::.ctor(string) = ( 01 00 04 54 65 73 74 00 00 )
+                } // end of mresource MyResource.res
+            """.trimIndent(),
+            actual = generateText {
+                manifestResource("MyResource.res") {
+                    custom(
+                        CustomAttributeReference(
+                            attributeType = TypeReference(
+                                resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                                name = "System.Reflection.AssemblyTitleAttribute",
+                            ),
+                            parameterTypes = listOf(Type.String),
+                        ),
+                        blob = byteArrayOf(0x01, 0x00, 0x04, 0x54, 0x65, 0x73, 0x74, 0x00, 0x00),
+                    )
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testManifestResourceWithFileOffset() {
+        assertContentEquals(
+            expected = """
+                .mresource public MyResource.res {
+                  .file data.bin at 0x00001000
+                } // end of mresource MyResource.res
+            """.trimIndent(),
+            actual = generateText {
+                manifestResource("MyResource.res") {
+                    file("data.bin", 0x1000)
+                }
             }
         )
     }
