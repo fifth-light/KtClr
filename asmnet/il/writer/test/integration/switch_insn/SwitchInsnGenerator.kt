@@ -37,7 +37,7 @@ private fun generateSwitchInsnTest(): String = StringWriter().use {
             version = Version(0, 0, 0, 0),
         ))
         module("switch_insn.dll")
-        class_("SwitchTest/Program",
+        class_("SwitchTest",
             attrs = TypeAttributes(
                 TypeAttributes.Public,
                 TypeAttributes.AutoLayout,

@@ -47,7 +47,7 @@ private fun generateTypeInsnTest(): String = StringWriter().use {
             version = Version(0, 0, 0, 0),
         ))
         module("type_insn.dll")
-        class_("TypeTest/Program",
+        class_("TypeTest",
             attrs = TypeAttributes(
                 TypeAttributes.Public,
                 TypeAttributes.AutoLayout,

@@ -32,7 +32,7 @@ private fun generateJumpInsnTest(): String = StringWriter().use {
             version = Version(0, 0, 0, 0),
         ))
         module("jump_insn.dll")
-        class_("JumpTest/Program",
+        class_("JumpTest",
             attrs = TypeAttributes(
                 TypeAttributes.Public,
                 TypeAttributes.AutoLayout,
