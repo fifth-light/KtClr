@@ -5,6 +5,7 @@ import top.fifthlight.asmnet.binary.DosHeader
 import top.fifthlight.asmnet.binary.PeSignature
 import top.fifthlight.asmnet.ModuleVisitor
 import top.fifthlight.asmnet.binary.OptionalHeader
+import top.fifthlight.asmnet.binary.SectionHeader
 import java.nio.ByteBuffer
 
 class ILBinaryReader(private val bytes: ByteBuffer) {
@@ -29,6 +30,26 @@ class ILBinaryReader(private val bytes: ByteBuffer) {
             "Optional header at offset 0x${offset.toString(16)} out of bounds for buffer capacity ${bytes.remaining()}"
         }
         val optionalHeader = OptionalHeader(bytes.slice(offset, bytes.limit() - offset))
+
+        require(optionalHeader.dataDirectories.size >= 15) {
+            "Specified file is not a .NET module: there are only ${optionalHeader.dataDirectories.size} data directories"
+        }
+
+        offset += coffHeader.sizeOfOptionalHeader.toInt()
+
+        val sections = mutableListOf<SectionHeader>()
+        repeat(coffHeader.numberOfSections.toInt()) {
+            require(bytes.remaining() - offset >= SectionHeader.SIZE) {
+                "Section header at offset 0x${offset.toString(16)} out of bounds for buffer capacity ${bytes.remaining()}"
+            }
+            sections.add(SectionHeader(bytes.slice(offset, SectionHeader.SIZE)))
+            offset += SectionHeader.SIZE
+        }
+
+        visitor.visitImageBase(optionalHeader.imageBase)
+        visitor.visitFileAlignment(optionalHeader.fileAlignment)
+        visitor.visitStackReserve(optionalHeader.sizeOfStackReserve)
+        visitor.visitSubsystem(optionalHeader.subsystem)
 
         TODO("Not yet implemented")
     }

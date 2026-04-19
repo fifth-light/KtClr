@@ -7,13 +7,17 @@ import top.fifthlight.asmnet.binary.MachineType
 import top.fifthlight.asmnet.binary.OptionalHeader
 import top.fifthlight.asmnet.Subsystem
 import top.fifthlight.asmnet.binary.PeSignature
+import top.fifthlight.asmnet.binary.SectionHeader
 import top.fifthlight.asmnet.binary.reader.DosHeader
 import top.fifthlight.asmnet.binary.reader.OptionalHeader
 import top.fifthlight.asmnet.binary.reader.PeHeader
+import top.fifthlight.asmnet.binary.reader.SectionHeader
+import top.fifthlight.asmnet.binary.reader.rvaToFileOffset
 import java.nio.ByteBuffer
 import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class PeFileTest {
@@ -59,5 +63,19 @@ class PeFileTest {
         val cliHeader = optionalHeader.dataDirectories[14]
         assertTrue(cliHeader.rva != 0u, "CLI Runtime Header RVA should be non-zero")
         assertTrue(cliHeader.size != 0u, "CLI Runtime Header size should be non-zero")
+
+        offset += coffHeader.sizeOfOptionalHeader.toInt()
+
+        val sections = mutableListOf<SectionHeader>()
+        repeat(coffHeader.numberOfSections.toInt()) {
+            sections.add(SectionHeader(buf.slice(offset, 40)))
+            offset += 40
+        }
+        assertTrue(sections.isNotEmpty(), "Expected at least one section")
+        val textSection = assertNotNull(sections.find { it.name == ".text" }, "Expected .text section")
+        assertTrue(textSection.characteristics.containsCode, ".text section should contain code")
+
+        val cliFileOffset = rvaToFileOffset(sections, cliHeader.rva)
+        assertTrue(cliFileOffset in bytes.indices, "CLI Runtime Header file offset should be within file")
     }
 }

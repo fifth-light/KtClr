@@ -5,15 +5,14 @@ import top.fifthlight.asmnet.Subsystem
 import top.fifthlight.asmnet.binary.DosHeader
 import top.fifthlight.asmnet.binary.MachineType
 import top.fifthlight.asmnet.binary.OptionalHeader
+import top.fifthlight.asmnet.binary.SectionFlags
 import top.fifthlight.asmnet.binary.reader.CoffHeader
 import top.fifthlight.asmnet.binary.reader.DosHeader
+import top.fifthlight.asmnet.binary.reader.OptionalHeader
+import top.fifthlight.asmnet.binary.reader.SectionHeader
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
-import kotlin.test.assertIs
-import kotlin.test.assertTrue
-import top.fifthlight.asmnet.binary.reader.OptionalHeader as readOptionalHeader
+import kotlin.test.*
 
 class HeaderReaderTest {
     @Test
@@ -152,7 +151,7 @@ class HeaderReaderTest {
         buf.putInt(0x00000040)    // Size
         buf.flip()
 
-        val header = readOptionalHeader(buf)
+        val header = OptionalHeader(buf)
         assertIs<OptionalHeader.PE32>(header)
         assertEquals(0x0Au.toUByte(), header.majorLinkerVersion)
         assertEquals(0x00400000uL, header.imageBase)
@@ -211,7 +210,7 @@ class HeaderReaderTest {
         buf.putInt(0x00000040)    // Size
         buf.flip()
 
-        val header = readOptionalHeader(buf)
+        val header = OptionalHeader(buf)
         assertIs<OptionalHeader.PE32Plus>(header)
         assertEquals(0x0000000180000000uL, header.imageBase)
         assertEquals(0x000001000000uL, header.sizeOfStackReserve)
@@ -230,7 +229,71 @@ class HeaderReaderTest {
         buf.flip()
 
         assertFailsWith<IllegalArgumentException> {
-            readOptionalHeader(buf)
+            OptionalHeader(buf)
+        }
+    }
+
+    @Test
+    fun testReadSectionHeader() {
+        val buf = ByteBuffer.allocate(40).order(ByteOrder.LITTLE_ENDIAN)
+        val nameBytes = byteArrayOf(0x2E, 0x74, 0x65, 0x78, 0x74, 0, 0, 0) // ".text\0\0\0"
+        buf.put(nameBytes)
+        buf.putInt(0x00000100)    // VirtualSize
+        buf.putInt(0x00002000)    // VirtualAddress
+        buf.putInt(0x00000200)    // SizeOfRawData
+        buf.putInt(0x00000400)    // PointerToRawData
+        buf.putInt(0)             // PointerToRelocations
+        buf.putInt(0)             // PointerToLinenumbers
+        buf.putShort(0)           // NumberOfRelocations
+        buf.putShort(0)           // NumberOfLinenumbers
+        buf.putInt(0x60000020)  // Characteristics: CNT_CODE | MEM_EXECUTE | MEM_READ
+        buf.flip()
+
+        val header = SectionHeader(buf)
+        assertEquals(".text", header.name)
+        assertEquals(0x00000100u, header.virtualSize)
+        assertEquals(0x00002000u, header.virtualAddress)
+        assertEquals(0x00000200u, header.sizeOfRawData)
+        assertEquals(0x00000400u, header.pointerToRawData)
+        assertEquals(0u, header.pointerToRelocations)
+        assertEquals(0u, header.pointerToLinenumbers)
+        assertEquals(0u.toUShort(), header.numberOfRelocations)
+        assertEquals(0u.toUShort(), header.numberOfLinenumbers)
+        assertEquals(SectionFlags(0x60000020u), header.characteristics)
+        assertTrue(header.characteristics.containsCode)
+        assertTrue(header.characteristics.isExecute)
+        assertTrue(header.characteristics.isRead)
+        assertFalse(header.characteristics.isWrite)
+        assertFalse(header.characteristics.isDiscardable)
+    }
+
+    @Test
+    fun testReadSectionHeaderFull8CharName() {
+        val buf = ByteBuffer.allocate(40).order(ByteOrder.LITTLE_ENDIAN)
+        buf.put(".textx00".toByteArray(Charsets.UTF_8))  // Name (exactly 8 chars, no null terminator)
+        buf.putInt(0x00000100)
+        buf.putInt(0x00002000)
+        buf.putInt(0x00000200)
+        buf.putInt(0x00000400)
+        buf.putInt(0)
+        buf.putInt(0)
+        buf.putShort(0)
+        buf.putShort(0)
+        buf.putInt(0x40000040)
+        buf.flip()
+
+        val header = SectionHeader(buf)
+        assertEquals(".textx00", header.name)
+        assertTrue(header.characteristics.containsInitializedData)
+        assertTrue(header.characteristics.isRead)
+    }
+
+    @Test
+    fun testReadSectionHeaderBufferTooSmall() {
+        val buf = ByteBuffer.allocate(20).order(ByteOrder.LITTLE_ENDIAN)
+
+        assertFailsWith<IllegalArgumentException> {
+            SectionHeader(buf)
         }
     }
 }

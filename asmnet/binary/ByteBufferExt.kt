@@ -1,19 +1,53 @@
 package top.fifthlight.asmnet.binary
 
 import java.nio.ByteBuffer
+import java.nio.charset.Charset
+import java.nio.charset.CodingErrorAction
 
-fun ByteBuffer.getUShort(): UShort = short.toUShort()
+internal fun ByteBuffer.readString(
+    maxLength: Int,
+    charset: Charset = Charsets.US_ASCII,
+    requireNullTerminator: Boolean = true,
+): String = (0 until maxLength)
+    .also { require(remaining() >= maxLength) { "Buffer remaining ${remaining()} too small for string of length $maxLength" } }
+    .firstOrNull { get(position() + it) == 0.toByte() }
+    .let { nullPosition ->
+        if (nullPosition != null) {
+            slice(position(), nullPosition).also {
+                position(position() + nullPosition + 1)
+            }
+        } else if (!requireNullTerminator) {
+            slice(position(), maxLength).also {
+                position(position() + maxLength)
+            }
+        } else {
+            error("String exceeds max length $maxLength without null terminator")
+        }
+    }
+    .let { buffer ->
+        charset
+            .newDecoder()
+            .onMalformedInput(CodingErrorAction.REPORT)
+            .onUnmappableCharacter(CodingErrorAction.REPORT)
+            .decode(buffer).toString()
+    }
 
-fun ByteBuffer.getUInt(): UInt = int.toUInt()
+internal fun ByteBuffer.getUShort(): UShort = short.toUShort()
 
-fun ByteBuffer.getUByte(): UByte = get().toUByte()
+internal fun ByteBuffer.getUInt(): UInt = int.toUInt()
 
-fun ByteBuffer.getULong(): ULong = long.toULong()
+internal fun ByteBuffer.getUByte(): UByte = get().toUByte()
 
-val ByteBuffer.ushort: UShort get() = getUShort()
+internal fun ByteBuffer.getULong(): ULong = long.toULong()
 
-val ByteBuffer.uint: UInt get() = getUInt()
+internal val ByteBuffer.ushort: UShort
+    get() = getUShort()
 
-val ByteBuffer.ubyte: UByte get() = getUByte()
+internal val ByteBuffer.uint: UInt
+    get() = getUInt()
 
-val ByteBuffer.ulong: ULong get() = getULong()
+internal val ByteBuffer.ubyte: UByte
+    get() = getUByte()
+
+internal val ByteBuffer.ulong: ULong
+    get() = getULong()

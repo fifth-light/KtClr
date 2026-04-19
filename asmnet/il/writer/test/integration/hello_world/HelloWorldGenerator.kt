@@ -19,20 +19,37 @@ private val runtimeToken = byteArrayOf(
 
 private fun generateHelloWorld(): String = StringWriter().use {
     ILTextModuleWriter(it).write {
-        externAssembly("System.Runtime", declaration = ExternAssemblyDeclaration(
-            publicKeyToken = runtimeToken,
-            version = Version(10, 0, 0, 0),
-        ))
-        externAssembly("System.Console", declaration = ExternAssemblyDeclaration(
-            publicKeyToken = runtimeToken,
-            version = Version(10, 0, 0, 0),
-        ))
-        assembly("hello_world", declaration = AssemblyDeclaration(
-            hash = HashAlgorithm.SHA1,
-            version = Version(0, 0, 0, 0),
-        ))
+        externAssembly(
+            name = "System.Runtime",
+            declaration = ExternAssemblyDeclaration(
+                publicKeyToken = runtimeToken,
+                version = Version(10, 0, 0, 0),
+            )
+        )
+        externAssembly(
+            name = "System.Console",
+            declaration = ExternAssemblyDeclaration(
+                publicKeyToken = runtimeToken,
+                version = Version(10, 0, 0, 0),
+            )
+        )
+        assembly(
+            name = "hello_world",
+            declaration = AssemblyDeclaration(
+                hash = HashAlgorithm.SHA1,
+                version = Version(0, 0, 0, 0),
+            )
+        )
+
         module("hello_world.dll")
-        class_("Hello",
+        imageBase(0x00400000u)
+        fileAlignment(0x00000200u)
+        stackReserve(0x00100000u)
+        subsystem(Subsystem.WINDOWS_CUI)
+        corFlags(RuntimeFlags(RuntimeFlags.ILONLY))
+
+        class_(
+            name = "Hello",
             attrs = TypeAttributes(
                 TypeAttributes.Public,
                 TypeAttributes.BeforeFieldInit,
@@ -42,7 +59,8 @@ private fun generateHelloWorld(): String = StringWriter().use {
                 name = "System.Object",
             ),
         ) {
-            method("Main",
+            method(
+                name = "Main",
                 attributes = listOf(
                     MethodAttribute.Public,
                     MethodAttribute.Static,
@@ -54,15 +72,18 @@ private fun generateHelloWorld(): String = StringWriter().use {
                 maxStack(8)
                 code()
                 ldc("Hello, world!")
-                insn(OpCode.Code.call, MethodReference(
-                    declaringType = TypeReference(
-                        resolutionScope = ResolutionScope.Assembly("System.Console"),
-                        name = "System.Console",
+                insn(
+                    code = OpCode.Code.call,
+                    ref = MethodReference(
+                        declaringType = TypeReference(
+                            resolutionScope = ResolutionScope.Assembly("System.Console"),
+                            name = "System.Console",
+                        ),
+                        name = "WriteLine",
+                        returnType = Type.Void,
+                        parameterTypes = listOf(Type.String),
                     ),
-                    name = "WriteLine",
-                    returnType = Type.Void,
-                    parameterTypes = listOf(Type.String),
-                ))
+                )
                 insn(OpCode.Code.ret)
             }
         }

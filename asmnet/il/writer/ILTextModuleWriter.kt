@@ -106,19 +106,19 @@ class ILTextModuleWriter internal constructor(
         line()
     }
 
-    override fun visitImageBase(base: Int) = writer.write {
+    override fun visitImageBase(base: ULong) = writer.write {
         +".imagebase "
         hex(base)
         line()
     }
 
-    override fun visitFileAlignment(alignment: Int) = writer.write {
+    override fun visitFileAlignment(alignment: UInt) = writer.write {
         +".file alignment "
         hex(alignment)
         line()
     }
 
-    override fun visitStackReserve(stackReserve: Int) = writer.write {
+    override fun visitStackReserve(stackReserve: ULong) = writer.write {
         +".stackreserve "
         hex(stackReserve)
         line()

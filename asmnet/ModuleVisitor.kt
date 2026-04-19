@@ -32,9 +32,9 @@ interface ModuleVisitor {
     // ECMA-335 II.6.5
     fun visitExternModule(fileName: String)
 
-    fun visitImageBase(base: Int)
-    fun visitFileAlignment(alignment: Int)
-    fun visitStackReserve(stackReserve: Int)
+    fun visitImageBase(base: ULong)
+    fun visitFileAlignment(alignment: UInt)
+    fun visitStackReserve(stackReserve: ULong)
 
     // ECMA-335 II.6.2
     fun visitSubsystem(subsystem: Subsystem)

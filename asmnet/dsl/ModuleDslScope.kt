@@ -26,11 +26,11 @@ class ModuleDslScope(val visitor: ModuleVisitor) {
         entryPoint: Boolean = false,
     ) = visitor.visitFile(noMetadata, fileName, hash, entryPoint)
 
-    fun imageBase(base: Int) = visitor.visitImageBase(base)
+    fun imageBase(base: ULong) = visitor.visitImageBase(base)
 
-    fun fileAlignment(alignment: Int) = visitor.visitFileAlignment(alignment)
+    fun fileAlignment(alignment: UInt) = visitor.visitFileAlignment(alignment)
 
-    fun stackReserve(stackReserve: Int) = visitor.visitStackReserve(stackReserve)
+    fun stackReserve(stackReserve: ULong) = visitor.visitStackReserve(stackReserve)
 
     fun subsystem(subsystem: Subsystem) = visitor.visitSubsystem(subsystem)
 

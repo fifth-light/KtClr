@@ -76,10 +76,10 @@ class ModuleTest {
     fun testImageBase() {
         assertContentEquals(
             expected = """
-                .imagebase 0x10000000
+                .imagebase 0x0000000010000000
             """.trimIndent(),
             actual = generateText {
-                imageBase(0x10000000)
+                imageBase(0x10000000u)
             }
         )
     }
@@ -91,7 +91,7 @@ class ModuleTest {
                 .file alignment 0x00000200
             """.trimIndent(),
             actual = generateText {
-                fileAlignment(0x00000200)
+                fileAlignment(0x00000200u)
             }
         )
     }
@@ -100,10 +100,10 @@ class ModuleTest {
     fun testStackReserve() {
         assertContentEquals(
             expected = """
-                .stackreserve 0x00100000
+                .stackreserve 0x0000000000100000
             """.trimIndent(),
             actual = generateText {
-                stackReserve(0x00100000)
+                stackReserve(0x00100000u)
             }
         )
     }
