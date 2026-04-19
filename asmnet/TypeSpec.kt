@@ -20,7 +20,7 @@ sealed interface ResolutionScope {
 data class TypeReference(
     val resolutionScope: ResolutionScope? = null,
     val names: List<KString>,
-) : TypeSpec {
+) : TypeSpec, Type {
     constructor(
         resolutionScope: ResolutionScope? = null,
         name: KString
@@ -30,6 +30,7 @@ data class TypeReference(
     )
 
     constructor(name: KString): this(names = listOf(name))
+    constructor(vararg names: KString): this(names = names.toList())
 
     init {
         require(names.isNotEmpty()) { "Type name cannot be empty" }

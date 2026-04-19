@@ -68,10 +68,11 @@ class ModuleDslScope(val visitor: ModuleVisitor) {
         ),
         entryPoint: Boolean = false,
         parameters: List<Parameter> = emptyList(),
+        returnMarshal: NativeType? = null,
         block: MethodDslScope.() -> Unit,
     ) {
         visitor.visitMethod(
-            name, returnType, callConv, attributes, implAttributes, entryPoint, parameters,
+            name, returnType, callConv, attributes, implAttributes, entryPoint, parameters, returnMarshal,
         )?.let { mv ->
             MethodDslScope(mv).block()
             mv.visitEnd()
@@ -98,9 +99,10 @@ class ModuleDslScope(val visitor: ModuleVisitor) {
         offset: Int? = null,
         initValue: FieldInitValue? = null,
         dataLabel: DataLabel? = null,
+        marshal: NativeType? = null,
         block: FieldDslScope.() -> Unit = {},
     ) {
-        visitor.visitField(name, type, attributes, offset, initValue, dataLabel)?.let { fv ->
+        visitor.visitField(name, type, attributes, offset, initValue, dataLabel, marshal)?.let { fv ->
             FieldDslScope(fv).block()
             fv.visitEnd()
         }

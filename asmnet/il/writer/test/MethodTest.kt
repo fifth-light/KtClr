@@ -13,7 +13,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("Main",
+                method(
+                    name = "Main",
                     attributes = listOf(
                         MethodAttribute.Public,
                         MethodAttribute.Static,
@@ -34,7 +35,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("Add",
+                method(
+                    name = "Add",
                     returnType = Type.Int32,
                     attributes = listOf(
                         MethodAttribute.Public,
@@ -60,7 +62,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("GetName",
+                method(
+                    name = "GetName",
                     returnType = Type.String,
                     callConv = CallConv(instance = true),
                     attributes = listOf(
@@ -82,7 +85,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method(".ctor",
+                method(
+                    name = ".ctor",
                     callConv = CallConv(instance = true),
                     attributes = listOf(
                         MethodAttribute.Public,
@@ -105,7 +109,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("DoWork",
+                method(
+                    name = "DoWork",
                     callConv = CallConv(instance = true),
                     attributes = listOf(
                         MethodAttribute.Public,
@@ -128,7 +133,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("DoWork",
+                method(
+                    name = "DoWork",
                     callConv = CallConv(instance = true),
                     attributes = listOf(
                         MethodAttribute.Public,
@@ -152,7 +158,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("TryParse",
+                method(
+                    name = "TryParse",
                     returnType = Type.Bool,
                     attributes = listOf(
                         MethodAttribute.Public,
@@ -183,7 +190,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("Main",
+                method(
+                    name = "Main",
                     attributes = listOf(
                         MethodAttribute.Public,
                         MethodAttribute.Static,
@@ -209,7 +217,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("Main",
+                method(
+                    name = "Main",
                     attributes = listOf(
                         MethodAttribute.Public,
                         MethodAttribute.Static,
@@ -241,11 +250,14 @@ class MethodTest {
             """.trimIndent(),
             actual = generateText {
                 class_("MyClass") {
-                    method("Main", attributes = listOf(
-                        MethodAttribute.Public,
-                        MethodAttribute.Static,
-                        MethodAttribute.HideBySig,
-                    )) {
+                    method(
+                        name = "Main",
+                        attributes = listOf(
+                            MethodAttribute.Public,
+                            MethodAttribute.Static,
+                            MethodAttribute.HideBySig,
+                        ),
+                    ) {
                         maxStack(8)
                         code()
                         insn(OpCode.Code.nop)
@@ -265,7 +277,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("Main",
+                method(
+                    name = "Main",
                     attributes = listOf(
                         MethodAttribute.Public,
                         MethodAttribute.Static,
@@ -289,7 +302,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("Printf",
+                method(
+                    name = "Printf",
                     callConv = CallConv(callKind = CallKind.Managed(vararg = true)),
                     attributes = listOf(
                         MethodAttribute.Public,
@@ -314,7 +328,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("Foo",
+                method(
+                    name = "Foo",
                     attributes = listOf(
                         MethodAttribute.Public,
                         MethodAttribute.Static,
@@ -338,7 +353,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("DoWork",
+                method(
+                    name = "DoWork",
                     attributes = listOf(
                         MethodAttribute.Public,
                         MethodAttribute.Static,
@@ -362,7 +378,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("Main",
+                method(
+                    name = "Main",
                     attributes = listOf(
                         MethodAttribute.Public,
                         MethodAttribute.Static,
@@ -391,7 +408,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("Main",
+                method(
+                    name = "Main",
                     attributes = listOf(
                         MethodAttribute.Public,
                         MethodAttribute.Static,
@@ -417,7 +435,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("Main",
+                method(
+                    name = "Main",
                     attributes = listOf(
                         MethodAttribute.Public,
                         MethodAttribute.Static,
@@ -446,7 +465,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("Main",
+                method(
+                    name = "Main",
                     attributes = listOf(
                         MethodAttribute.Public,
                         MethodAttribute.Static,
@@ -476,7 +496,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("Main",
+                method(
+                    name = "Main",
                     attributes = listOf(
                         MethodAttribute.Public,
                         MethodAttribute.Static,
@@ -507,7 +528,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("Main",
+                method(
+                    name = "Main",
                     attributes = listOf(
                         MethodAttribute.Public,
                         MethodAttribute.Static,
@@ -539,7 +561,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("Main",
+                method(
+                    name = "Main",
                     attributes = listOf(
                         MethodAttribute.Public,
                         MethodAttribute.Static,
@@ -571,7 +594,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("Main",
+                method(
+                    name = "Main",
                     attributes = listOf(
                         MethodAttribute.Public,
                         MethodAttribute.Static,
@@ -600,7 +624,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("Main",
+                method(
+                    name = "Main",
                     attributes = listOf(
                         MethodAttribute.Public,
                         MethodAttribute.Static,
@@ -627,7 +652,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("Main",
+                method(
+                    name = "Main",
                     attributes = listOf(
                         MethodAttribute.Public,
                         MethodAttribute.Static,
@@ -661,7 +687,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("Main",
+                method(
+                    name = "Main",
                     attributes = listOf(
                         MethodAttribute.Public,
                         MethodAttribute.Static,
@@ -688,7 +715,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("M2",
+                method(
+                    name = "M2",
                     callConv = CallConv(instance = true),
                     attributes = listOf(
                         MethodAttribute.Public,
@@ -722,7 +750,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("Main",
+                method(
+                    name = "Main",
                     attributes = listOf(
                         MethodAttribute.Public,
                         MethodAttribute.Static,
@@ -756,7 +785,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("Main",
+                method(
+                    name = "Main",
                     attributes = listOf(
                         MethodAttribute.Public,
                         MethodAttribute.Static,
@@ -792,7 +822,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("Main",
+                method(
+                    name = "Main",
                     attributes = listOf(
                         MethodAttribute.Public,
                         MethodAttribute.Static,
@@ -822,7 +853,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("Main",
+                method(
+                    name = "Main",
                     attributes = listOf(
                         MethodAttribute.Public,
                         MethodAttribute.Static,
@@ -851,7 +883,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("Main",
+                method(
+                    name = "Main",
                     attributes = listOf(
                         MethodAttribute.Public,
                         MethodAttribute.Static,
@@ -880,7 +913,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("Main",
+                method(
+                    name = "Main",
                     attributes = listOf(
                         MethodAttribute.Public,
                         MethodAttribute.Static,
@@ -909,7 +943,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("Main",
+                method(
+                    name = "Main",
                     attributes = listOf(
                         MethodAttribute.Public,
                         MethodAttribute.Static,
@@ -942,7 +977,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("Main",
+                method(
+                    name = "Main",
                     attributes = listOf(
                         MethodAttribute.Public,
                         MethodAttribute.Static,
@@ -973,7 +1009,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("Main",
+                method(
+                    name = "Main",
                     attributes = listOf(
                         MethodAttribute.Public,
                         MethodAttribute.Static,
@@ -1005,7 +1042,8 @@ class MethodTest {
                 }
             """.trimIndent(),
             actual = generateText {
-                method("Main",
+                method(
+                    name = "Main",
                     attributes = listOf(
                         MethodAttribute.Public,
                         MethodAttribute.Static,
@@ -1039,7 +1077,7 @@ class MethodTest {
             """.trimIndent(),
             actual = generateText {
                 method(
-                    "Main",
+                    name = "Main",
                     parameters = listOf(
                         Parameter(Type.String, "s"),
                         Parameter(Type.Int32, "x"),
@@ -1069,7 +1107,7 @@ class MethodTest {
             """.trimIndent(),
             actual = generateText {
                 method(
-                    "Foo",
+                    name = "Foo",
                     returnType = Type.Int32,
                     attributes = listOf(
                         MethodAttribute.Public,
@@ -1098,7 +1136,7 @@ class MethodTest {
             """.trimIndent(),
             actual = generateText {
                 method(
-                    "Bar",
+                    name = "Bar",
                     parameters = listOf(
                         Parameter(Type.Bool, "b"),
                         Parameter(Type.Float32, "f"),
@@ -1132,7 +1170,7 @@ class MethodTest {
             """.trimIndent(),
             actual = generateText {
                 method(
-                    "Baz",
+                    name = "Baz",
                     parameters = listOf(
                         Parameter(Type.Int64, "n"),
                     ),
@@ -1145,6 +1183,367 @@ class MethodTest {
                 ) {
                     param(1, FieldInitValue.Int64(Long.MAX_VALUE))
                 }
+            }
+        )
+    }
+
+    @Test
+    fun testParamMarshalInt32() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void M(int32 marshal(int32) x) cil managed
+                {
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method(
+                    "M", parameters = listOf(
+                        Parameter(Type.Int32, "x", marshal = NativeType.Int32),
+                    ), attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    )
+                ) {}
+            }
+        )
+    }
+
+    @Test
+    fun testParamMarshalLPWStr() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void M(string marshal(lpwstr) name) cil managed
+                {
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method(
+                    "M", parameters = listOf(
+                        Parameter(Type.String, "name", marshal = NativeType.LPWStr),
+                    ), attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    )
+                ) {}
+            }
+        )
+    }
+
+    @Test
+    fun testParamMarshalLPStr() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void M(string marshal(lpstr) name) cil managed
+                {
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method(
+                    "M", parameters = listOf(
+                        Parameter(Type.String, "name", marshal = NativeType.LPStr),
+                    ), attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    )
+                ) {}
+            }
+        )
+    }
+
+    @Test
+    fun testParamMarshalArrayFixedSize() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void M1(int32 marshal(int32), bool[] marshal(bool[5]) ar) cil managed
+                {
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method(
+                    "M1", parameters = listOf(
+                        Parameter(Type.Int32, marshal = NativeType.Int32),
+                        Parameter(
+                            type = Type.Array(Type.Bool, emptyList()),
+                            name = "ar",
+                            marshal = NativeType.Array(
+                                elementType = NativeType.Boolean,
+                                size = 5,
+                            ),
+                        ),
+                    ), attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    )
+                ) {}
+            }
+        )
+    }
+
+    @Test
+    fun testParamMarshalArrayParamSize() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void M2(int32 marshal(int32), int32[] marshal(int32[+1]) ar) cil managed
+                {
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method(
+                    "M2", parameters = listOf(
+                        Parameter(Type.Int32, marshal = NativeType.Int32),
+                        Parameter(
+                            type = Type.Array(Type.Int32, emptyList()),
+                            name = "ar",
+                            marshal = NativeType.Array(
+                                elementType = NativeType.Int32,
+                                sizeParamIndex = 1,
+                            ),
+                        ),
+                    ), attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    )
+                ) {}
+            }
+        )
+    }
+
+    @Test
+    fun testParamMarshalArrayFixedPlusParam() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void M3(int32 marshal(int32), bool[] marshal(bool[7+1]) ar) cil managed
+                {
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method(
+                    "M3", parameters = listOf(
+                        Parameter(Type.Int32, marshal = NativeType.Int32),
+                        Parameter(
+                            type = Type.Array(Type.Bool, emptyList()),
+                            name = "ar",
+                            marshal = NativeType.Array(
+                                elementType = NativeType.Boolean,
+                                size = 7,
+                                sizeParamIndex = 1,
+                            )
+                        ),
+                    ), attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    )
+                ) {}
+            }
+        )
+    }
+
+    @Test
+    fun testParamMarshalBool() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void M(int32 marshal(bool) x) cil managed
+                {
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method(
+                    "M", parameters = listOf(
+                        Parameter(Type.Int32, "x", marshal = NativeType.Boolean),
+                    ), attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    )
+                ) {}
+            }
+        )
+    }
+
+    @Test
+    fun testParamMarshalUnsignedInt() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void M(native int marshal(unsigned int) x) cil managed
+                {
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method(
+                    "M", parameters = listOf(
+                        Parameter(Type.NativeInt, "x", marshal = NativeType.SysUInt),
+                    ), attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    )
+                ) {}
+            }
+        )
+    }
+
+    @Test
+    fun testParamMarshalWithParamAttr() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void M([in] int32& marshal(int32) x) cil managed
+                {
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method(
+                    "M", parameters = listOf(
+                        Parameter(
+                            Type.ManagedTypePointer(Type.Int32),
+                            "x",
+                            flags = ParamAttributes(ParamAttributes.In),
+                            marshal = NativeType.Int32,
+                        ),
+                    ), attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    )
+                ) {}
+            }
+        )
+    }
+
+    @Test
+    fun testParamMarshalMultipleParams() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void M(int32 marshal(int32) a, string marshal(lpstr) b, float64 marshal(float64) c) cil managed
+                {
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method(
+                    "M", parameters = listOf(
+                        Parameter(Type.Int32, "a", marshal = NativeType.Int32),
+                        Parameter(Type.String, "b", marshal = NativeType.LPStr),
+                        Parameter(Type.Float64, "c", marshal = NativeType.Float64),
+                    ), attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    )
+                ) {}
+            }
+        )
+    }
+
+    @Test
+    fun testReturnMarshalLPStr() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig string marshal(lpstr) M() cil managed
+                {
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method(
+                    "M", returnType = Type.String, returnMarshal = NativeType.LPStr, attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    )
+                ) {}
+            }
+        )
+    }
+
+    @Test
+    fun testReturnMarshalLPWStr() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig string marshal(lpwstr) M() cil managed
+                {
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method(
+                    "M", returnType = Type.String, returnMarshal = NativeType.LPWStr, attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    )
+                ) {}
+            }
+        )
+    }
+
+    @Test
+    fun testReturnMarshalInt() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig native int marshal(int) M() cil managed
+                {
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method(
+                    "M", returnType = Type.NativeInt, returnMarshal = NativeType.SysInt, attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    )
+                ) {}
+            }
+        )
+    }
+
+    @Test
+    fun testReturnMarshalWithParams() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig string marshal(lpstr) M(int32 marshal(int32) x) cil managed
+                {
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method(
+                    "M",
+                    returnType = Type.String,
+                    returnMarshal = NativeType.LPStr,
+                    parameters = listOf(
+                        Parameter(Type.Int32, "x", marshal = NativeType.Int32),
+                    ),
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    ),
+                ) {}
+            }
+        )
+    }
+
+    @Test
+    fun testReturnMarshalWithCallConv() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig string marshal(lpstr) M() cil managed
+                {
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method(
+                    "M",
+                    returnType = Type.String,
+                    returnMarshal = NativeType.LPStr,
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    ),
+                ) {}
             }
         )
     }

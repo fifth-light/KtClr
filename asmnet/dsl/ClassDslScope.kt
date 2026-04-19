@@ -17,14 +17,13 @@ class ClassDslScope(val visitor: ClassVisitor) {
         ),
         entryPoint: Boolean = false,
         parameters: List<Parameter> = emptyList(),
+        returnMarshal: NativeType? = null,
         block: MethodDslScope.() -> Unit,
-    ) {
-        visitor.visitMethod(
-            name, returnType, callConv, attributes, implAttributes, entryPoint, parameters,
-        )?.let { mv ->
-            MethodDslScope(mv).block()
-            mv.visitEnd()
-        }
+    ) = visitor.visitMethod(
+        name, returnType, callConv, attributes, implAttributes, entryPoint, parameters, returnMarshal,
+    )?.let { mv ->
+        MethodDslScope(mv).block()
+        mv.visitEnd()
     }
 
     fun custom(reference: CustomAttributeReference, blob: ByteArray?) = visitor.visitCustomAttribute(reference, blob)
@@ -36,12 +35,11 @@ class ClassDslScope(val visitor: ClassVisitor) {
         offset: Int? = null,
         initValue: FieldInitValue? = null,
         dataLabel: DataLabel? = null,
+        marshal: NativeType? = null,
         block: FieldDslScope.() -> Unit = {},
-    ) {
-        visitor.visitField(name, type, attributes, offset, initValue, dataLabel)?.let { fv ->
-            FieldDslScope(fv).block()
-            fv.visitEnd()
-        }
+    ) = visitor.visitField(name, type, attributes, offset, initValue, dataLabel, marshal)?.let { fv ->
+        FieldDslScope(fv).block()
+        fv.visitEnd()
     }
 
     fun property(
@@ -51,13 +49,11 @@ class ClassDslScope(val visitor: ClassVisitor) {
         attributes: PropertyAttributes = PropertyAttributes(),
         parameters: List<Parameter> = emptyList(),
         block: PropertyDslScope.() -> Unit,
-    ) {
-        visitor.visitProperty(
-            name, type, callConv, attributes, parameters,
-        )?.let { pv ->
-            PropertyDslScope(pv).block()
-            pv.visitEnd()
-        }
+    ) = visitor.visitProperty(
+        name, type, callConv, attributes, parameters,
+    )?.let { pv ->
+        PropertyDslScope(pv).block()
+        pv.visitEnd()
     }
 
     fun override(baseType: TypeSpec, baseName: String, implementation: MethodReference) =
@@ -72,13 +68,28 @@ class ClassDslScope(val visitor: ClassVisitor) {
         type: TypeSpec,
         attributes: EventAttributes = EventAttributes(),
         block: EventDslScope.() -> Unit,
-    ) {
-        visitor.visitEvent(
-            name, type, attributes,
-        )?.let { ev ->
-            EventDslScope(ev).block()
-            ev.visitEnd()
-        }
+    ) = visitor.visitEvent(
+        name, type, attributes,
+    )?.let { ev ->
+        EventDslScope(ev).block()
+        ev.visitEnd()
+    }
+
+    fun class_(
+        name: String,
+        attrs: TypeAttributes = TypeAttributes(
+            TypeAttributes.Public,
+            TypeAttributes.AutoLayout,
+            TypeAttributes.Class,
+            TypeAttributes.AnsiClass,
+        ),
+        extends: TypeSpec? = null,
+        implements: Set<TypeSpec> = emptySet(),
+        block: ClassDslScope.() -> Unit,
+    ) = visitor.visitClass(name)?.let { cv ->
+        cv.visit(attrs, extends, implements)
+        ClassDslScope(cv).block()
+        cv.visitEnd()
     }
 
     fun data(

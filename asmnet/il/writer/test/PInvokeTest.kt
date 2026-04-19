@@ -117,7 +117,7 @@ class PInvokeTest {
     fun testPInvokeWithPlatformApi() {
         assertContentEquals(
             expected = """
-                .method public static pinvokeimpl("mylib.dll" platformapi) void MyFunc() cil managed
+                .method public static pinvokeimpl("mylib.dll" winapi) void MyFunc() cil managed
                 {
                 }
             """.trimIndent(),
@@ -481,6 +481,106 @@ class PInvokeTest {
                         insn(OpCode.Code.ret)
                     }
                 }
+            }
+        )
+    }
+
+    @Test
+    fun testPInvokeWithMarshalParam() {
+        assertContentEquals(
+            expected = """
+                .method public static pinvokeimpl("user32.dll" stdcall) int32 MessageBox(unsigned int32, string marshal(lpstr), string marshal(lpstr)) cil managed preservesig
+                {
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("MessageBox",
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.PInvokeImpl(
+                            moduleName = "user32.dll",
+                            attributes = PInvokeAttributes(PInvokeAttributes.CallConvStdCall),
+                        ),
+                    ),
+                    returnType = Type.Int32,
+                    parameters = listOf(
+                        Parameter(Type.UnsignedInt32),
+                        Parameter(Type.String, marshal = NativeType.LPStr),
+                        Parameter(Type.String, marshal = NativeType.LPStr),
+                    ),
+                    implAttributes = ImplementationAttributes(
+                        ImplementationAttributes.IL,
+                        ImplementationAttributes.Managed,
+                        ImplementationAttributes.PreserveSig,
+                    ),
+                ) {}
+            }
+        )
+    }
+
+    @Test
+    fun testPInvokeWithMarshalReturn() {
+        assertContentEquals(
+            expected = """
+                .method public static pinvokeimpl("kernel32.dll" stdcall) string marshal(lpstr) GetCurrentDirectory(unsigned int32, string) cil managed preservesig
+                {
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("GetCurrentDirectory",
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.PInvokeImpl(
+                            moduleName = "kernel32.dll",
+                            attributes = PInvokeAttributes(PInvokeAttributes.CallConvStdCall),
+                        ),
+                    ),
+                    returnType = Type.String,
+                    returnMarshal = NativeType.LPStr,
+                    parameters = listOf(
+                        Parameter(Type.UnsignedInt32),
+                        Parameter(Type.String),
+                    ),
+                    implAttributes = ImplementationAttributes(
+                        ImplementationAttributes.IL,
+                        ImplementationAttributes.Managed,
+                        ImplementationAttributes.PreserveSig,
+                    ),
+                ) {}
+            }
+        )
+    }
+
+    @Test
+    fun testPInvokeWithAnsiAndMarshalParam() {
+        assertContentEquals(
+            expected = """
+                .method public static pinvokeimpl("user32.dll" ansi stdcall) bool MessageBeep(unsigned int32) cil managed
+                {
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("MessageBeep",
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.PInvokeImpl(
+                            moduleName = "user32.dll",
+                            attributes = PInvokeAttributes(
+                                PInvokeAttributes.CharSetAnsi,
+                                PInvokeAttributes.CallConvStdCall,
+                            ),
+                        ),
+                    ),
+                    returnType = Type.Bool,
+                    parameters = listOf(Parameter(Type.UnsignedInt32)),
+                    implAttributes = ImplementationAttributes(
+                        ImplementationAttributes.IL,
+                        ImplementationAttributes.Managed,
+                    ),
+                ) {}
             }
         )
     }

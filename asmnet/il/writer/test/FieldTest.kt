@@ -560,4 +560,294 @@ class FieldTest {
             }
         )
     }
+
+    @Test
+    fun testFieldMarshalInt32() {
+        assertContentEquals(
+            expected = """
+                .class public auto ansi MyClass
+                {
+                  .field public marshal(int32) int32 x
+                } // end of class MyClass
+            """.trimIndent(),
+            actual = generateText {
+                class_("MyClass") {
+                    field("x", Type.Int32, attributes = FieldAttributes(FieldAttributes.Public), marshal = NativeType.Int32)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testFieldMarshalBool() {
+        assertContentEquals(
+            expected = """
+                .class public auto ansi MyClass
+                {
+                  .field public marshal(bool) int32 x
+                } // end of class MyClass
+            """.trimIndent(),
+            actual = generateText {
+                class_("MyClass") {
+                    field("x", Type.Int32, attributes = FieldAttributes(FieldAttributes.Public), marshal = NativeType.Boolean)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testFieldMarshalLPStr() {
+        assertContentEquals(
+            expected = """
+                .class public auto ansi MyClass
+                {
+                  .field public marshal(lpstr) string x
+                } // end of class MyClass
+            """.trimIndent(),
+            actual = generateText {
+                class_("MyClass") {
+                    field("x", Type.String, attributes = FieldAttributes(FieldAttributes.Public), marshal = NativeType.LPStr)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testFieldMarshalLPWStr() {
+        assertContentEquals(
+            expected = """
+                .class public auto ansi MyClass
+                {
+                  .field public marshal(lpwstr) string x
+                } // end of class MyClass
+            """.trimIndent(),
+            actual = generateText {
+                class_("MyClass") {
+                    field("x", Type.String, attributes = FieldAttributes(FieldAttributes.Public), marshal = NativeType.LPWStr)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testFieldMarshalUnsignedInt() {
+        assertContentEquals(
+            expected = """
+                .class public auto ansi MyClass
+                {
+                  .field public marshal(unsigned int) native int x
+                } // end of class MyClass
+            """.trimIndent(),
+            actual = generateText {
+                class_("MyClass") {
+                    field("x", Type.NativeInt, attributes = FieldAttributes(FieldAttributes.Public), marshal = NativeType.SysUInt)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testFieldMarshalPointer() {
+        assertContentEquals(
+            expected = """
+                .class public auto ansi MyClass
+                {
+                  .field public marshal(int32*) int32* x
+                } // end of class MyClass
+            """.trimIndent(),
+            actual = generateText {
+                class_("MyClass") {
+                    field("x", Type.UnmanagedTypePointer(Type.Int32), attributes = FieldAttributes(FieldAttributes.Public), marshal = NativeType.Pointer(NativeType.Int32))
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testFieldMarshalArrayFixedSize() {
+        assertContentEquals(
+            expected = """
+                .class public auto ansi MyClass
+                {
+                  .field public marshal(int32[5]) int32[] x
+                } // end of class MyClass
+            """.trimIndent(),
+            actual = generateText {
+                class_("MyClass") {
+                    field("x", Type.Array(Type.Int32, emptyList()), attributes = FieldAttributes(FieldAttributes.Public), marshal = NativeType.Array(
+                        elementType = NativeType.Int32,
+                        size = 5,
+                    ))
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testFieldMarshalArrayRuntimeSize() {
+        assertContentEquals(
+            expected = """
+                .class public auto ansi MyClass
+                {
+                  .field public marshal(int32[]) int32[] x
+                } // end of class MyClass
+            """.trimIndent(),
+            actual = generateText {
+                class_("MyClass") {
+                    field("x", Type.Array(Type.Int32, emptyList()), attributes = FieldAttributes(FieldAttributes.Public), marshal = NativeType.Array(
+                        elementType = NativeType.Int32,
+                    ))
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testFieldMarshalFloat() {
+        assertContentEquals(
+            expected = """
+                .class public auto ansi MyClass
+                {
+                  .field public marshal(float64) float64 x
+                } // end of class MyClass
+            """.trimIndent(),
+            actual = generateText {
+                class_("MyClass") {
+                    field("x", Type.Float64, attributes = FieldAttributes(FieldAttributes.Public), marshal = NativeType.Float64)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testFieldMarshalWithOtherAttributes() {
+        assertContentEquals(
+            expected = """
+                .class public auto ansi MyClass
+                {
+                  .field private static marshal(lpstr) string name
+                } // end of class MyClass
+            """.trimIndent(),
+            actual = generateText {
+                class_("MyClass") {
+                    field("name", Type.String, attributes = FieldAttributes(
+                        FieldAttributes.Private,
+                        FieldAttributes.Static,
+                    ), marshal = NativeType.LPStr)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testFieldMarshalWithOffset() {
+        assertContentEquals(
+            expected = """
+                .class public explicit ansi MyClass
+                {
+                  .field [0] public marshal(int32) int32 x
+                } // end of class MyClass
+            """.trimIndent(),
+            actual = generateText {
+                class_("MyClass", attrs = TypeAttributes(
+                    TypeAttributes.Public,
+                    TypeAttributes.ExplicitLayout,
+                )) {
+                    field("x", Type.Int32, attributes = FieldAttributes(FieldAttributes.Public), offset = 0, marshal = NativeType.Int32)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testFieldMarshalInt8() {
+        assertContentEquals(
+            expected = """
+                .class public auto ansi MyClass
+                {
+                  .field public marshal(int8) int8 x
+                } // end of class MyClass
+            """.trimIndent(),
+            actual = generateText {
+                class_("MyClass") {
+                    field("x", Type.Int8, attributes = FieldAttributes(FieldAttributes.Public), marshal = NativeType.Int8)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testFieldMarshalUnsignedInt8() {
+        assertContentEquals(
+            expected = """
+                .class public auto ansi MyClass
+                {
+                  .field public marshal(unsigned int8) unsigned int8 x
+                } // end of class MyClass
+            """.trimIndent(),
+            actual = generateText {
+                class_("MyClass") {
+                    field("x", Type.UnsignedInt8, attributes = FieldAttributes(FieldAttributes.Public), marshal = NativeType.UnsignedInt8)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testFieldMarshalInt16() {
+        assertContentEquals(
+            expected = """
+                .class public auto ansi MyClass
+                {
+                  .field public marshal(int16) int16 x
+                } // end of class MyClass
+            """.trimIndent(),
+            actual = generateText {
+                class_("MyClass") {
+                    field("x", Type.Int16, attributes = FieldAttributes(FieldAttributes.Public), marshal = NativeType.Int16)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testFieldMarshalInt64() {
+        assertContentEquals(
+            expected = """
+                .class public auto ansi MyClass
+                {
+                  .field public marshal(int64) int64 x
+                } // end of class MyClass
+            """.trimIndent(),
+            actual = generateText {
+                class_("MyClass") {
+                    field("x", Type.Int64, attributes = FieldAttributes(FieldAttributes.Public), marshal = NativeType.Int64)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testFieldMarshalMethod() {
+        assertContentEquals(
+            expected = """
+                .class public auto ansi MyClass
+                {
+                  .field public marshal(method) method int32**(int32, int32) x
+                } // end of class MyClass
+            """.trimIndent(),
+            actual = generateText {
+                class_("MyClass") {
+                    field("x", Type.MethodPointer(
+                        callConv = CallConv(),
+                        returnType = Type.UnmanagedTypePointer(Type.Int32),
+                        parameterTypes = listOf(
+                            Parameter(Type.Int32),
+                            Parameter(Type.Int32),
+                        ),
+                    ), attributes = FieldAttributes(FieldAttributes.Public), marshal = NativeType.Method)
+                }
+            }
+        )
+    }
 }

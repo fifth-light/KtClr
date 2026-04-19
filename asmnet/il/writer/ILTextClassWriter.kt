@@ -4,6 +4,7 @@ import top.fifthlight.asmnet.*
 
 class ILTextClassWriter internal constructor(
     private val writer: TextWriter,
+    private val nestedOwnerName: String? = null,
     private val className: String,
     private val dataLabelRegistry: DataLabelRegistry,
 ) : ClassVisitor {
@@ -46,9 +47,10 @@ class ILTextClassWriter internal constructor(
         implAttributes: ImplementationAttributes,
         entryPoint: Boolean,
         parameters: List<Parameter>,
+        returnMarshal: NativeType?,
     ): MethodVisitor? = ILTextMethodWriter(
         writer = writer,
-        className = className,
+        className = if (nestedOwnerName != null) "$nestedOwnerName/$className" else className,
         name = name,
         returnType = returnType,
         callConv = callConv,
@@ -56,6 +58,7 @@ class ILTextClassWriter internal constructor(
         implAttributes = implAttributes,
         entryPoint = entryPoint,
         parameters = parameters,
+        returnMarshal = returnMarshal,
         dataLabelRegistry = dataLabelRegistry,
     )
 
@@ -68,10 +71,11 @@ class ILTextClassWriter internal constructor(
         offset: Int?,
         initValue: FieldInitValue?,
         dataLabel: DataLabel?,
+        marshal: NativeType?,
     ): FieldVisitor? {
         val dataLabelName = dataLabel?.let { "D_${dataLabelRegistry.getOrCreateLabelIndex(it)}" }
         writer.write {
-            fieldDecl(name, type, attributes, offset, initValue, dataLabelName)
+            fieldDecl(name, type, attributes, offset, initValue, dataLabelName, marshal)
         }
         return ILTextFieldWriter(writer)
     }
@@ -167,4 +171,11 @@ class ILTextClassWriter internal constructor(
             line()
         }
     }
+
+    override fun visitClass(name: String): ClassVisitor = ILTextClassWriter(
+        writer = writer,
+        nestedOwnerName = className,
+        className = name,
+        dataLabelRegistry = dataLabelRegistry,
+    )
 }

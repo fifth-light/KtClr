@@ -12,6 +12,7 @@ class ILTextMethodWriter internal constructor(
     private val implAttributes: ImplementationAttributes,
     private val entryPoint: Boolean,
     private val parameters: List<Parameter>,
+    private val returnMarshal: NativeType? = null,
     private val dataLabelRegistry: DataLabelRegistry,
 ) : MethodVisitor {
     private val labels = mutableMapOf<Label, Int>()
@@ -27,6 +28,10 @@ class ILTextMethodWriter internal constructor(
             callConv(callConv)
             +' '
             type(returnType)
+            returnMarshal?.let {
+                +' '
+                marshalSpec(it)
+            }
             +' '
             identifier(name)
             params(parameters)

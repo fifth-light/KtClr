@@ -1,0 +1,18 @@
+load("//asmnet/il/writer/test/integration:integration.bzl", "integration_test")
+
+integration_test(
+    name = "marshal",
+    srcs = ["MarshalGenerator.kt"],
+    expected = [
+        "PASS",
+        "",
+    ],
+    main_class = "top.fifthlight.asmnet.il.writer.test.integration.marshal.MarshalGeneratorKt",
+    runtimeconfig = "marshal_test.runtimeconfig.json",
+    deps = [
+        "//asmnet",
+        "//asmnet/dsl",
+        "//asmnet/il/writer",
+    ],
+    target_compatible_with = ["@platforms//os:windows"],
+)

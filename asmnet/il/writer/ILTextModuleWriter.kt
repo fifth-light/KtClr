@@ -169,7 +169,12 @@ class ILTextModuleWriter internal constructor(
     }
 
     @Suppress("RedundantNullableReturnType")
-    override fun visitClass(name: String): ClassVisitor? = ILTextClassWriter(writer, name, dataLabelRegistry)
+    override fun visitClass(name: String): ClassVisitor? = ILTextClassWriter(
+        writer = writer,
+        nestedOwnerName = null,
+        className = name,
+        dataLabelRegistry = dataLabelRegistry,
+    )
 
     @Suppress("RedundantNullableReturnType")
     override fun visitMethod(
@@ -179,7 +184,8 @@ class ILTextModuleWriter internal constructor(
         attributes: List<MethodAttribute>,
         implAttributes: ImplementationAttributes,
         entryPoint: Boolean,
-        parameters: List<Parameter>
+        parameters: List<Parameter>,
+        returnMarshal: NativeType?,
     ): MethodVisitor? = ILTextMethodWriter(
         writer = writer,
         className = null,
@@ -190,6 +196,7 @@ class ILTextModuleWriter internal constructor(
         implAttributes = implAttributes,
         entryPoint = entryPoint,
         parameters = parameters,
+        returnMarshal = returnMarshal,
         dataLabelRegistry = dataLabelRegistry,
     )
 
@@ -228,10 +235,11 @@ class ILTextModuleWriter internal constructor(
         offset: Int?,
         initValue: FieldInitValue?,
         dataLabel: DataLabel?,
+        marshal: NativeType?,
     ): FieldVisitor? {
         val dataLabelName = dataLabel?.let { "D_${dataLabelRegistry.getOrCreateLabelIndex(it)}" }
         writer.write {
-            fieldDecl(name, type, attributes, offset, initValue, dataLabelName)
+            fieldDecl(name, type, attributes, offset, initValue, dataLabelName, marshal)
         }
         return ILTextFieldWriter(writer)
     }

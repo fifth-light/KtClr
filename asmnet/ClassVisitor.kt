@@ -31,6 +31,7 @@ interface ClassVisitor {
         ),
         entryPoint: Boolean = false,
         parameters: List<Parameter> = emptyList(),
+        returnMarshal: NativeType? = null,
     ): MethodVisitor?
 
     // ECMA-335 II.16
@@ -41,6 +42,8 @@ interface ClassVisitor {
         offset: Int? = null,
         initValue: FieldInitValue? = null,
         dataLabel: DataLabel? = null,
+        marshal: NativeType? = null,
+        // TODO: DataLabel
     ): FieldVisitor?
 
     // ECMA-335 II.17
@@ -76,4 +79,6 @@ interface ClassVisitor {
     )
 
     fun visitEnd()
+
+    fun visitClass(name: String): ClassVisitor?
 }

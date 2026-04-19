@@ -139,12 +139,17 @@ fun WriteScope.fieldDecl(
     offset: Int?,
     initValue: FieldInitValue?,
     dataLabelName: String? = null,
+    marshal: NativeType? = null,
 ) {
     +".field "
     offset?.let {
         +"[${it}] "
     }
     fieldAttr(attributes)
+    marshal?.let {
+        marshalSpec(it)
+        +' '
+    }
     type(type)
     +' '
     identifier(name)
@@ -344,6 +349,10 @@ fun WriteScope.paramAttr(paramAttr: ParamAttributes) {
 fun WriteScope.param(param: Parameter) {
     paramAttr(param.flags)
     type(param.type)
+    param.marshal?.let {
+        +' '
+        marshalSpec(it)
+    }
     param.name?.let { +' '; identifier(it) }
 }
 
@@ -661,7 +670,53 @@ fun WriteScope.fieldAttr(attrs: FieldAttributes) {
     if (attrs.pInvokeImpl) error("pinvokeimpl attribute can't be set on fields")
 
     if (attrs.rtSpecialName) +"rtspecialname "
-    if (attrs.hasFieldMarshal) TODO("marshal attribute is not yet supported")
+}
+
+// ECMA-335 II.23.4
+fun WriteScope.nativeType(type: NativeType) {
+    when (type) {
+        NativeType.Boolean -> +"bool"
+        NativeType.Int8 -> +"int8"
+        NativeType.UnsignedInt8 -> +"unsigned int8"
+        NativeType.Int16 -> +"int16"
+        NativeType.UnsignedInt16 -> +"unsigned int16"
+        NativeType.Int32 -> +"int32"
+        NativeType.UnsignedInt32 -> +"unsigned int32"
+        NativeType.Int64 -> +"int64"
+        NativeType.UnsignedInt64 -> +"unsigned int64"
+        NativeType.Float32 -> +"float32"
+        NativeType.Float64 -> +"float64"
+        NativeType.LPStr -> +"lpstr"
+        NativeType.LPWStr -> +"lpwstr"
+        NativeType.SysInt -> +"int"
+        NativeType.SysUInt -> +"unsigned int"
+        NativeType.Method -> +"method"
+
+        is NativeType.Pointer -> {
+            nativeType(type.type)
+            +"*"
+        }
+
+        is NativeType.Array -> {
+            nativeType(type.elementType)
+            +'['
+            if (type.size != null && type.sizeParamIndex != null) {
+                +"${type.size}+${type.sizeParamIndex}"
+            } else if (type.size != null) {
+                +"${type.size}"
+            } else if (type.sizeParamIndex != null) {
+                +"+${type.sizeParamIndex}"
+            }
+            +']'
+        }
+    }
+}
+
+// ECMA-335 II.23.4
+fun WriteScope.marshalSpec(type: NativeType) {
+    +"marshal("
+    nativeType(type)
+    +')'
 }
 
 // ECMA-335 II.16.2
