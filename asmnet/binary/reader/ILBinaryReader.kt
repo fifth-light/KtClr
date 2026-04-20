@@ -42,6 +42,7 @@ class ILBinaryReader(bytes: ByteBuffer) {
         offset += coffHeader.sizeOfOptionalHeader.toInt()
 
         val sections = mutableListOf<SectionHeader>()
+        require(coffHeader.numberOfSections <= 128u) { "Too many sections: ${coffHeader.numberOfSections}" }
         repeat(coffHeader.numberOfSections.toInt()) {
             require(bytes.remaining() - offset >= SectionHeader.SIZE) {
                 "Section header at offset 0x${offset.toString(16)} out of bounds for buffer capacity ${bytes.remaining()}"

@@ -11,6 +11,8 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
 private fun readDataDirectories(buf: ByteBuffer, count: UInt): List<DataDirectory> = buildList {
+    require(count < 128u) { "Too many data directories: $count" } // 128 is a safe and enough size
+    require(buf.remaining() >= count.toInt() * 8) { "Buffer size ${buf.remaining()} too small for $count data directories" }
     repeat(count.toInt()) {
         add(DataDirectory(rva = buf.uint, size = buf.uint))
     }
