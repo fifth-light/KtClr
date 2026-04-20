@@ -97,6 +97,27 @@ class ModuleDslScope(val visitor: ModuleVisitor) {
         }
     }
 
+    fun exportedType(
+        name: String,
+        flags: TypeAttributes = TypeAttributes(TypeAttributes.Public),
+        block: ExportedTypeDslScope.() -> Unit = {},
+    ) {
+        visitor.visitExportedType(name, flags)?.let { ev ->
+            ExportedTypeDslScope(ev).block()
+            ev.visitEnd()
+        }
+    }
+
+    fun typeForwarder(
+        name: String,
+        block: TypeForwarderDslScope.() -> Unit = {},
+    ) {
+        visitor.visitTypeForwarder(name)?.let { fv ->
+            TypeForwarderDslScope(fv).block()
+            fv.visitEnd()
+        }
+    }
+
     fun field(
         name: String,
         type: TypeSpec,

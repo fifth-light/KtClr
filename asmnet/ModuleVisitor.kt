@@ -73,6 +73,17 @@ interface ModuleVisitor {
         attributes: ManifestResourceAttributes = ManifestResourceAttributes(ManifestResourceAttributes.Public),
     ): ManifestResourceVisitor?
 
+    // ECMA-335 II.6.7
+    fun visitExportedType(
+        name: String,
+        flags: TypeAttributes = TypeAttributes(TypeAttributes.Public),
+    ): ExportedTypeVisitor?
+
+    // ECMA-335 II.6.8
+    fun visitTypeForwarder(
+        name: String,
+    ): TypeForwarderVisitor?
+
     // ECMA-335 II.21
     fun visitCustomAttribute(reference: CustomAttributeReference, blob: ByteArray?)
 

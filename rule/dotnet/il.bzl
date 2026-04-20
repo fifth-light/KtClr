@@ -117,7 +117,7 @@ def _ilasm_exe_impl(ctx):
             is_executable = True,
         )
 
-    runfiles = ctx.runfiles(files = outputs + dotnet_info.runtime_files)
+    runfiles = ctx.runfiles(files = outputs + dotnet_info.runtime_files + ctx.files.runtime_dlls)
     runfiles = runfiles.merge(ctx.attr._bash_runfiles[DefaultInfo].default_runfiles)
 
     return DefaultInfo(
@@ -134,6 +134,11 @@ ilasm_exe = rule(
             mandatory = False,
             allow_single_file = [".json"],
             doc = "Optional runtimeconfig.json to copy alongside output",
+        ),
+        "runtime_dlls": attr.label_list(
+            mandatory = False,
+            allow_files = True,
+            doc = "Runtime DLLs to include alongside the exe for assembly resolution",
         ),
         "_launcher_sh": attr.label(
             doc = "A template file for the launcher on Linux/MacOS",

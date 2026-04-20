@@ -1,0 +1,88 @@
+load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_binary")
+load("//rule/dotnet:il.bzl", "ilasm_dll", "ilasm_exe")
+load("@bazel_skylib//rules:run_binary.bzl", "run_binary")
+load("@bazel_lib//lib:diff_test.bzl", "diff_test")
+load("@bazel_skylib//rules:write_file.bzl", "write_file")
+
+DEPS = [
+    "//asmnet",
+    "//asmnet/dsl",
+    "//asmnet/il/writer",
+]
+
+kt_jvm_binary(
+    name = "lib_generator",
+    srcs = ["LibGenerator.kt"],
+    main_class = "top.fifthlight.asmnet.il.writer.test.integration.type_forwarder.LibGeneratorKt",
+    deps = DEPS,
+)
+
+run_binary(
+    name = "lib_il",
+    outs = ["Lib.il"],
+    args = ["$(location Lib.il)"],
+    tool = ":lib_generator",
+)
+
+ilasm_dll(name = "Lib", input = ":lib_il")
+
+kt_jvm_binary(
+    name = "forwarder_generator",
+    srcs = ["ForwarderGenerator.kt"],
+    main_class = "top.fifthlight.asmnet.il.writer.test.integration.type_forwarder.ForwarderGeneratorKt",
+    deps = DEPS,
+)
+
+run_binary(
+    name = "forwarder_il",
+    outs = ["Forwarder.il"],
+    args = ["$(location Forwarder.il)"],
+    tool = ":forwarder_generator",
+)
+
+ilasm_dll(name = "Forwarder", input = ":forwarder_il")
+
+kt_jvm_binary(
+    name = "main_generator",
+    srcs = ["MainGenerator.kt"],
+    main_class = "top.fifthlight.asmnet.il.writer.test.integration.type_forwarder.MainGeneratorKt",
+    deps = DEPS,
+)
+
+run_binary(
+    name = "main_il",
+    outs = ["Main.il"],
+    args = ["$(location Main.il)"],
+    tool = ":main_generator",
+)
+
+ilasm_exe(
+    name = "Main",
+    input = ":main_il",
+    runtimeconfig = "type_forwarder.runtimeconfig.json",
+    runtime_dlls = [":Lib", ":Forwarder"],
+)
+
+write_file(
+    name = "expected",
+    out = "expected.txt",
+    content = [
+        "Type forwarded!",
+        "Nested forwarded!",
+        "",
+    ],
+)
+
+genrule(
+    name = "actual",
+    srcs = [],
+    outs = ["actual.txt"],
+    tools = [":Main"],
+    cmd = "$(location :Main) > $@",
+)
+
+diff_test(
+    name = "type_forwarder",
+    file1 = ":actual",
+    file2 = ":expected",
+)

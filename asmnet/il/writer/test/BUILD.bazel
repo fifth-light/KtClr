@@ -142,3 +142,27 @@ kt_jvm_test(
         "@maven//:junit_junit",
     ],
 )
+
+kt_jvm_test(
+    name = "exported_type",
+    srcs = ["ExportedTypeTest.kt"],
+    test_class = "top.fifthlight.asmnet.il.writer.test.ExportedTypeTest",
+    deps = [
+        ":util",
+        "//asmnet",
+        "//asmnet/dsl",
+        "@maven//:junit_junit",
+    ],
+)
+
+kt_jvm_test(
+    name = "type_forwarder",
+    srcs = ["TypeForwarderTest.kt"],
+    test_class = "top.fifthlight.asmnet.il.writer.test.TypeForwarderTest",
+    deps = [
+        ":util",
+        "//asmnet",
+        "//asmnet/dsl",
+        "@maven//:junit_junit",
+    ],
+)

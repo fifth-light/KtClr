@@ -226,6 +226,44 @@ class ILTextModuleWriter internal constructor(
         return ILTextManifestResourceWriter(writer, name)
     }
 
+    // ECMA-335 II.6.7
+    @Suppress("RedundantNullableReturnType")
+    override fun visitExportedType(
+        name: String,
+        flags: TypeAttributes,
+    ): ExportedTypeVisitor? {
+        writer.write {
+            +".class extern "
+            when (flags.visibility) {
+                TypeAttributes.Public -> +"public "
+                TypeAttributes.NestedPublic -> +"nested public "
+                else -> throw IllegalArgumentException("ExportedType visibility must be public or nested public")
+            }
+            identifier(name)
+            +" "
+            +"{"
+            indent()
+            line()
+        }
+        return ILTextExportedTypeWriter(writer, name)
+    }
+
+    // ECMA-335 II.6.8
+    @Suppress("RedundantNullableReturnType")
+    override fun visitTypeForwarder(
+        name: String,
+    ): TypeForwarderVisitor? {
+        writer.write {
+            +".class extern forwarder "
+            identifier(name)
+            +" "
+            +"{"
+            indent()
+            line()
+        }
+        return ILTextTypeForwarderWriter(writer, name)
+    }
+
     // ECMA-335 II.21
     override fun visitCustomAttribute(reference: CustomAttributeReference, blob: ByteArray?) = writer.write {
         customAttributeRef(reference, blob)
