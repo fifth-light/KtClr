@@ -6,6 +6,8 @@
 package top.fifthlight.asmnet.binary.reader
 
 import top.fifthlight.asmnet.ModuleVisitor
+import top.fifthlight.asmnet.RuntimeFlags
+import top.fifthlight.asmnet.binary.CliHeader
 import top.fifthlight.asmnet.binary.CoffHeader
 import top.fifthlight.asmnet.binary.DosHeader
 import top.fifthlight.asmnet.binary.PeSignature
@@ -55,6 +57,11 @@ class ILBinaryReader(private val bytes: ByteBuffer) {
         visitor.visitStackReserve(optionalHeader.sizeOfStackReserve)
         visitor.visitSubsystem(optionalHeader.subsystem)
 
-        TODO("Not yet implemented")
+        val cliHeaderDir = optionalHeader.dataDirectories[14]
+        val cliFileOffset = rvaToFileOffset(sections, cliHeaderDir.rva)
+        val cliHeader = CliHeader(bytes.slice(cliFileOffset, CliHeader.SIZE))
+        visitor.visitCorFlags(RuntimeFlags(cliHeader.flags.toInt()))
+
+        TODO("Not yet implemented: 1.7 Metadata Root")
     }
 }

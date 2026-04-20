@@ -7,6 +7,7 @@ package top.fifthlight.asmnet.binary.reader.test
 
 import org.junit.Test
 import top.fifthlight.asmnet.Subsystem
+import top.fifthlight.asmnet.RuntimeFlags
 import top.fifthlight.asmnet.binary.*
 import top.fifthlight.asmnet.binary.reader.*
 import java.nio.ByteBuffer
@@ -73,5 +74,10 @@ class PeFileTest {
 
         val cliFileOffset = rvaToFileOffset(sections, cliHeader.rva)
         assertTrue(cliFileOffset in bytes.indices, "CLI Runtime Header file offset should be within file")
+
+        val cli = CliHeader(buf.slice(cliFileOffset, CliHeader.SIZE))
+        assertTrue(cli.metaData.rva != 0u, "CLI Header metadata RVA should be non-zero")
+        assertTrue(cli.majorRuntimeVersion.toInt() >= 2, "Major runtime version should be >= 2, got ${cli.majorRuntimeVersion}")
+        assertTrue(cli.flags and RuntimeFlags.ILONLY.toUInt() != 0u, "CLI Header flags should contain ILONLY")
     }
 }

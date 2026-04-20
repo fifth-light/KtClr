@@ -7,10 +7,12 @@ package top.fifthlight.asmnet.binary.reader.test
 
 import org.junit.Test
 import top.fifthlight.asmnet.Subsystem
+import top.fifthlight.asmnet.binary.CliHeader
 import top.fifthlight.asmnet.binary.DosHeader
 import top.fifthlight.asmnet.binary.MachineType
 import top.fifthlight.asmnet.binary.OptionalHeader
 import top.fifthlight.asmnet.binary.SectionFlags
+import top.fifthlight.asmnet.binary.reader.CliHeader
 import top.fifthlight.asmnet.binary.reader.CoffHeader
 import top.fifthlight.asmnet.binary.reader.DosHeader
 import top.fifthlight.asmnet.binary.reader.OptionalHeader
@@ -299,6 +301,61 @@ class HeaderReaderTest {
 
         assertFailsWith<IllegalArgumentException> {
             SectionHeader(buf)
+        }
+    }
+
+    @Test
+    fun testReadCliHeader() {
+        val buf = ByteBuffer.allocate(72).order(ByteOrder.LITTLE_ENDIAN)
+        buf.putInt(0x48)          // cb = 72
+        buf.putShort(2)           // majorRuntimeVersion
+        buf.putShort(5)           // minorRuntimeVersion
+        buf.putInt(0x00002008)    // metaData.rva
+        buf.putInt(0x00000100)    // metaData.size
+        buf.putInt(0x00000001)    // flags = ILONLY
+        buf.putInt(0x06000001)    // entryPointToken
+        buf.putInt(0x00003000)    // resources.rva
+        buf.putInt(0x00000200)    // resources.size
+        buf.putInt(0x00004000)    // strongNameSignature.rva
+        buf.putInt(0x00000100)    // strongNameSignature.size
+        buf.putInt(0)             // codeManagerTable.rva
+        buf.putInt(0)             // codeManagerTable.size
+        buf.putInt(0x00005000)    // vTableFixups.rva
+        buf.putInt(0x00000030)    // vTableFixups.size
+        buf.putInt(0)             // exportAddressTableJumps.rva
+        buf.putInt(0)             // exportAddressTableJumps.size
+        buf.putInt(0)             // managedNativeHeader.rva
+        buf.putInt(0)             // managedNativeHeader.size
+        buf.flip()
+
+        val header = CliHeader(buf)
+        assertEquals(0x48u, header.cb)
+        assertEquals(2u.toUShort(), header.majorRuntimeVersion)
+        assertEquals(5u.toUShort(), header.minorRuntimeVersion)
+        assertEquals(0x00002008u, header.metaData.rva)
+        assertEquals(0x00000100u, header.metaData.size)
+        assertEquals(0x00000001u, header.flags)
+        assertEquals(0x06000001u, header.entryPointToken)
+        assertEquals(0x00003000u, header.resources.rva)
+        assertEquals(0x00000200u, header.resources.size)
+        assertEquals(0x00004000u, header.strongNameSignature.rva)
+        assertEquals(0x00000100u, header.strongNameSignature.size)
+        assertEquals(0u, header.codeManagerTable.rva)
+        assertEquals(0u, header.codeManagerTable.size)
+        assertEquals(0x00005000u, header.vTableFixups.rva)
+        assertEquals(0x00000030u, header.vTableFixups.size)
+        assertEquals(0u, header.exportAddressTableJumps.rva)
+        assertEquals(0u, header.exportAddressTableJumps.size)
+        assertEquals(0u, header.managedNativeHeader.rva)
+        assertEquals(0u, header.managedNativeHeader.size)
+    }
+
+    @Test
+    fun testReadCliHeaderBufferTooSmall() {
+        val buf = ByteBuffer.allocate(71).order(ByteOrder.LITTLE_ENDIAN)
+
+        assertFailsWith<IllegalArgumentException> {
+            CliHeader(buf)
         }
     }
 }
