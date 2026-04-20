@@ -29,8 +29,11 @@ class MethodDslScope(val visitor: MethodVisitor) {
     fun insn(code: OpCode.Code, vararg prefixes: OpCode.Prefix) =
         visitor.visitInsn(OpCode(code, *prefixes))
 
-    fun insn(code: OpCode.Code, ref: MethodReference, vararg prefixes: OpCode.Prefix) =
+    fun insn(code: OpCode.Code, ref: MethodCallReference, vararg prefixes: OpCode.Prefix) =
         visitor.visitMethodInsn(OpCode(code, *prefixes), ref)
+
+    fun insn(code: OpCode.Code, ref: MethodReference, vararg prefixes: OpCode.Prefix) =
+        visitor.visitMethodInsn(OpCode(code, *prefixes), MethodCallReference(ref))
 
     fun insn(code: OpCode.Code, ref: FieldReference, vararg prefixes: OpCode.Prefix) =
         visitor.visitFieldInsn(OpCode(code, *prefixes), ref)
@@ -170,4 +173,6 @@ class MethodDslScope(val visitor: MethodVisitor) {
         tls: Boolean = false,
         items: List<DataItem>,
     ) = visitor.visitData(label, tls, items)
+
+    fun calli(sig: MethodSignature) = visitor.visitCalliInsn(sig)
 }

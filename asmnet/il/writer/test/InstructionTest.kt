@@ -855,4 +855,185 @@ class InstructionTest {
             }
         )
     }
+
+    @Test
+    fun testCallWithSentinel() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .maxstack 8
+                  LABEL_0: call vararg void [System.Runtime]System.Console::WriteLine(string, ..., int32)
+                  LABEL_1: ret
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    maxStack(8)
+                    label()
+                    insn(OpCode.Code.call, MethodCallReference(
+                        callConv = CallConv(callKind = CallKind.Managed(vararg = true)),
+                        declaringType = TypeReference(
+                            resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                            name = "System.Console",
+                        ),
+                        name = "WriteLine",
+                        returnType = Type.Void,
+                        parameterTypes = listOf(Type.String, Type.Int32),
+                        sentinelIndex = 1,
+                    ))
+                    label()
+                    insn(OpCode.Code.ret)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testLdftnWithSentinelAtEnd() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .maxstack 8
+                  LABEL_0: ldftn vararg char GlobalModule::F(...)
+                  LABEL_1: ret
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    maxStack(8)
+                    label()
+                    insn(OpCode.Code.ldftn, MethodCallReference(
+                        declaringType = TypeReference("GlobalModule"),
+                        name = "F",
+                        returnType = Type.Char,
+                        callConv = CallConv(callKind = CallKind.Managed(vararg = true)),
+                        sentinelIndex = 0,
+                    ))
+                    label()
+                    insn(OpCode.Code.ret)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testCalliWithoutSentinel() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .maxstack 8
+                  LABEL_0: calli void(string)
+                  LABEL_1: ret
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    maxStack(8)
+                    label()
+                    calli(MethodSignature(
+                        returnType = Type.Void,
+                        parameterTypes = listOf(Type.String),
+                    ))
+                    label()
+                    insn(OpCode.Code.ret)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testCalliWithSentinel() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .maxstack 8
+                  LABEL_0: calli vararg bool(int32, ..., float32)
+                  LABEL_1: ret
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    maxStack(8)
+                    label()
+                    calli(MethodSignature(
+                        callConv = CallConv(callKind = CallKind.Managed(vararg = true)),
+                        returnType = Type.Bool,
+                        parameterTypes = listOf(Type.Int32, Type.Float32),
+                        sentinelIndex = 1,
+                    ))
+                    label()
+                    insn(OpCode.Code.ret)
+                }
+            }
+        )
+    }
+
+    @Test
+    fun testCallWithMethodReferenceCompatibility() {
+        assertContentEquals(
+            expected = """
+                .method public static hidebysig void Main() cil managed
+                {
+                  .maxstack 8
+                  LABEL_0: call instance void [System.Runtime]System.Object::'.ctor'()
+                  LABEL_1: ret
+                }
+            """.trimIndent(),
+            actual = generateText {
+                method("Main",
+                    attributes = listOf(
+                        MethodAttribute.Public,
+                        MethodAttribute.Static,
+                        MethodAttribute.HideBySig,
+                    ),
+                    implAttributes = ImplementationAttributes(ImplementationAttributes.IL),
+                ) {
+                    maxStack(8)
+                    label()
+                    insn(OpCode.Code.call, MethodReference(
+                        declaringType = TypeReference(
+                            resolutionScope = ResolutionScope.Assembly("System.Runtime"),
+                            name = "System.Object",
+                        ),
+                        name = ".ctor",
+                        callConv = CallConv(instance = true),
+                    ))
+                    label()
+                    insn(OpCode.Code.ret)
+                }
+            }
+        )
+    }
 }

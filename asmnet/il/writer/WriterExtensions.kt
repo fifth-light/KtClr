@@ -185,6 +185,58 @@ fun WriteScope.methodRef(ref: MethodReference) {
     +')'
 }
 
+// ECMA-335 VI.C.4.8, II.23.2.2 MethodRefSig
+fun WriteScope.methodRef(ref: MethodCallReference) {
+    callConv(ref.callConv)
+    +' '
+    type(ref.returnType)
+    +' '
+    typeSpec(ref.declaringType)
+    +"::"
+    identifier(ref.name)
+    +'('
+    var first = true
+    ref.parameterTypes.forEachIndexed { index, type ->
+        if (ref.sentinelIndex != null && index == ref.sentinelIndex) {
+            if (!first) +", "
+            +"..."
+            first = false
+        }
+        if (!first) +", "
+        type(type)
+        first = false
+    }
+    if (ref.sentinelIndex != null && ref.sentinelIndex == ref.parameterTypes.size) {
+        if (!first) +", "
+        +"..."
+    }
+    +')'
+}
+
+// ECMA-335 VI.C.4.12, II.23.2.3 StandAloneMethodSig
+fun WriteScope.methodSig(sig: MethodSignature) {
+    callConv(sig.callConv)
+    +' '
+    type(sig.returnType)
+    +'('
+    var first = true
+    sig.parameterTypes.forEachIndexed { index, type ->
+        if (sig.sentinelIndex != null && index == sig.sentinelIndex) {
+            if (!first) +", "
+            +"..."
+            first = false
+        }
+        if (!first) +", "
+        type(type)
+        first = false
+    }
+    if (sig.sentinelIndex != null && sig.sentinelIndex == sig.parameterTypes.size) {
+        if (!first) +", "
+        +"..."
+    }
+    +')'
+}
+
 // ECMA-335 VI.C.4.9
 fun WriteScope.fieldRef(ref: FieldReference) {
     type(ref.fieldType)

@@ -157,11 +157,19 @@ class ILTextMethodWriter internal constructor(
         }
     }
 
-    override fun visitMethodInsn(opcode: OpCode, ref: MethodReference) {
+    override fun visitMethodInsn(opcode: OpCode, ref: MethodCallReference) {
         writer.write {
             opcode(opcode)
             +' '
             methodRef(ref)
+            line()
+        }
+    }
+
+    override fun visitCalliInsn(sig: MethodSignature) {
+        writer.write {
+            +"calli "
+            methodSig(sig)
             line()
         }
     }

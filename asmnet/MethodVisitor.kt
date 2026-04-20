@@ -36,7 +36,10 @@ interface MethodVisitor {
     fun visitVarInsn(opcode: OpCode, varIndex: Int)
 
     // ECMA-335 VI.C.4.8
-    fun visitMethodInsn(opcode: OpCode, ref: MethodReference)
+    fun visitMethodInsn(opcode: OpCode, ref: MethodCallReference)
+
+    // ECMA-335 VI.C.4.12
+    fun visitCalliInsn(sig: MethodSignature)
 
     // ECMA-335 VI.C.4.9
     fun visitFieldInsn(opcode: OpCode, ref: FieldReference)
