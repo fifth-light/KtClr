@@ -12,9 +12,14 @@ import java.nio.charset.CodingErrorAction
 internal fun ByteBuffer.readString(
     maxLength: Int,
     charset: Charset = Charsets.US_ASCII,
+    forceMaxLength: Boolean = true,
     requireNullTerminator: Boolean = true,
 ): String = (0 until maxLength)
-    .also { require(remaining() >= maxLength) { "Buffer remaining ${remaining()} too small for string of length $maxLength" } }
+    .also {
+        if (forceMaxLength) {
+            require(remaining() >= maxLength) { "Buffer remaining ${remaining()} too small for string of length $maxLength" }
+        }
+    }
     .firstOrNull { get(position() + it) == 0.toByte() }
     .let { nullPosition ->
         if (nullPosition != null) {

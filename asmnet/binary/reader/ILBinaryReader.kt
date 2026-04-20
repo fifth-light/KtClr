@@ -7,14 +7,12 @@ package top.fifthlight.asmnet.binary.reader
 
 import top.fifthlight.asmnet.ModuleVisitor
 import top.fifthlight.asmnet.RuntimeFlags
-import top.fifthlight.asmnet.binary.CliHeader
-import top.fifthlight.asmnet.binary.CoffHeader
-import top.fifthlight.asmnet.binary.DosHeader
-import top.fifthlight.asmnet.binary.PeSignature
-import top.fifthlight.asmnet.binary.SectionHeader
+import top.fifthlight.asmnet.binary.*
 import java.nio.ByteBuffer
 
-class ILBinaryReader(private val bytes: ByteBuffer) {
+class ILBinaryReader(bytes: ByteBuffer) {
+    private val bytes = bytes.asReadOnlyBuffer()
+
     fun accept(visitor: ModuleVisitor) {
         var offset = 0
 
@@ -62,6 +60,7 @@ class ILBinaryReader(private val bytes: ByteBuffer) {
         val cliHeader = CliHeader(bytes.slice(cliFileOffset, CliHeader.SIZE))
         visitor.visitCorFlags(RuntimeFlags(cliHeader.flags.toInt()))
 
-        TODO("Not yet implemented: 1.7 Metadata Root")
+        val metadataFileOffset = rvaToFileOffset(sections, cliHeader.metaData.rva)
+        val metadataRoot = MetadataRoot(bytes.slice(metadataFileOffset, cliHeader.metaData.size.toInt()))
     }
 }

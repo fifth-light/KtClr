@@ -6,8 +6,8 @@
 package top.fifthlight.asmnet.binary.reader.test
 
 import org.junit.Test
-import top.fifthlight.asmnet.Subsystem
 import top.fifthlight.asmnet.RuntimeFlags
+import top.fifthlight.asmnet.Subsystem
 import top.fifthlight.asmnet.binary.*
 import top.fifthlight.asmnet.binary.reader.*
 import java.nio.ByteBuffer
@@ -79,5 +79,16 @@ class PeFileTest {
         assertTrue(cli.metaData.rva != 0u, "CLI Header metadata RVA should be non-zero")
         assertTrue(cli.majorRuntimeVersion.toInt() >= 2, "Major runtime version should be >= 2, got ${cli.majorRuntimeVersion}")
         assertTrue(cli.flags and RuntimeFlags.ILONLY.toUInt() != 0u, "CLI Header flags should contain ILONLY")
+
+        val metadataFileOffset = rvaToFileOffset(sections, cli.metaData.rva)
+        val metadataRoot = MetadataRoot(buf.slice(metadataFileOffset, cli.metaData.size.toInt()))
+        assertEquals(MetadataRoot.SIGNATURE, metadataRoot.signature)
+        assertTrue(metadataRoot.version.isNotEmpty(), "Version string should not be empty")
+        assertTrue(metadataRoot.streams.isNotEmpty(), "Expected at least one stream")
+
+        val streamNames = metadataRoot.streams.map { it.name }.toSet()
+        assertTrue("#~" in streamNames || "#-" in streamNames, "Expected #~ or #- stream, got $streamNames")
+        assertTrue("#Strings" in streamNames, "Expected #Strings stream, got $streamNames")
+        assertTrue("#Blob" in streamNames, "Expected #Blob stream, got $streamNames")
     }
 }

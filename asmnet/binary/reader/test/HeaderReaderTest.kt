@@ -7,16 +7,8 @@ package top.fifthlight.asmnet.binary.reader.test
 
 import org.junit.Test
 import top.fifthlight.asmnet.Subsystem
-import top.fifthlight.asmnet.binary.CliHeader
-import top.fifthlight.asmnet.binary.DosHeader
-import top.fifthlight.asmnet.binary.MachineType
-import top.fifthlight.asmnet.binary.OptionalHeader
-import top.fifthlight.asmnet.binary.SectionFlags
-import top.fifthlight.asmnet.binary.reader.CliHeader
-import top.fifthlight.asmnet.binary.reader.CoffHeader
-import top.fifthlight.asmnet.binary.reader.DosHeader
-import top.fifthlight.asmnet.binary.reader.OptionalHeader
-import top.fifthlight.asmnet.binary.reader.SectionHeader
+import top.fifthlight.asmnet.binary.*
+import top.fifthlight.asmnet.binary.reader.*
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import kotlin.test.*
@@ -356,6 +348,113 @@ class HeaderReaderTest {
 
         assertFailsWith<IllegalArgumentException> {
             CliHeader(buf)
+        }
+    }
+
+    @Test
+    fun testReadMetadataRoot() {
+        val versionString = "Standard"
+        val versionBytes = versionString.toByteArray(Charsets.UTF_8)
+        val versionWithNull = versionBytes.size + 1
+        val versionPadded = (versionWithNull + 3) / 4 * 4
+
+        val streamNames = listOf("#~", "#Strings", "#Blob", "#GUID", "#US")
+        val streamData = streamNames.mapIndexed { i, name ->
+            StreamHeader(
+                offset = (0x100u + i.toUInt() * 0x50u),
+                size = (0x40u + i.toUInt() * 0x10u),
+                name = name,
+            )
+        }
+
+        val streamHeadersSize = streamData.sumOf { header ->
+            val nameWithNull = header.name.toByteArray(Charsets.US_ASCII).size + 1
+            val padded = (nameWithNull + 3) / 4 * 4
+            8 + padded
+        }
+
+        val totalSize = 12 + 4 + versionPadded + 4 + streamHeadersSize
+        val buf = ByteBuffer.allocate(totalSize).order(ByteOrder.LITTLE_ENDIAN)
+
+        buf.putInt(0x424A5342)       // Signature "BSJB"
+        buf.putShort(1)               // MajorVersion
+        buf.putShort(1)               // MinorVersion
+        buf.putInt(0)                  // Reserved
+        buf.putInt(versionPadded)      // Length (x), padded
+        buf.put(versionBytes)         // Version string
+        buf.put(0.toByte())           // Null terminator
+        repeat(versionPadded - versionWithNull) {
+            buf.put(0.toByte())       // Padding to 4-byte boundary
+        }
+        buf.putShort(0)               // Flags
+        buf.putShort(streamNames.size.toShort()) // Streams count
+
+        for (header in streamData) {
+            buf.putInt(header.offset.toInt())
+            buf.putInt(header.size.toInt())
+            val nameBytes = header.name.toByteArray(Charsets.US_ASCII)
+            buf.put(nameBytes)
+            buf.put(0.toByte())
+            val nameWithNull = nameBytes.size + 1
+            val padded = (nameWithNull + 3) / 4 * 4
+            repeat(padded - nameWithNull) {
+                buf.put(0.toByte())
+            }
+        }
+        buf.flip()
+
+        val root = MetadataRoot(buf)
+        assertEquals(MetadataRoot.SIGNATURE, root.signature)
+        assertEquals(1u.toUShort(), root.majorVersion)
+        assertEquals(1u.toUShort(), root.minorVersion)
+        assertEquals(versionString, root.version)
+        assertEquals(0u.toUShort(), root.flags)
+        assertEquals(5, root.streams.size)
+
+        assertEquals("#~", root.streams[0].name)
+        assertEquals(0x100u, root.streams[0].offset)
+        assertEquals(0x40u, root.streams[0].size)
+
+        assertEquals("#Strings", root.streams[1].name)
+        assertEquals(0x150u, root.streams[1].offset)
+        assertEquals(0x50u, root.streams[1].size)
+
+        assertEquals("#Blob", root.streams[2].name)
+        assertEquals(0x1A0u, root.streams[2].offset)
+        assertEquals(0x60u, root.streams[2].size)
+
+        assertEquals("#GUID", root.streams[3].name)
+        assertEquals(0x1F0u, root.streams[3].offset)
+        assertEquals(0x70u, root.streams[3].size)
+
+        assertEquals("#US", root.streams[4].name)
+        assertEquals(0x240u, root.streams[4].offset)
+        assertEquals(0x80u, root.streams[4].size)
+    }
+
+    @Test
+    fun testReadMetadataRootInvalidSignature() {
+        val buf = ByteBuffer.allocate(12).order(ByteOrder.LITTLE_ENDIAN)
+        buf.putInt(0xDEADBEEF.toInt())
+        buf.putShort(1)
+        buf.putShort(1)
+        buf.putInt(0)
+        buf.flip()
+
+        assertFailsWith<IllegalArgumentException> {
+            MetadataRoot(buf)
+        }
+    }
+
+    @Test
+    fun testReadMetadataRootBufferTooSmall() {
+        val buf = ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN)
+        buf.putInt(0x424A5342)
+        buf.putInt(0)
+        buf.flip()
+
+        assertFailsWith<IllegalArgumentException> {
+            MetadataRoot(buf)
         }
     }
 }
