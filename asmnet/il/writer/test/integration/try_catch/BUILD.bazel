@@ -6,6 +6,7 @@ integration_test(
     expected = [
         "Caught!",
         "Done",
+        "",
     ],
     main_class = "top.fifthlight.asmnet.il.writer.test.integration.try_catch.TryCatchGeneratorKt",
     runtimeconfig = "try_catch_test.runtimeconfig.json",

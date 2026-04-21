@@ -7,6 +7,7 @@ integration_test(
         "Try",
         "Finally ran",
         "Done",
+        "",
     ],
     main_class = "top.fifthlight.asmnet.il.writer.test.integration.try_finally.TryFinallyGeneratorKt",
     runtimeconfig = "try_finally_test.runtimeconfig.json",

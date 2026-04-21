@@ -6,6 +6,7 @@ integration_test(
     expected = [
         "Filtered!",
         "Done",
+        "",
     ],
     main_class = "top.fifthlight.asmnet.il.writer.test.integration.try_filter.TryFilterGeneratorKt",
     runtimeconfig = "try_filter_test.runtimeconfig.json",
