@@ -4,16 +4,15 @@ load("//rule/dotnet:il.bzl", "ildasm")
 
 csharp_binary(
     name = "lib",
-    srcs = ["PinvokeTest.cs"],
-    out = "pinvoke_test",
-    target_compatible_with = ["@platforms//os:windows"],
+    srcs = ["EventTest.cs"],
+    out = "event",
     target_frameworks = ["net10.0"],
 )
 
 select_file(
     name = "dll",
     srcs = ":lib",
-    subpath = "pinvoke_test.dll",
+    subpath = "event.dll",
 )
 
 ildasm(

@@ -5,14 +5,14 @@ load("//rule/dotnet:il.bzl", "ildasm")
 csharp_binary(
     name = "lib",
     srcs = ["SwitchTest.cs"],
-    out = "switch_test",
+    out = "switch",
     target_frameworks = ["net10.0"],
 )
 
 select_file(
     name = "dll",
     srcs = ":lib",
-    subpath = "switch_test.dll",
+    subpath = "switch.dll",
 )
 
 ildasm(

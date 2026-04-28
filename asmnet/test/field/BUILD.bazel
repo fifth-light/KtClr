@@ -4,15 +4,15 @@ load("//rule/dotnet:il.bzl", "ildasm")
 
 csharp_binary(
     name = "lib",
-    srcs = ["JumpTest.cs"],
-    out = "jump_test",
+    srcs = ["FieldTest.cs"],
+    out = "field",
     target_frameworks = ["net10.0"],
 )
 
 select_file(
     name = "dll",
     srcs = ":lib",
-    subpath = "jump_test.dll",
+    subpath = "field.dll",
 )
 
 ildasm(

@@ -4,15 +4,16 @@ load("//rule/dotnet:il.bzl", "ildasm")
 
 csharp_binary(
     name = "lib",
-    srcs = ["TypeTest.cs"],
-    out = "type_test",
+    srcs = ["PinvokeTest.cs"],
+    out = "pinvoke",
+    target_compatible_with = ["@platforms//os:windows"],
     target_frameworks = ["net10.0"],
 )
 
 select_file(
     name = "dll",
     srcs = ":lib",
-    subpath = "type_test.dll",
+    subpath = "pinvoke.dll",
 )
 
 ildasm(
