@@ -9,6 +9,7 @@ bazel_dep(name = "rules_shell", version = "0.7.1")
 bazel_dep(name = "bazel_skylib", version = "1.9.0")
 bazel_dep(name = "bazel_lib", version = "3.2.2")
 bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "rules_android", version = "0.7.2")
 
 maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
 maven.install(
