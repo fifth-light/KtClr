@@ -5,5 +5,8 @@ kt_jvm_library(
     srcs = glob(["*.kt"]),
     associates = ["//asmnet/binary"],
     visibility = ["//visibility:public"],
-    deps = ["//asmnet"],
+    deps = [
+        "//asmnet",
+        "@maven//:io_netty_netty_buffer",
+    ],
 )

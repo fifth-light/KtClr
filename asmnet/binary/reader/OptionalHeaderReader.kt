@@ -5,90 +5,89 @@
 
 package top.fifthlight.asmnet.binary.reader
 
+import io.netty.buffer.ByteBuf
 import top.fifthlight.asmnet.Subsystem
 import top.fifthlight.asmnet.binary.*
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
 
-private fun readDataDirectories(buf: ByteBuffer, count: UInt): List<DataDirectory> = buildList {
-    require(count < 128u) { "Too many data directories: $count" } // 128 is a safe and enough size
-    require(buf.remaining() >= count.toInt() * 8) { "Buffer size ${buf.remaining()} too small for $count data directories" }
+private fun readDataDirectories(buf: ByteBuf, count: UInt): List<DataDirectory> = buildList {
+    require(count < 128u) { "Too many data directories: $count" }
+    require(buf.readableBytes() >= count.toInt() * 8) { "Buffer size ${buf.readableBytes()} too small for $count data directories" }
     repeat(count.toInt()) {
-        add(DataDirectory(rva = buf.uint, size = buf.uint))
+        add(DataDirectory(rva = buf.readUIntLE(), size = buf.readUIntLE()))
     }
 }
 
-private fun readPE32(buf: ByteBuffer): OptionalHeader.PE32 = OptionalHeader.PE32(
-    majorLinkerVersion = buf.ubyte,
-    minorLinkerVersion = buf.ubyte,
-    sizeOfCode = buf.uint,
-    sizeOfInitializedData = buf.uint,
-    sizeOfUninitializedData = buf.uint,
-    addressOfEntryPoint = buf.uint,
-    baseOfCode = buf.uint,
-    baseOfData = buf.uint,
-    imageBase = buf.uint.toULong(),
-    sectionAlignment = buf.uint,
-    fileAlignment = buf.uint,
-    majorOperatingSystemVersion = buf.ushort,
-    minorOperatingSystemVersion = buf.ushort,
-    majorImageVersion = buf.ushort,
-    minorImageVersion = buf.ushort,
-    majorSubsystemVersion = buf.ushort,
-    minorSubsystemVersion = buf.ushort,
-    win32VersionValue = buf.uint,
-    sizeOfImage = buf.uint,
-    sizeOfHeaders = buf.uint,
-    checksum = buf.uint,
-    subsystem = Subsystem(buf.short),
-    dllCharacteristics = DllCharacteristics(buf.ushort),
-    sizeOfStackReserve = buf.uint.toULong(),
-    sizeOfStackCommit = buf.uint.toULong(),
-    sizeOfHeapReserve = buf.uint.toULong(),
-    sizeOfHeapCommit = buf.uint.toULong(),
-    loaderFlags = buf.uint,
-    dataDirectories = readDataDirectories(buf, buf.uint),
+private fun readPE32(buf: ByteBuf): OptionalHeader.PE32 = OptionalHeader.PE32(
+    majorLinkerVersion = buf.readUByteLE(),
+    minorLinkerVersion = buf.readUByteLE(),
+    sizeOfCode = buf.readUIntLE(),
+    sizeOfInitializedData = buf.readUIntLE(),
+    sizeOfUninitializedData = buf.readUIntLE(),
+    addressOfEntryPoint = buf.readUIntLE(),
+    baseOfCode = buf.readUIntLE(),
+    baseOfData = buf.readUIntLE(),
+    imageBase = buf.readUIntLE().toULong(),
+    sectionAlignment = buf.readUIntLE(),
+    fileAlignment = buf.readUIntLE(),
+    majorOperatingSystemVersion = buf.readUShortLE(),
+    minorOperatingSystemVersion = buf.readUShortLE(),
+    majorImageVersion = buf.readUShortLE(),
+    minorImageVersion = buf.readUShortLE(),
+    majorSubsystemVersion = buf.readUShortLE(),
+    minorSubsystemVersion = buf.readUShortLE(),
+    win32VersionValue = buf.readUIntLE(),
+    sizeOfImage = buf.readUIntLE(),
+    sizeOfHeaders = buf.readUIntLE(),
+    checksum = buf.readUIntLE(),
+    subsystem = Subsystem(buf.readShortLE()),
+    dllCharacteristics = DllCharacteristics(buf.readUShortLE()),
+    sizeOfStackReserve = buf.readUIntLE().toULong(),
+    sizeOfStackCommit = buf.readUIntLE().toULong(),
+    sizeOfHeapReserve = buf.readUIntLE().toULong(),
+    sizeOfHeapCommit = buf.readUIntLE().toULong(),
+    loaderFlags = buf.readUIntLE(),
+    dataDirectories = readDataDirectories(buf, buf.readUIntLE()),
 )
 
-private fun readPE32Plus(buf: ByteBuffer): OptionalHeader.PE32Plus = OptionalHeader.PE32Plus(
-    majorLinkerVersion = buf.ubyte,
-    minorLinkerVersion = buf.ubyte,
-    sizeOfCode = buf.uint,
-    sizeOfInitializedData = buf.uint,
-    sizeOfUninitializedData = buf.uint,
-    addressOfEntryPoint = buf.uint,
-    baseOfCode = buf.uint,
-    imageBase = buf.ulong,
-    sectionAlignment = buf.uint,
-    fileAlignment = buf.uint,
-    majorOperatingSystemVersion = buf.ushort,
-    minorOperatingSystemVersion = buf.ushort,
-    majorImageVersion = buf.ushort,
-    minorImageVersion = buf.ushort,
-    majorSubsystemVersion = buf.ushort,
-    minorSubsystemVersion = buf.ushort,
-    win32VersionValue = buf.uint,
-    sizeOfImage = buf.uint,
-    sizeOfHeaders = buf.uint,
-    checksum = buf.uint,
-    subsystem = Subsystem(buf.short),
-    dllCharacteristics = DllCharacteristics(buf.ushort),
-    sizeOfStackReserve = buf.ulong,
-    sizeOfStackCommit = buf.ulong,
-    sizeOfHeapReserve = buf.ulong,
-    sizeOfHeapCommit = buf.ulong,
-    loaderFlags = buf.uint,
-    dataDirectories = readDataDirectories(buf, buf.uint),
+private fun readPE32Plus(buf: ByteBuf): OptionalHeader.PE32Plus = OptionalHeader.PE32Plus(
+    majorLinkerVersion = buf.readUByteLE(),
+    minorLinkerVersion = buf.readUByteLE(),
+    sizeOfCode = buf.readUIntLE(),
+    sizeOfInitializedData = buf.readUIntLE(),
+    sizeOfUninitializedData = buf.readUIntLE(),
+    addressOfEntryPoint = buf.readUIntLE(),
+    baseOfCode = buf.readUIntLE(),
+    imageBase = buf.readULongLE(),
+    sectionAlignment = buf.readUIntLE(),
+    fileAlignment = buf.readUIntLE(),
+    majorOperatingSystemVersion = buf.readUShortLE(),
+    minorOperatingSystemVersion = buf.readUShortLE(),
+    majorImageVersion = buf.readUShortLE(),
+    minorImageVersion = buf.readUShortLE(),
+    majorSubsystemVersion = buf.readUShortLE(),
+    minorSubsystemVersion = buf.readUShortLE(),
+    win32VersionValue = buf.readUIntLE(),
+    sizeOfImage = buf.readUIntLE(),
+    sizeOfHeaders = buf.readUIntLE(),
+    checksum = buf.readUIntLE(),
+    subsystem = Subsystem(buf.readShortLE()),
+    dllCharacteristics = DllCharacteristics(buf.readUShortLE()),
+    sizeOfStackReserve = buf.readULongLE(),
+    sizeOfStackCommit = buf.readULongLE(),
+    sizeOfHeapReserve = buf.readULongLE(),
+    sizeOfHeapCommit = buf.readULongLE(),
+    loaderFlags = buf.readUIntLE(),
+    dataDirectories = readDataDirectories(buf, buf.readUIntLE()),
 )
 
-internal fun OptionalHeader(buffer: ByteBuffer): OptionalHeader = buffer.slice().order(ByteOrder.LITTLE_ENDIAN).let { buf ->
-    when (val magic = buf.ushort) {
+internal fun OptionalHeader(buffer: ByteBuf): OptionalHeader = buffer.slice().let { buf ->
+    when (val magic = buf.readUShortLE()) {
         OptionalHeader.MAGIC_PE32 -> {
-            require(buf.remaining() >= 94) { "Buffer too small for PE32 optional header: ${buf.remaining()} < 94" }
+            require(buf.readableBytes() >= 94) { "Buffer too small for PE32 optional header: ${buf.readableBytes()} < 94" }
             readPE32(buf)
         }
         OptionalHeader.MAGIC_PE32_PLUS -> {
-            require(buf.remaining() >= 110) { "Buffer too small for PE32+ optional header: ${buf.remaining()} < 110" }
+            require(buf.readableBytes() >= 110) { "Buffer too small for PE32+ optional header: ${buf.readableBytes()} < 110" }
             readPE32Plus(buf)
         }
         else -> throw IllegalArgumentException("Invalid optional header magic: 0x${magic.toString(16)}")

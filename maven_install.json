@@ -6,6 +6,7 @@
     "com.google.errorprone:error_prone_annotations": -1035138750,
     "com.google.guava:guava": 1943808618,
     "com.google.j2objc:j2objc-annotations": 2003271689,
+    "io.netty:netty-buffer": -86950668,
     "junit:junit": -744267592,
     "org.jetbrains.kotlin:kotlin-compiler": -1140536117,
     "org.jetbrains.kotlin:kotlin-test-junit": 1929862879,
@@ -25,6 +26,10 @@
     "com.google.guava:listenablefuture": 1079558157,
     "com.google.j2objc:j2objc-annotations": 248818742,
     "com.google.j2objc:j2objc-annotations:jar:sources": -378364028,
+    "io.netty:netty-buffer": -615578812,
+    "io.netty:netty-buffer:jar:sources": 1274136475,
+    "io.netty:netty-common": 1898807211,
+    "io.netty:netty-common:jar:sources": -903781575,
     "junit:junit": -1256429642,
     "junit:junit:jar:sources": 940567721,
     "org.checkerframework:checker-qual": -1533199059,
@@ -103,6 +108,20 @@
         "sources": "7413eed41f111453a08837f5ac680edded7faed466cbd35745e402e13f4cc3f5"
       },
       "version": "2.8"
+    },
+    "io.netty:netty-buffer": {
+      "shasums": {
+        "jar": "20dffa0e42c7b90b8c114d00c73bdf8f8ff5b363e3180b449359b2609e339561",
+        "sources": "7cc7edd45c3d04c4237d454b1a9c9d6ef0d76c513659230c838c0345911c158b"
+      },
+      "version": "4.2.12.Final"
+    },
+    "io.netty:netty-common": {
+      "shasums": {
+        "jar": "9b03e4d08ef4c3e4e97065186fd3e1485301532ef4303f9fc29049dd13475b8d",
+        "sources": "8bde0515975d6c50c6f23dedc733f4722831d5fdcdb90306648a438af677f388"
+      },
+      "version": "4.2.12.Final"
     },
     "junit:junit": {
       "shasums": {
@@ -205,6 +224,9 @@
       "com.google.j2objc:j2objc-annotations",
       "org.checkerframework:checker-qual"
     ],
+    "io.netty:netty-buffer": [
+      "io.netty:netty-common"
+    ],
     "junit:junit": [
       "org.hamcrest:hamcrest-core"
     ],
@@ -282,6 +304,25 @@
     ],
     "com.google.j2objc:j2objc-annotations": [
       "com.google.j2objc.annotations"
+    ],
+    "io.netty:netty-buffer": [
+      "io.netty.buffer",
+      "io.netty.buffer.search"
+    ],
+    "io.netty:netty-common": [
+      "io.netty.util",
+      "io.netty.util.collection",
+      "io.netty.util.concurrent",
+      "io.netty.util.internal",
+      "io.netty.util.internal.logging",
+      "io.netty.util.internal.shaded.org.jctools.counters",
+      "io.netty.util.internal.shaded.org.jctools.maps",
+      "io.netty.util.internal.shaded.org.jctools.queues",
+      "io.netty.util.internal.shaded.org.jctools.queues.atomic",
+      "io.netty.util.internal.shaded.org.jctools.queues.atomic.unpadded",
+      "io.netty.util.internal.shaded.org.jctools.queues.unpadded",
+      "io.netty.util.internal.shaded.org.jctools.util",
+      "io.netty.util.internal.svm"
     ],
     "junit:junit": [
       "junit.extensions",
@@ -1439,6 +1480,10 @@
       "com.google.guava:listenablefuture",
       "com.google.j2objc:j2objc-annotations",
       "com.google.j2objc:j2objc-annotations:jar:sources",
+      "io.netty:netty-buffer",
+      "io.netty:netty-buffer:jar:sources",
+      "io.netty:netty-common",
+      "io.netty:netty-common:jar:sources",
       "junit:junit",
       "junit:junit:jar:sources",
       "org.checkerframework:checker-qual",
@@ -1468,6 +1513,16 @@
     ]
   },
   "services": {
+    "io.netty:netty-common": {
+      "reactor.blockhound.integration.BlockHoundIntegration": [
+        "io.netty.util.internal.Hidden$NettyBlockHoundIntegration"
+      ]
+    },
+    "io.netty:netty-common:jar:sources": {
+      "reactor.blockhound.integration.BlockHoundIntegration": [
+        "io.netty.util.internal.Hidden$NettyBlockHoundIntegration"
+      ]
+    },
     "org.jetbrains.kotlin:kotlin-compiler": {
       "org.jetbrains.kotlin.builtins.BuiltInsLoader": [
         "org.jetbrains.kotlin.serialization.deserialization.builtins.BuiltInsLoaderImpl"

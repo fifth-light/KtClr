@@ -5,50 +5,48 @@
 
 package top.fifthlight.asmnet.binary.reader.test
 
+import io.netty.buffer.Unpooled
 import org.junit.Test
 import top.fifthlight.asmnet.Subsystem
 import top.fifthlight.asmnet.binary.*
 import top.fifthlight.asmnet.binary.reader.*
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
 import kotlin.test.*
 
 class HeaderReaderTest {
     @Test
     fun testReadDosHeader() {
-        val buf = ByteBuffer.allocate(64).order(ByteOrder.LITTLE_ENDIAN)
-        buf.putShort(0x5A4D)      // e_magic
-        buf.putShort(0x0090)      // e_cblp
-        buf.putShort(0x0003)      // e_cp
-        buf.putShort(0x0000)      // e_crlc
-        buf.putShort(0x0004)      // e_cparhdr
-        buf.putShort(0x0000)      // e_minalloc
-        buf.putShort(0xFFFF.toShort()) // e_maxalloc
-        buf.putShort(0x0000)      // e_ss
-        buf.putShort(0x00B8)      // e_sp
-        buf.putShort(0x0000)      // e_csum
-        buf.putShort(0x0000)      // e_ip
-        buf.putShort(0x0000)      // e_cs
-        buf.putShort(0x0040)      // e_lfarlc
-        buf.putShort(0x0000)      // e_ovno
-        buf.putShort(0x0000)      // e_res[0]
-        buf.putShort(0x0000)      // e_res[1]
-        buf.putShort(0x0000)      // e_res[2]
-        buf.putShort(0x0000)      // e_res[3]
-        buf.putShort(0x0000)      // e_oemid
-        buf.putShort(0x0000)      // e_oeminfo
-        buf.putShort(0x0000)      // e_res2[0]
-        buf.putShort(0x0000)      // e_res2[1]
-        buf.putShort(0x0000)      // e_res2[2]
-        buf.putShort(0x0000)      // e_res2[3]
-        buf.putShort(0x0000)      // e_res2[4]
-        buf.putShort(0x0000)      // e_res2[5]
-        buf.putShort(0x0000)      // e_res2[6]
-        buf.putShort(0x0000)      // e_res2[7]
-        buf.putShort(0x0000)      // e_res2[8]
-        buf.putShort(0x0000)      // e_res2[9]
-        buf.putInt(0x00000080)    // e_lfanew
-        buf.flip()
+        val buf = Unpooled.buffer(64)
+        buf.writeShortLE(0x5A4D)      // e_magic
+        buf.writeShortLE(0x0090)      // e_cblp
+        buf.writeShortLE(0x0003)      // e_cp
+        buf.writeShortLE(0x0000)      // e_crlc
+        buf.writeShortLE(0x0004)      // e_cparhdr
+        buf.writeShortLE(0x0000)      // e_minalloc
+        buf.writeShortLE(0xFFFF)      // e_maxalloc
+        buf.writeShortLE(0x0000)      // e_ss
+        buf.writeShortLE(0x00B8)      // e_sp
+        buf.writeShortLE(0x0000)      // e_csum
+        buf.writeShortLE(0x0000)      // e_ip
+        buf.writeShortLE(0x0000)      // e_cs
+        buf.writeShortLE(0x0040)      // e_lfarlc
+        buf.writeShortLE(0x0000)      // e_ovno
+        buf.writeShortLE(0x0000)      // e_res[0]
+        buf.writeShortLE(0x0000)      // e_res[1]
+        buf.writeShortLE(0x0000)      // e_res[2]
+        buf.writeShortLE(0x0000)      // e_res[3]
+        buf.writeShortLE(0x0000)      // e_oemid
+        buf.writeShortLE(0x0000)      // e_oeminfo
+        buf.writeShortLE(0x0000)      // e_res2[0]
+        buf.writeShortLE(0x0000)      // e_res2[1]
+        buf.writeShortLE(0x0000)      // e_res2[2]
+        buf.writeShortLE(0x0000)      // e_res2[3]
+        buf.writeShortLE(0x0000)      // e_res2[4]
+        buf.writeShortLE(0x0000)      // e_res2[5]
+        buf.writeShortLE(0x0000)      // e_res2[6]
+        buf.writeShortLE(0x0000)      // e_res2[7]
+        buf.writeShortLE(0x0000)      // e_res2[8]
+        buf.writeShortLE(0x0000)      // e_res2[9]
+        buf.writeIntLE(0x00000080)    // e_lfanew
 
         val header = DosHeader(buf)
         assertEquals(DosHeader.MAGIC_MZ, header.e_magic)
@@ -57,9 +55,8 @@ class HeaderReaderTest {
 
     @Test
     fun testReadDosHeaderInvalidMagic() {
-        val buf = ByteBuffer.allocate(64).order(ByteOrder.LITTLE_ENDIAN)
-        buf.putShort(0x0000)
-        buf.flip()
+        val buf = Unpooled.buffer(64)
+        buf.writeShortLE(0x0000)
 
         assertFailsWith<IllegalArgumentException> {
             DosHeader(buf)
@@ -68,9 +65,8 @@ class HeaderReaderTest {
 
     @Test
     fun testReadDosHeaderBufferTooSmall() {
-        val buf = ByteBuffer.allocate(32).order(ByteOrder.LITTLE_ENDIAN)
-        buf.putShort(0x5A4D)
-        buf.flip()
+        val buf = Unpooled.buffer(32)
+        buf.writeShortLE(0x5A4D)
 
         assertFailsWith<IllegalArgumentException> {
             DosHeader(buf)
@@ -79,15 +75,14 @@ class HeaderReaderTest {
 
     @Test
     fun testReadCoffHeader() {
-        val buf = ByteBuffer.allocate(20).order(ByteOrder.LITTLE_ENDIAN)
-        buf.putShort(0x8664.toShort())
-        buf.putShort(3)
-        buf.putInt(0x12345678)
-        buf.putInt(0)
-        buf.putInt(0)
-        buf.putShort(0xF0.toShort())
-        buf.putShort(0x0022)
-        buf.flip()
+        val buf = Unpooled.buffer(20)
+        buf.writeShortLE(0x8664)
+        buf.writeShortLE(3)
+        buf.writeIntLE(0x12345678)
+        buf.writeIntLE(0)
+        buf.writeIntLE(0)
+        buf.writeShortLE(0xF0)
+        buf.writeShortLE(0x0022)
 
         val header = CoffHeader(buf)
         assertEquals(MachineType.AMD64, header.machine)
@@ -100,7 +95,7 @@ class HeaderReaderTest {
 
     @Test
     fun testReadCoffHeaderBufferTooSmall() {
-        val buf = ByteBuffer.allocate(10).order(ByteOrder.LITTLE_ENDIAN)
+        val buf = Unpooled.buffer(10)
 
         assertFailsWith<IllegalArgumentException> {
             CoffHeader(buf)
@@ -111,44 +106,43 @@ class HeaderReaderTest {
     fun testReadOptionalHeaderPE32() {
         // PE32: 96 bytes header + 2 data directories (16 bytes) = 112 bytes
         val size = 96 + 2 * 8
-        val buf = ByteBuffer.allocate(size).order(ByteOrder.LITTLE_ENDIAN)
-        buf.putShort(0x010B)      // Magic (PE32)
-        buf.put(0x0A)             // MajorLinkerVersion
-        buf.put(0x00)             // MinorLinkerVersion
-        buf.putInt(0x00001000)    // SizeOfCode
-        buf.putInt(0x00002000)    // SizeOfInitializedData
-        buf.putInt(0x00000000)    // SizeOfUninitializedData
-        buf.putInt(0x00001234)    // AddressOfEntryPoint
-        buf.putInt(0x00001000)    // BaseOfCode
-        buf.putInt(0x00002000)    // BaseOfData (PE32 only)
-        buf.putInt(0x00400000)    // ImageBase (4B for PE32)
-        buf.putInt(0x00001000)    // SectionAlignment
-        buf.putInt(0x00000200)    // FileAlignment
-        buf.putShort(6)           // MajorOperatingSystemVersion
-        buf.putShort(0)           // MinorOperatingSystemVersion
-        buf.putShort(0)           // MajorImageVersion
-        buf.putShort(0)           // MinorImageVersion
-        buf.putShort(6)           // MajorSubsystemVersion
-        buf.putShort(0)           // MinorSubsystemVersion
-        buf.putInt(0)             // Win32VersionValue
-        buf.putInt(0x00003000)    // SizeOfImage
-        buf.putInt(0x00000200)    // SizeOfHeaders
-        buf.putInt(0)             // CheckSum
-        buf.putShort(3)           // Subsystem (WINDOWS_CUI)
-        buf.putShort(0xC160.toShort()) // DllCharacteristics (DYNAMIC_BASE | NX_COMPAT | TERMINAL_SERVER_AWARE | GUARD_CF)
-        buf.putInt(0x00100000)    // SizeOfStackReserve (4B for PE32)
-        buf.putInt(0x00001000)    // SizeOfStackCommit (4B for PE32)
-        buf.putInt(0x00100000)    // SizeOfHeapReserve (4B for PE32)
-        buf.putInt(0x00001000)    // SizeOfHeapCommit (4B for PE32)
-        buf.putInt(0)             // LoaderFlags
-        buf.putInt(2)             // NumberOfRvaAndSizes
+        val buf = Unpooled.buffer(size)
+        buf.writeShortLE(0x010B)      // Magic (PE32)
+        buf.writeByte(0x0A)           // MajorLinkerVersion
+        buf.writeByte(0x00)           // MinorLinkerVersion
+        buf.writeIntLE(0x00001000)    // SizeOfCode
+        buf.writeIntLE(0x00002000)    // SizeOfInitializedData
+        buf.writeIntLE(0x00000000)    // SizeOfUninitializedData
+        buf.writeIntLE(0x00001234)    // AddressOfEntryPoint
+        buf.writeIntLE(0x00001000)    // BaseOfCode
+        buf.writeIntLE(0x00002000)    // BaseOfData (PE32 only)
+        buf.writeIntLE(0x00400000)    // ImageBase (4B for PE32)
+        buf.writeIntLE(0x00001000)    // SectionAlignment
+        buf.writeIntLE(0x00000200)    // FileAlignment
+        buf.writeShortLE(6)           // MajorOperatingSystemVersion
+        buf.writeShortLE(0)           // MinorOperatingSystemVersion
+        buf.writeShortLE(0)           // MajorImageVersion
+        buf.writeShortLE(0)           // MinorImageVersion
+        buf.writeShortLE(6)           // MajorSubsystemVersion
+        buf.writeShortLE(0)           // MinorSubsystemVersion
+        buf.writeIntLE(0)             // Win32VersionValue
+        buf.writeIntLE(0x00003000)    // SizeOfImage
+        buf.writeIntLE(0x00000200)    // SizeOfHeaders
+        buf.writeIntLE(0)             // CheckSum
+        buf.writeShortLE(3)           // Subsystem (WINDOWS_CUI)
+        buf.writeShortLE(0xC160)      // DllCharacteristics (DYNAMIC_BASE | NX_COMPAT | TERMINAL_SERVER_AWARE | GUARD_CF)
+        buf.writeIntLE(0x00100000)    // SizeOfStackReserve (4B for PE32)
+        buf.writeIntLE(0x00001000)    // SizeOfStackCommit (4B for PE32)
+        buf.writeIntLE(0x00100000)    // SizeOfHeapReserve (4B for PE32)
+        buf.writeIntLE(0x00001000)    // SizeOfHeapCommit (4B for PE32)
+        buf.writeIntLE(0)             // LoaderFlags
+        buf.writeIntLE(2)             // NumberOfRvaAndSizes
         // Data Directory 0: Export Table
-        buf.putInt(0)             // RVA
-        buf.putInt(0)             // Size
+        buf.writeIntLE(0)             // RVA
+        buf.writeIntLE(0)             // Size
         // Data Directory 1: Import Table
-        buf.putInt(0x00005000)    // RVA
-        buf.putInt(0x00000040)    // Size
-        buf.flip()
+        buf.writeIntLE(0x00005000)    // RVA
+        buf.writeIntLE(0x00000040)    // Size
 
         val header = OptionalHeader(buf)
         assertIs<OptionalHeader.PE32>(header)
@@ -170,44 +164,43 @@ class HeaderReaderTest {
     fun testReadOptionalHeaderPE32Plus() {
         // PE32+: 112 bytes header + 2 data directories (16 bytes) = 128 bytes
         val size = 112 + 2 * 8
-        val buf = ByteBuffer.allocate(size).order(ByteOrder.LITTLE_ENDIAN)
-        buf.putShort(0x020B)      // Magic (PE32+)
-        buf.put(0x0A)             // MajorLinkerVersion
-        buf.put(0x00)             // MinorLinkerVersion
-        buf.putInt(0x00001000)    // SizeOfCode
-        buf.putInt(0x00002000)    // SizeOfInitializedData
-        buf.putInt(0x00000000)    // SizeOfUninitializedData
-        buf.putInt(0x00001234)    // AddressOfEntryPoint
-        buf.putInt(0x00001000)    // BaseOfCode
+        val buf = Unpooled.buffer(size)
+        buf.writeShortLE(0x020B)      // Magic (PE32+)
+        buf.writeByte(0x0A)           // MajorLinkerVersion
+        buf.writeByte(0x00)           // MinorLinkerVersion
+        buf.writeIntLE(0x00001000)    // SizeOfCode
+        buf.writeIntLE(0x00002000)    // SizeOfInitializedData
+        buf.writeIntLE(0x00000000)    // SizeOfUninitializedData
+        buf.writeIntLE(0x00001234)    // AddressOfEntryPoint
+        buf.writeIntLE(0x00001000)    // BaseOfCode
         // No BaseOfData for PE32+
-        buf.putLong(0x0000000180000000L) // ImageBase (8B for PE32+)
-        buf.putInt(0x00001000)    // SectionAlignment
-        buf.putInt(0x00000200)    // FileAlignment
-        buf.putShort(6)           // MajorOperatingSystemVersion
-        buf.putShort(0)           // MinorOperatingSystemVersion
-        buf.putShort(0)           // MajorImageVersion
-        buf.putShort(0)           // MinorImageVersion
-        buf.putShort(6)           // MajorSubsystemVersion
-        buf.putShort(0)           // MinorSubsystemVersion
-        buf.putInt(0)             // Win32VersionValue
-        buf.putInt(0x00003000)    // SizeOfImage
-        buf.putInt(0x00000200)    // SizeOfHeaders
-        buf.putInt(0)             // CheckSum
-        buf.putShort(3)           // Subsystem (WINDOWS_CUI)
-        buf.putShort(0xC160.toShort()) // DllCharacteristics (DYNAMIC_BASE | NX_COMPAT | TERMINAL_SERVER_AWARE | GUARD_CF)
-        buf.putLong(0x000001000000L) // SizeOfStackReserve (8B for PE32+)
-        buf.putLong(0x00000010000L) // SizeOfStackCommit (8B for PE32+)
-        buf.putLong(0x000001000000L) // SizeOfHeapReserve (8B for PE32+)
-        buf.putLong(0x00000010000L) // SizeOfHeapCommit (8B for PE32+)
-        buf.putInt(0)             // LoaderFlags
-        buf.putInt(2)             // NumberOfRvaAndSizes
+        buf.writeLongLE(0x0000000180000000L) // ImageBase (8B for PE32+)
+        buf.writeIntLE(0x00001000)    // SectionAlignment
+        buf.writeIntLE(0x00000200)    // FileAlignment
+        buf.writeShortLE(6)           // MajorOperatingSystemVersion
+        buf.writeShortLE(0)           // MinorOperatingSystemVersion
+        buf.writeShortLE(0)           // MajorImageVersion
+        buf.writeShortLE(0)           // MinorImageVersion
+        buf.writeShortLE(6)           // MajorSubsystemVersion
+        buf.writeShortLE(0)           // MinorSubsystemVersion
+        buf.writeIntLE(0)             // Win32VersionValue
+        buf.writeIntLE(0x00003000)    // SizeOfImage
+        buf.writeIntLE(0x00000200)    // SizeOfHeaders
+        buf.writeIntLE(0)             // CheckSum
+        buf.writeShortLE(3)           // Subsystem (WINDOWS_CUI)
+        buf.writeShortLE(0xC160)      // DllCharacteristics (DYNAMIC_BASE | NX_COMPAT | TERMINAL_SERVER_AWARE | GUARD_CF)
+        buf.writeLongLE(0x000001000000L) // SizeOfStackReserve (8B for PE32+)
+        buf.writeLongLE(0x00000010000L) // SizeOfStackCommit (8B for PE32+)
+        buf.writeLongLE(0x000001000000L) // SizeOfHeapReserve (8B for PE32+)
+        buf.writeLongLE(0x00000010000L) // SizeOfHeapCommit (8B for PE32+)
+        buf.writeIntLE(0)             // LoaderFlags
+        buf.writeIntLE(2)             // NumberOfRvaAndSizes
         // Data Directory 0
-        buf.putInt(0)             // RVA
-        buf.putInt(0)             // Size
+        buf.writeIntLE(0)             // RVA
+        buf.writeIntLE(0)             // Size
         // Data Directory 1
-        buf.putInt(0x00005000)    // RVA
-        buf.putInt(0x00000040)    // Size
-        buf.flip()
+        buf.writeIntLE(0x00005000)    // RVA
+        buf.writeIntLE(0x00000040)    // Size
 
         val header = OptionalHeader(buf)
         assertIs<OptionalHeader.PE32Plus>(header)
@@ -223,9 +216,8 @@ class HeaderReaderTest {
 
     @Test
     fun testReadOptionalHeaderInvalidMagic() {
-        val buf = ByteBuffer.allocate(96).order(ByteOrder.LITTLE_ENDIAN)
-        buf.putShort(0x0000)      // Invalid magic
-        buf.flip()
+        val buf = Unpooled.buffer(96)
+        buf.writeShortLE(0x0000)      // Invalid magic
 
         assertFailsWith<IllegalArgumentException> {
             OptionalHeader(buf)
@@ -234,19 +226,18 @@ class HeaderReaderTest {
 
     @Test
     fun testReadSectionHeader() {
-        val buf = ByteBuffer.allocate(40).order(ByteOrder.LITTLE_ENDIAN)
+        val buf = Unpooled.buffer(40)
         val nameBytes = byteArrayOf(0x2E, 0x74, 0x65, 0x78, 0x74, 0, 0, 0) // ".text\0\0\0"
-        buf.put(nameBytes)
-        buf.putInt(0x00000100)    // VirtualSize
-        buf.putInt(0x00002000)    // VirtualAddress
-        buf.putInt(0x00000200)    // SizeOfRawData
-        buf.putInt(0x00000400)    // PointerToRawData
-        buf.putInt(0)             // PointerToRelocations
-        buf.putInt(0)             // PointerToLinenumbers
-        buf.putShort(0)           // NumberOfRelocations
-        buf.putShort(0)           // NumberOfLinenumbers
-        buf.putInt(0x60000020)  // Characteristics: CNT_CODE | MEM_EXECUTE | MEM_READ
-        buf.flip()
+        buf.writeBytes(nameBytes)
+        buf.writeIntLE(0x00000100)    // VirtualSize
+        buf.writeIntLE(0x00002000)    // VirtualAddress
+        buf.writeIntLE(0x00000200)    // SizeOfRawData
+        buf.writeIntLE(0x00000400)    // PointerToRawData
+        buf.writeIntLE(0)             // PointerToRelocations
+        buf.writeIntLE(0)             // PointerToLinenumbers
+        buf.writeShortLE(0)           // NumberOfRelocations
+        buf.writeShortLE(0)           // NumberOfLinenumbers
+        buf.writeIntLE(0x60000020)    // Characteristics: CNT_CODE | MEM_EXECUTE | MEM_READ
 
         val header = SectionHeader(buf)
         assertEquals(".text", header.name)
@@ -268,18 +259,17 @@ class HeaderReaderTest {
 
     @Test
     fun testReadSectionHeaderFull8CharName() {
-        val buf = ByteBuffer.allocate(40).order(ByteOrder.LITTLE_ENDIAN)
-        buf.put(".textx00".toByteArray(Charsets.UTF_8))  // Name (exactly 8 chars, no null terminator)
-        buf.putInt(0x00000100)
-        buf.putInt(0x00002000)
-        buf.putInt(0x00000200)
-        buf.putInt(0x00000400)
-        buf.putInt(0)
-        buf.putInt(0)
-        buf.putShort(0)
-        buf.putShort(0)
-        buf.putInt(0x40000040)
-        buf.flip()
+        val buf = Unpooled.buffer(40)
+        buf.writeBytes(".textx00".toByteArray(Charsets.UTF_8))  // Name (exactly 8 chars, no null terminator)
+        buf.writeIntLE(0x00000100)
+        buf.writeIntLE(0x00002000)
+        buf.writeIntLE(0x00000200)
+        buf.writeIntLE(0x00000400)
+        buf.writeIntLE(0)
+        buf.writeIntLE(0)
+        buf.writeShortLE(0)
+        buf.writeShortLE(0)
+        buf.writeIntLE(0x40000040)
 
         val header = SectionHeader(buf)
         assertEquals(".textx00", header.name)
@@ -289,7 +279,7 @@ class HeaderReaderTest {
 
     @Test
     fun testReadSectionHeaderBufferTooSmall() {
-        val buf = ByteBuffer.allocate(20).order(ByteOrder.LITTLE_ENDIAN)
+        val buf = Unpooled.buffer(20)
 
         assertFailsWith<IllegalArgumentException> {
             SectionHeader(buf)
@@ -298,27 +288,26 @@ class HeaderReaderTest {
 
     @Test
     fun testReadCliHeader() {
-        val buf = ByteBuffer.allocate(72).order(ByteOrder.LITTLE_ENDIAN)
-        buf.putInt(0x48)          // cb = 72
-        buf.putShort(2)           // majorRuntimeVersion
-        buf.putShort(5)           // minorRuntimeVersion
-        buf.putInt(0x00002008)    // metaData.rva
-        buf.putInt(0x00000100)    // metaData.size
-        buf.putInt(0x00000001)    // flags = ILONLY
-        buf.putInt(0x06000001)    // entryPointToken
-        buf.putInt(0x00003000)    // resources.rva
-        buf.putInt(0x00000200)    // resources.size
-        buf.putInt(0x00004000)    // strongNameSignature.rva
-        buf.putInt(0x00000100)    // strongNameSignature.size
-        buf.putInt(0)             // codeManagerTable.rva
-        buf.putInt(0)             // codeManagerTable.size
-        buf.putInt(0x00005000)    // vTableFixups.rva
-        buf.putInt(0x00000030)    // vTableFixups.size
-        buf.putInt(0)             // exportAddressTableJumps.rva
-        buf.putInt(0)             // exportAddressTableJumps.size
-        buf.putInt(0)             // managedNativeHeader.rva
-        buf.putInt(0)             // managedNativeHeader.size
-        buf.flip()
+        val buf = Unpooled.buffer(72)
+        buf.writeIntLE(0x48)          // cb = 72
+        buf.writeShortLE(2)           // majorRuntimeVersion
+        buf.writeShortLE(5)           // minorRuntimeVersion
+        buf.writeIntLE(0x00002008)    // metaData.rva
+        buf.writeIntLE(0x00000100)    // metaData.size
+        buf.writeIntLE(0x00000001)    // flags = ILONLY
+        buf.writeIntLE(0x06000001)    // entryPointToken
+        buf.writeIntLE(0x00003000)    // resources.rva
+        buf.writeIntLE(0x00000200)    // resources.size
+        buf.writeIntLE(0x00004000)    // strongNameSignature.rva
+        buf.writeIntLE(0x00000100)    // strongNameSignature.size
+        buf.writeIntLE(0)             // codeManagerTable.rva
+        buf.writeIntLE(0)             // codeManagerTable.size
+        buf.writeIntLE(0x00005000)    // vTableFixups.rva
+        buf.writeIntLE(0x00000030)    // vTableFixups.size
+        buf.writeIntLE(0)             // exportAddressTableJumps.rva
+        buf.writeIntLE(0)             // exportAddressTableJumps.size
+        buf.writeIntLE(0)             // managedNativeHeader.rva
+        buf.writeIntLE(0)             // managedNativeHeader.size
 
         val header = CliHeader(buf)
         assertEquals(0x48u, header.cb)
@@ -344,7 +333,7 @@ class HeaderReaderTest {
 
     @Test
     fun testReadCliHeaderBufferTooSmall() {
-        val buf = ByteBuffer.allocate(71).order(ByteOrder.LITTLE_ENDIAN)
+        val buf = Unpooled.buffer(71)
 
         assertFailsWith<IllegalArgumentException> {
             CliHeader(buf)
@@ -374,34 +363,33 @@ class HeaderReaderTest {
         }
 
         val totalSize = 12 + 4 + versionPadded + 4 + streamHeadersSize
-        val buf = ByteBuffer.allocate(totalSize).order(ByteOrder.LITTLE_ENDIAN)
+        val buf = Unpooled.buffer(totalSize)
 
-        buf.putInt(0x424A5342)       // Signature "BSJB"
-        buf.putShort(1)               // MajorVersion
-        buf.putShort(1)               // MinorVersion
-        buf.putInt(0)                  // Reserved
-        buf.putInt(versionPadded)      // Length (x), padded
-        buf.put(versionBytes)         // Version string
-        buf.put(0.toByte())           // Null terminator
+        buf.writeIntLE(0x424A5342)       // Signature "BSJB"
+        buf.writeShortLE(1)               // MajorVersion
+        buf.writeShortLE(1)               // MinorVersion
+        buf.writeIntLE(0)                  // Reserved
+        buf.writeIntLE(versionPadded)      // Length (x), padded
+        buf.writeBytes(versionBytes)       // Version string
+        buf.writeByte(0)                   // Null terminator
         repeat(versionPadded - versionWithNull) {
-            buf.put(0.toByte())       // Padding to 4-byte boundary
+            buf.writeByte(0)               // Padding to 4-byte boundary
         }
-        buf.putShort(0)               // Flags
-        buf.putShort(streamNames.size.toShort()) // Streams count
+        buf.writeShortLE(0)               // Flags
+        buf.writeShortLE(streamNames.size) // Streams count
 
         for (header in streamData) {
-            buf.putInt(header.offset.toInt())
-            buf.putInt(header.size.toInt())
+            buf.writeIntLE(header.offset.toInt())
+            buf.writeIntLE(header.size.toInt())
             val nameBytes = header.name.toByteArray(Charsets.US_ASCII)
-            buf.put(nameBytes)
-            buf.put(0.toByte())
+            buf.writeBytes(nameBytes)
+            buf.writeByte(0)
             val nameWithNull = nameBytes.size + 1
             val padded = (nameWithNull + 3) / 4 * 4
             repeat(padded - nameWithNull) {
-                buf.put(0.toByte())
+                buf.writeByte(0)
             }
         }
-        buf.flip()
 
         val root = MetadataRoot(buf)
         assertEquals(MetadataRoot.SIGNATURE, root.signature)
@@ -434,12 +422,11 @@ class HeaderReaderTest {
 
     @Test
     fun testReadMetadataRootInvalidSignature() {
-        val buf = ByteBuffer.allocate(12).order(ByteOrder.LITTLE_ENDIAN)
-        buf.putInt(0xDEADBEEF.toInt())
-        buf.putShort(1)
-        buf.putShort(1)
-        buf.putInt(0)
-        buf.flip()
+        val buf = Unpooled.buffer(12)
+        buf.writeIntLE(0xDEADBEEF.toInt())
+        buf.writeShortLE(1)
+        buf.writeShortLE(1)
+        buf.writeIntLE(0)
 
         assertFailsWith<IllegalArgumentException> {
             MetadataRoot(buf)
@@ -448,10 +435,9 @@ class HeaderReaderTest {
 
     @Test
     fun testReadMetadataRootBufferTooSmall() {
-        val buf = ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN)
-        buf.putInt(0x424A5342)
-        buf.putInt(0)
-        buf.flip()
+        val buf = Unpooled.buffer(8)
+        buf.writeIntLE(0x424A5342)
+        buf.writeIntLE(0)
 
         assertFailsWith<IllegalArgumentException> {
             MetadataRoot(buf)

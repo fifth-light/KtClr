@@ -5,19 +5,18 @@
 
 package top.fifthlight.asmnet.binary.reader
 
+import io.netty.buffer.ByteBuf
 import top.fifthlight.asmnet.binary.*
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
 
-internal fun CoffHeader(buffer: ByteBuffer): CoffHeader = buffer.slice().order(ByteOrder.LITTLE_ENDIAN).let { buf ->
-    require(buf.remaining() >= CoffHeader.SIZE) { "Buffer too small for COFF header: ${buf.remaining()} < ${CoffHeader.SIZE}" }
+internal fun CoffHeader(buffer: ByteBuf): CoffHeader = buffer.slice().let { buf ->
+    require(buf.readableBytes() >= CoffHeader.SIZE) { "Buffer too small for COFF header: ${buf.readableBytes()} < ${CoffHeader.SIZE}" }
     CoffHeader(
-        machine = MachineType(buf.ushort),
-        numberOfSections = buf.ushort,
-        timeDateStamp = buf.uint,
-        pointerToSymbolTable = buf.uint,
-        numberOfSymbols = buf.uint,
-        sizeOfOptionalHeader = buf.ushort,
-        characteristics = ImageCharacteristics(buf.ushort),
+        machine = MachineType(buf.readUShortLE()),
+        numberOfSections = buf.readUShortLE(),
+        timeDateStamp = buf.readUIntLE(),
+        pointerToSymbolTable = buf.readUIntLE(),
+        numberOfSymbols = buf.readUIntLE(),
+        sizeOfOptionalHeader = buf.readUShortLE(),
+        characteristics = ImageCharacteristics(buf.readUShortLE()),
     )
 }

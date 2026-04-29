@@ -5,13 +5,12 @@
 
 package top.fifthlight.asmnet.binary.reader
 
+import io.netty.buffer.ByteBuf
 import top.fifthlight.asmnet.binary.CoffHeader
 import top.fifthlight.asmnet.binary.PeSignature
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
 
-internal fun PeHeader(buffer: ByteBuffer): CoffHeader = buffer.slice().order(ByteOrder.LITTLE_ENDIAN).let { buf ->
-    val signature = buf.getInt().toUInt()
+internal fun PeHeader(buffer: ByteBuf): CoffHeader = buffer.slice().let { buf ->
+    val signature = buf.readUIntLE()
     require(signature == PeSignature.SIGNATURE) { "Invalid PE signature: 0x${signature.toString(16)}" }
-    CoffHeader(buf.slice(PeSignature.SIZE, buf.remaining()))
+    CoffHeader(buf.slice(PeSignature.SIZE, buf.readableBytes()))
 }

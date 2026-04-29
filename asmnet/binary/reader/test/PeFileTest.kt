@@ -5,12 +5,12 @@
 
 package top.fifthlight.asmnet.binary.reader.test
 
+import io.netty.buffer.Unpooled
 import org.junit.Test
 import top.fifthlight.asmnet.RuntimeFlags
 import top.fifthlight.asmnet.Subsystem
 import top.fifthlight.asmnet.binary.*
 import top.fifthlight.asmnet.binary.reader.*
-import java.nio.ByteBuffer
 import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.test.assertEquals
@@ -28,7 +28,7 @@ class PeFileTest {
         val path = loadFilePath("hello_world_dll")
         assertTrue(Files.exists(path), "PE file not found: $path")
         val bytes = Files.readAllBytes(path)
-        val buf = ByteBuffer.wrap(bytes)
+        val buf = Unpooled.wrappedBuffer(bytes)
         var offset = 0
 
         val dosHeader = DosHeader(buf.slice(offset, DosHeader.SIZE))
@@ -44,7 +44,7 @@ class PeFileTest {
         assertTrue(coffHeader.characteristics.isDll, "Expected DLL characteristics")
         offset += PeSignature.SIZE + CoffHeader.SIZE
 
-        val optionalHeader = OptionalHeader(buf.slice(offset, buf.limit() - offset))
+        val optionalHeader = OptionalHeader(buf.slice(offset, buf.capacity() - offset))
         assertTrue(
             optionalHeader is OptionalHeader.PE32 || optionalHeader is OptionalHeader.PE32Plus,
             "Expected PE32 or PE32Plus"

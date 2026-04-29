@@ -5,27 +5,26 @@
 
 package top.fifthlight.asmnet.binary.reader
 
+import io.netty.buffer.ByteBuf
 import top.fifthlight.asmnet.binary.*
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
 
-internal fun SectionHeader(buffer: ByteBuffer): SectionHeader =
-    buffer.slice().order(ByteOrder.LITTLE_ENDIAN).let { buf ->
-        require(buf.remaining() >= SectionHeader.SIZE) { "Buffer too small for section header: ${buf.remaining()} < ${SectionHeader.SIZE}" }
-        val pos = buf.position()
+internal fun SectionHeader(buffer: ByteBuf): SectionHeader =
+    buffer.slice().let { buf ->
+        require(buf.readableBytes() >= SectionHeader.SIZE) { "Buffer too small for section header: ${buf.readableBytes()} < ${SectionHeader.SIZE}" }
+        val pos = buf.readerIndex()
         val name = buf.readString(8, requireNullTerminator = false)
-        buf.position(pos + 8)
+        buf.readerIndex(pos + 8)
         SectionHeader(
             name = name,
-            virtualSize = buf.uint,
-            virtualAddress = buf.uint,
-            sizeOfRawData = buf.uint,
-            pointerToRawData = buf.uint,
-            pointerToRelocations = buf.uint,
-            pointerToLinenumbers = buf.uint,
-            numberOfRelocations = buf.ushort,
-            numberOfLinenumbers = buf.ushort,
-            characteristics = SectionFlags(buf.uint),
+            virtualSize = buf.readUIntLE(),
+            virtualAddress = buf.readUIntLE(),
+            sizeOfRawData = buf.readUIntLE(),
+            pointerToRawData = buf.readUIntLE(),
+            pointerToRelocations = buf.readUIntLE(),
+            pointerToLinenumbers = buf.readUIntLE(),
+            numberOfRelocations = buf.readUShortLE(),
+            numberOfLinenumbers = buf.readUShortLE(),
+            characteristics = SectionFlags(buf.readUIntLE()),
         )
     }
 

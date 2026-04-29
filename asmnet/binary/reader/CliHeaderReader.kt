@@ -5,28 +5,26 @@
 
 package top.fifthlight.asmnet.binary.reader
 
+import io.netty.buffer.ByteBuf
 import top.fifthlight.asmnet.binary.*
-import top.fifthlight.asmnet.binary.reader.CliHeader
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
 
-internal fun CliHeader(buffer: ByteBuffer): CliHeader = buffer.slice().order(ByteOrder.LITTLE_ENDIAN).let { buf ->
-    require(buf.remaining() >= CliHeader.SIZE) {
-        "Buffer too small for CLI header: ${buf.remaining()} < ${CliHeader.SIZE}"
+internal fun CliHeader(buffer: ByteBuf): CliHeader = buffer.slice().let { buf ->
+    require(buf.readableBytes() >= CliHeader.SIZE) {
+        "Buffer too small for CLI header: ${buf.readableBytes()} < ${CliHeader.SIZE}"
     }
 
     CliHeader(
-        cb = buf.uint,
-        majorRuntimeVersion = buf.ushort,
-        minorRuntimeVersion = buf.ushort,
-        metaData = DataDirectory(rva = buf.uint, size = buf.uint),
-        flags = buf.uint,
-        entryPointToken = buf.uint,
-        resources = DataDirectory(rva = buf.uint, size = buf.uint),
-        strongNameSignature = DataDirectory(rva = buf.uint, size = buf.uint),
-        codeManagerTable = DataDirectory(rva = buf.uint, size = buf.uint),
-        vTableFixups = DataDirectory(rva = buf.uint, size = buf.uint),
-        exportAddressTableJumps = DataDirectory(rva = buf.uint, size = buf.uint),
-        managedNativeHeader = DataDirectory(rva = buf.uint, size = buf.uint),
+        cb = buf.readUIntLE(),
+        majorRuntimeVersion = buf.readUShortLE(),
+        minorRuntimeVersion = buf.readUShortLE(),
+        metaData = DataDirectory(rva = buf.readUIntLE(), size = buf.readUIntLE()),
+        flags = buf.readUIntLE(),
+        entryPointToken = buf.readUIntLE(),
+        resources = DataDirectory(rva = buf.readUIntLE(), size = buf.readUIntLE()),
+        strongNameSignature = DataDirectory(rva = buf.readUIntLE(), size = buf.readUIntLE()),
+        codeManagerTable = DataDirectory(rva = buf.readUIntLE(), size = buf.readUIntLE()),
+        vTableFixups = DataDirectory(rva = buf.readUIntLE(), size = buf.readUIntLE()),
+        exportAddressTableJumps = DataDirectory(rva = buf.readUIntLE(), size = buf.readUIntLE()),
+        managedNativeHeader = DataDirectory(rva = buf.readUIntLE(), size = buf.readUIntLE()),
     )
 }

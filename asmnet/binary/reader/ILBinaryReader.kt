@@ -5,13 +5,17 @@
 
 package top.fifthlight.asmnet.binary.reader
 
+import io.netty.buffer.ByteBuf
+import io.netty.buffer.Unpooled
 import top.fifthlight.asmnet.ModuleVisitor
 import top.fifthlight.asmnet.RuntimeFlags
 import top.fifthlight.asmnet.binary.*
 import java.nio.ByteBuffer
 
-class ILBinaryReader(bytes: ByteBuffer) {
-    private val bytes = bytes.asReadOnlyBuffer()
+class ILBinaryReader private constructor(
+    private val bytes: ByteBuf,
+): AutoCloseable {
+    constructor(bytes: ByteBuffer): this(Unpooled.wrappedBuffer(bytes.asReadOnlyBuffer()))
 
     fun accept(visitor: ModuleVisitor) {
         var offset = 0
@@ -24,16 +28,16 @@ class ILBinaryReader(bytes: ByteBuffer) {
         }
         offset = lfanew.toInt()
 
-        require(offset + PeSignature.SIZE + CoffHeader.SIZE <= bytes.remaining()) {
-            "PE headers at offset 0x${offset.toString(16)} out of bounds for buffer capacity ${bytes.remaining()}"
+        require(offset + PeSignature.SIZE + CoffHeader.SIZE <= bytes.readableBytes()) {
+            "PE headers at offset 0x${offset.toString(16)} out of bounds for buffer capacity ${bytes.readableBytes()}"
         }
         val coffHeader = PeHeader(bytes.slice(offset, PeSignature.SIZE + CoffHeader.SIZE))
         offset += PeSignature.SIZE + CoffHeader.SIZE
 
-        require(bytes.remaining() - offset >= 2) {
-            "Optional header at offset 0x${offset.toString(16)} out of bounds for buffer capacity ${bytes.remaining()}"
+        require(bytes.readableBytes() - offset >= 2) {
+            "Optional header at offset 0x${offset.toString(16)} out of bounds for buffer capacity ${bytes.readableBytes()}"
         }
-        val optionalHeader = OptionalHeader(bytes.slice(offset, bytes.limit() - offset))
+        val optionalHeader = OptionalHeader(bytes.slice(offset, bytes.capacity() - offset))
 
         require(optionalHeader.dataDirectories.size >= 15) {
             "Specified file is not a .NET module: there are only ${optionalHeader.dataDirectories.size} data directories"
@@ -44,8 +48,8 @@ class ILBinaryReader(bytes: ByteBuffer) {
         val sections = mutableListOf<SectionHeader>()
         require(coffHeader.numberOfSections <= 128u) { "Too many sections: ${coffHeader.numberOfSections}" }
         repeat(coffHeader.numberOfSections.toInt()) {
-            require(bytes.remaining() - offset >= SectionHeader.SIZE) {
-                "Section header at offset 0x${offset.toString(16)} out of bounds for buffer capacity ${bytes.remaining()}"
+            require(bytes.readableBytes() - offset >= SectionHeader.SIZE) {
+                "Section header at offset 0x${offset.toString(16)} out of bounds for buffer capacity ${bytes.readableBytes()}"
             }
             sections.add(SectionHeader(bytes.slice(offset, SectionHeader.SIZE)))
             offset += SectionHeader.SIZE
@@ -63,5 +67,9 @@ class ILBinaryReader(bytes: ByteBuffer) {
 
         val metadataFileOffset = rvaToFileOffset(sections, cliHeader.metaData.rva)
         val metadataRoot = MetadataRoot(bytes.slice(metadataFileOffset, cliHeader.metaData.size.toInt()))
+    }
+
+    override fun close() {
+        bytes.release()
     }
 }
