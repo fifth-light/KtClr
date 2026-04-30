@@ -7,6 +7,8 @@ package top.fifthlight.asmnet.binary.reader
 
 import io.netty.buffer.ByteBuf
 import top.fifthlight.asmnet.binary.DosHeader
+import top.fifthlight.asmnet.binary.reader.util.readUIntLE
+import top.fifthlight.asmnet.binary.reader.util.readUShortLE
 
 internal fun DosHeader(buffer: ByteBuf): DosHeader = buffer.slice().let { buf ->
     require(buf.readableBytes() >= DosHeader.SIZE) { "Buffer too small for DOS header: ${buf.readableBytes()} < ${DosHeader.SIZE}" }

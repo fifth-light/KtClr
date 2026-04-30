@@ -8,6 +8,7 @@ package top.fifthlight.asmnet.binary.reader
 import io.netty.buffer.ByteBuf
 import top.fifthlight.asmnet.binary.CoffHeader
 import top.fifthlight.asmnet.binary.PeSignature
+import top.fifthlight.asmnet.binary.reader.util.readUIntLE
 
 internal fun PeHeader(buffer: ByteBuf): CoffHeader = buffer.slice().let { buf ->
     val signature = buf.readUIntLE()

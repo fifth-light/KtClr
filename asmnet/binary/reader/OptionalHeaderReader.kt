@@ -8,6 +8,10 @@ package top.fifthlight.asmnet.binary.reader
 import io.netty.buffer.ByteBuf
 import top.fifthlight.asmnet.Subsystem
 import top.fifthlight.asmnet.binary.*
+import top.fifthlight.asmnet.binary.reader.util.readUByteLE
+import top.fifthlight.asmnet.binary.reader.util.readUIntLE
+import top.fifthlight.asmnet.binary.reader.util.readULongLE
+import top.fifthlight.asmnet.binary.reader.util.readUShortLE
 
 private fun readDataDirectories(buf: ByteBuf, count: UInt): List<DataDirectory> = buildList {
     require(count < 128u) { "Too many data directories: $count" }

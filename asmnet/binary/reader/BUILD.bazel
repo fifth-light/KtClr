@@ -2,11 +2,12 @@ load("@rules_kotlin//kotlin:jvm.bzl", "kt_jvm_library")
 
 kt_jvm_library(
     name = "reader",
-    srcs = glob(["*.kt"]),
+    srcs = glob(["**/*.kt"]),
     associates = ["//asmnet/binary"],
     visibility = ["//visibility:public"],
     deps = [
         "//asmnet",
         "@maven//:io_netty_netty_buffer",
+        "@maven//:io_netty_netty_common",
     ],
 )

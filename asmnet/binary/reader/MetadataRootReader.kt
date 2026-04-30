@@ -7,6 +7,9 @@ package top.fifthlight.asmnet.binary.reader
 
 import io.netty.buffer.ByteBuf
 import top.fifthlight.asmnet.binary.*
+import top.fifthlight.asmnet.binary.reader.util.readString
+import top.fifthlight.asmnet.binary.reader.util.readUIntLE
+import top.fifthlight.asmnet.binary.reader.util.readUShortLE
 
 internal fun MetadataRoot(buffer: ByteBuf): MetadataRoot = buffer.slice().let { buf ->
     require(buf.readableBytes() >= 16) {

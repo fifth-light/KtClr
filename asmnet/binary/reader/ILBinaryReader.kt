@@ -10,6 +10,7 @@ import io.netty.buffer.Unpooled
 import top.fifthlight.asmnet.ModuleVisitor
 import top.fifthlight.asmnet.RuntimeFlags
 import top.fifthlight.asmnet.binary.*
+import top.fifthlight.asmnet.binary.reader.util.use
 import java.nio.ByteBuffer
 
 class ILBinaryReader private constructor(
@@ -60,13 +61,22 @@ class ILBinaryReader private constructor(
         visitor.visitStackReserve(optionalHeader.sizeOfStackReserve)
         visitor.visitSubsystem(optionalHeader.subsystem)
 
-        val cliHeaderDir = optionalHeader.dataDirectories[14]
-        val cliFileOffset = rvaToFileOffset(sections, cliHeaderDir.rva)
-        val cliHeader = CliHeader(bytes.slice(cliFileOffset, CliHeader.SIZE))
-        visitor.visitCorFlags(RuntimeFlags(cliHeader.flags.toInt()))
+        createRvaMappedBuf(bytes, sections).use { rvaBuf ->
+            val cliHeaderDir = optionalHeader.dataDirectories[14]
+            require(cliHeaderDir.rva <= Int.MAX_VALUE.toUInt()) {
+                "CLI header RVA 0x${cliHeaderDir.rva.toString(16)} exceeds Int.MAX_VALUE"
+            }
+            val cliHeader = CliHeader(rvaBuf.slice(cliHeaderDir.rva.toInt(), CliHeader.SIZE))
+            visitor.visitCorFlags(RuntimeFlags(cliHeader.flags.toInt()))
 
-        val metadataFileOffset = rvaToFileOffset(sections, cliHeader.metaData.rva)
-        val metadataRoot = MetadataRoot(bytes.slice(metadataFileOffset, cliHeader.metaData.size.toInt()))
+            require(cliHeader.metaData.rva <= Int.MAX_VALUE.toUInt()) {
+                "Metadata RVA 0x${cliHeader.metaData.rva.toString(16)} exceeds Int.MAX_VALUE"
+            }
+            require(cliHeader.metaData.size <= Int.MAX_VALUE.toUInt()) {
+                "Metadata size 0x${cliHeader.metaData.size.toString(16)} exceeds Int.MAX_VALUE"
+            }
+            val metadataRoot = MetadataRoot(rvaBuf.slice(cliHeader.metaData.rva.toInt(), cliHeader.metaData.size.toInt()))
+        }
     }
 
     override fun close() {

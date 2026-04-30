@@ -7,6 +7,8 @@ package top.fifthlight.asmnet.binary.reader
 
 import io.netty.buffer.ByteBuf
 import top.fifthlight.asmnet.binary.*
+import top.fifthlight.asmnet.binary.reader.util.readUIntLE
+import top.fifthlight.asmnet.binary.reader.util.readUShortLE
 
 internal fun CliHeader(buffer: ByteBuf): CliHeader = buffer.slice().let { buf ->
     require(buf.readableBytes() >= CliHeader.SIZE) {

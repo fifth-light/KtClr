@@ -3,9 +3,10 @@
  * Copyright (C) 2026 fifth_light
  */
 
-package top.fifthlight.asmnet.binary.reader
+package top.fifthlight.asmnet.binary.reader.util
 
 import io.netty.buffer.ByteBuf
+import io.netty.util.ReferenceCounted
 import java.nio.charset.Charset
 
 internal fun ByteBuf.readString(
@@ -44,3 +45,9 @@ internal fun ByteBuf.readUIntLE(): UInt = readIntLE().toUInt()
 internal fun ByteBuf.readUByteLE(): UByte = readByte().toUByte()
 
 internal fun ByteBuf.readULongLE(): ULong = readLongLE().toULong()
+
+internal inline fun <T: ReferenceCounted, R> T.use(crossinline block: (T) -> R) = try {
+    block(this)
+} finally {
+    release()
+}
